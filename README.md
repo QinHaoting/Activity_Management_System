@@ -1,4 +1,4 @@
-# Campaign_Management_System（活动管理系统）
+# Activity_Management_System（活动管理系统）
 ## 1. 项目基本信息
 
 ### 1.1 项目名称
