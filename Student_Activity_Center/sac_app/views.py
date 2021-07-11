@@ -2,6 +2,8 @@ from django.shortcuts import render
 from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse
 from django.conf import settings
+from django.core.mail import send_mail
+import uuid
 
 from sac_app.check_code import gen_check_code
 
@@ -11,37 +13,80 @@ from django.contrib import auth
 
 
 def login(request):
-
-    return render(request, "login.html")
+    if request.method == 'POST':
+        method = request.POST.get('method')
+        log_id = request.POST.get('id')
+        log_password = request.POST.get('password')
+        if log_id and log_password:
+            if method == 'student':
+                try:
+                    student = students.objects.get(stu_id=log_id)
+                    if student.stu_valid == 1:
+                        if student.stu_password == log_password:
+                            request.session['user_id'] = student.stu_id
+                            return redirect()
+                        else:
+                            return render(request,'login.html',{'password_error':'密码错误'})
+                    else:
+                        return render(request,'login.html',{'valid_error':'账户未激活'})
+                except:
+                    return render(request,'login.html',{'id_error':'id不存在'})
+            elif method == 'organizer':
+                try:
+                    organizer = organizers.objects.get(org_id=log_id)
+                    if organizer.org_password == log_password:
+                        request.session['user_id'] = organizer.org_id
+                        return redirect()
+                    else:
+                        return render(request, 'login.html', {'password_error': '密码错误'})
+                except:
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
+            elif method == 'manager':
+                try:
+                    manager = managers.objects.get(man_id = log_id)
+                    if manager.man_password == log_password:
+                        request.session['user_id'] = manager.man_id
+                        return redirect()
+                    else:
+                        return render(request, 'login.html', {'password_error': '密码错误'})
+                except:
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
+        else:
+            return render(request,'',{'fill_in_error':'ID和密码均不能为空'})
+    else:
+        return render(request, "login.html")
 # Create your views here.
 
 def register(request):
-    if request.method == POST:
+    if request.method == 'POST':
         re_id = request.POST.get('stu_id')
         re_Email = requestPOST.get('stu_Email')
-        try:
-            student = students.objects.get(stu_id = re_id)
-            return render(request,'login.html',{'id_error':'该id已存在'})
-        except:
+        re_password = request.POST.get('stu_password')
+        if re_id and re_Email and re_password:
             try:
-                student = students.objects.get(stu_Email=re_Email)
-                return ren已被使用der(request,'login.html',{'Email_error':'该Email已被占用'})
+                student = students.objects.get(stu_id=re_id)
+                return render(request, 'login.html', {'id_error': '该id已存在'})
             except:
-                re_password = request.POST.get('stu_password')
-                student = students.objects.create(stu_id = re_id,stu_Email = re_Email,stu_password = re_password)
-                token = str(uuid.uuid4()).replace('-', '')
-                request.session[token] = re_id
-                path = ''.format(token)
-                subject = '学生账号激活'
-                message = '''
-                                    欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
-                                    <br> <a herf = '{}'>点击激活</a>
-                                    <br>
-                                                            学生活动中心开发团队
-                                    '''.format(path)
-                send_mail(subject=subject, message='', from_email='',
-                          recipient_list=[re_Email, ],html_message = message)
-                return render(request,'login.html')
+                try:
+                    student = students.objects.get(stu_Email=re_Email)
+                    return render(request, 'login.html', {'Email_error': '该Email已被占用'})
+                except:
+                    student = students.objects.create(stu_id=re_id, stu_Email=re_Email, stu_password=re_password)
+                    token = str(uuid.uuid4()).replace('-', '')
+                    request.session[token] = re_id
+                    path = ''.format(token)
+                    subject = '学生账号激活'
+                    message = '''
+                                        欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
+                                        <br> <a herf = '{}'>点击激活</a>
+                                        <br>
+                                                                学生活动中心开发团队
+                                        '''.format(path)
+                    send_mail(subject=subject, message='', from_email='',
+                              recipient_list=[re_Email, ], html_message=message)
+                    return render(request, 'login.html')
+        else:
+            return render(request,'login.html',{'fill_in_error':'ID，邮箱，密码均不能为空'})
     else:
         return render(request, "register.html")
 
