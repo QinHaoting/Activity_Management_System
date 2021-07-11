@@ -1,9 +1,11 @@
 import enum
+import re
 import uuid
-from typing import re
 
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db import DatabaseError
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse
@@ -59,19 +61,19 @@ def login(request):
                     if student.stu_valid == 1:
                         if student.stu_password == log_password:
                             request.session['user_id'] = student.stu_id
-                            return redirect()
+                            return redirect()  # ??????????????????????????????????????????//
                         else:
-                            return render(request,'login.html',{'password_error':'密码错误'})
+                            return render(request, 'login.html', {'password_error': '密码错误'})
                     else:
-                        return render(request,'login.html',{'valid_error':'账户未激活'})
+                        return render(request, 'login.html', {'valid_error': '账户未激活'})
                 except:
-                    return render(request,'login.html',{'id_error':'id不存在'})
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
             elif type == 'organizer':
                 try:
                     organizer = organizers.objects.get(org_id=log_id)
                     if organizer.org_password == log_password:
                         request.session['user_id'] = organizer.org_id
-                        return redirect() # ??????????????
+                        return redirect()             # ??????????????
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
@@ -81,13 +83,13 @@ def login(request):
                     manager = managers.objects.get(man_id = log_id)
                     if manager.man_password == log_password:
                         request.session['user_id'] = manager.man_id
-                        return redirect() # ??????????????/
+                        return redirect()              # ??????????????/
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
                     return render(request, 'login.html', {'id_error': 'id不存在'})
         else:
-            return render(request,'',{'fill_in_error':'ID和密码均不能为空'})
+            return render(request, '', {'fill_in_error': 'ID和密码均不能为空'})           # ??????????????
     else:
         return render(request, "login.html")
 
@@ -121,7 +123,7 @@ def register(request):
                               recipient_list=[re_Email, ], html_message=message)
                     return render(request, 'login.html')
         else:
-            return render(request,'login.html',{'fill_in_error':'ID，邮箱，密码均不能为空'})
+            return render(request, 'login.html', {'fill_in_error': 'ID，邮箱，密码均不能为空'})
     else:
         return render(request, "register.html")
 
@@ -199,11 +201,54 @@ def stu_activity(request):
 
 def stu_join_activity(request):
     """
-    学生：已参加活动
-    :param request:
+    学生：已参加活动   request.session['user_id']
+    :param stu_id:
+    :param request:models.students.stu_id
     :return:
     """
-    return render(request, 'stu_home/stu_join_activity.html')
+    if request.method == 'POST':#检测是否用Post请求
+        user_id = request.session.get("user_id", None)#从前端获取user_id
+        if user_id:
+            # act_id = act_to_stu.objects.filter(user_id=stu_id).values()
+            # act = activities.objects.filter(act_id=act_id)
+
+            stu = students.objects.get(stu_id=user_id)
+            act = stu.activities_set.all().order_by('act_id')
+                #进行分页操作
+            pagesize = request.params['pagesize']
+            pagenum = request.params['pagenum']
+
+            pgnt1 = Paginator(act, pagesize)  #分页结果
+            page1 = pgnt1.page(pagenum)#分页操作后的页
+
+            pagelist = list(page1)#处理成序列字典
+
+            # act_organizer_name = act.act_organizer_name
+            # act_name = act.act_name
+            # act_state = act.act_state
+            # act_flag = act.act_flage
+            # value = {
+            #     "act_organizer_name": act_organizer_name,
+            #     "act_name": act_name,
+            #     "act_state": act_state,
+            #     "act_flag": act_flag
+            # }
+            # act=act_to_stu.objects.filter(students__stu_id=user_id).values()
+            act_organizer_name = list(act.values('act_organizer_name'))#形成序列字典
+            act_name = list(act.values('act_name'))
+            act_state = list(act.values('act_state'))
+            act_flag = list(act.values('act_flag'))
+
+            return JsonResponse({'act_organizer_name': act_organizer_name,#JsonResponse响应
+                                 'act_name': act_name,
+                                 'act_state': act_state,
+                                 'act_flag': act_flag,
+                                 "pagelist": pagelist})
+        # return render(request, {"act_list":act_list},'stu_home/stu_join_activity.html')
+        else:
+            return render(request, 'stu_home/stu_join_activity.html',context={'message':'No user_id'})
+    else:
+        return render(request, 'stu_home/stu_join_activity.html', context={'message': 'Do not use GET'})
 
 
 def stu_center(request):
@@ -215,7 +260,7 @@ def stu_center(request):
     return render(request, 'stu_home/stu_center.html')
 
 
-def stu_activity_yes(request):
+def stu_activity_details(request):
     """
     学生：可参加活动
     :param request:
@@ -224,7 +269,7 @@ def stu_activity_yes(request):
     return render(request, 'stu_home/stu_activity_yes.html')
 
 
-def stu_activity_no(request):
+def stu_activity_list(request):
     """
     学生：显示活动列表
     根据前端的control信号返回对应的活动列表
@@ -244,17 +289,17 @@ def stu_activity_no(request):
                 show_activities = whole_activities.filter().exclude(act_state=Status.SIGN_UP)
 
             if show_activities.all().count() != 0:  # 待显示的活动不为空
-                context = {
-                    "act_name": show_activities.values('act_name'),                      # 活动名称        - 列表
-                    "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
-                    "act_state": show_activities.values('act_state'),                    # 活动状态        - 列表
-                    "act_flag": whole_activities.values('act_flag'),                     # 活动可否参加状态 - 列表
-                    "func_state": FunctionStatus.NORMAL,                                 # 访问状态
-                    "message": "正常访问"                                                 # 待返回的信息
+                data = {
+                        "act_name": list(show_activities.values('act_name')),                      # 活动名称        - 列表
+                        "act_organizer_name": list(show_activities.values('act_organizer_name')),  # 组织者名称      - 列表
+                        "act_state": list(show_activities.values('act_state')),                    # 活动状态        - 列表
+                        "act_flag": list(whole_activities.values('act_flag')),                     # 活动可否参加状态 - 列表
+                        "func_state": FunctionStatus.NORMAL,                                       # 访问状态
+                        "message": "正常访问"                                                       # 待返回的信息
                 }
-                return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
+                return JsonResponse(data)                                                   # 访问成功
             else:  # 待显示列表为空
-                context = {
+                data = {
                     "act_name": '无',
                     "act_organizer_name": '无',
                     "act_state": '无',
@@ -262,9 +307,9 @@ def stu_activity_no(request):
                     "func_state": FunctionStatus.EMPTY,
                     "message": "待显示的内容为空"
                 }
-                return render(request, 'org_home/org_view_posted_activity.html', context=context)
+                return render(request, 'stu_home/stu_activity.html', context=data)
         else:  # 非学生登录访问（无权限）
-            context = {
+            data = {
                 "act_name": '无',                                          # 活动名称        - 列表
                 "act_organizer_name": '无',                                # 组织者名称      - 列表
                 "act_state": '无',                                         # 活动状态        - 列表
@@ -272,9 +317,9 @@ def stu_activity_no(request):
                 "func_state": FunctionStatus.NO_PERMISSION,                # 访问状态
                 "message": "非学生身份访问，无权限"                           # 待返回的信息
             }
-            return render(request, 'login.html', context=context)
+            return render(request, 'login.html', context=data)
     else:  # 非正常方式访问（GET）
-        context = {
+        data = {
             "act_name": '无',                           # 活动名称        - 列表
             "act_organizer_name": '无',                 # 组织者名称      - 列表
             "act_state": '无',                          # 活动状态        - 列表
@@ -282,7 +327,7 @@ def stu_activity_no(request):
             "func_state": FunctionStatus.NOT_POST,      # 访问状态
             "message": "非正常形式访问，请登录"            # 待返回的信息
         }
-        return render(request, 'login.html', context=context)
+        return render(request, 'login.html', context=data)
 
 
 def stu_createteam(request):
@@ -317,7 +362,7 @@ def stu_createteam(request):
             activity.act_participated_number += 1
             activity.act_available_number -= 1
         except DatabaseError:
-            return render(request,'stu_home/stu_createteam.html',{'create_team_error':'队伍创建失败'})
+            return render(request, 'stu_home/stu_createteam.html', {'create_team_error': '队伍创建失败'})
         # 创建完队伍重定向到"我的队伍"
         return redirect(reverse('stu_my_team'))
 
@@ -361,7 +406,7 @@ def org_launch_activity(request):
     if request.method != 'GET':
         return render(request, 'org_home/org_launch_activity.html')
     elif request.method == 'POST':
-        # act_id = request.POST.get('act_id')
+        act_id = request.POST.get('act_id')
         act_name = request.POST.get('act_name')
         act_start_time = request.POST.get('act_start_time')
         act_end_time = request.POST.get('acct_end_time')
@@ -381,7 +426,7 @@ def org_launch_activity(request):
             return render(request, 'org_home/org_launch_activity.html', {'message': '不能为空'})
         try:
             activities.objects.create(
-                # act_id=act_id,
+                act_id=act_id,
                 act_name=act_name,
                 act_start_time=act_start_time,
                 act_end_time=act_end_time,
@@ -410,7 +455,7 @@ def org_launch_notice(request):
     if request.method != 'POST':
         return render(request, 'org_home/org_launch_notice.html')
     if request.method == 'POST':
-        # notice_id = request.POST.get('notice_id')
+        notice_id = request.POST.get('notice_id')
         notice_title = request.POST.get('notice_title')
         notice_create_time = request.POST.get('notice_create_time')
         notice_content = request.POST.get('notice_content')
@@ -419,14 +464,13 @@ def org_launch_notice(request):
                 and notice_appendix):
             return render(request, 'org_home/org_launch_notice.html', {'empty_notice_content': '公告所有部分均不能为空'})
         notices.objects.create(
-            # notice_id = notice_id,
-            notice_title = notice_title,
-            notice_create_time = notice_create_time,
-            notice_content = notice_content,
-            notice_appendix = notice_appendix
+            notice_id=notice_id,
+            notice_title=notice_title,
+            notice_create_time=notice_create_time,
+            notice_content=notice_content,
+            notice_appendix=notice_appendix
         )
         return render(request, 'notice/notice.html')
-
 
 
 def org_modify_activity(request):
@@ -453,20 +497,20 @@ def org_view_posted_activity(request):
             whole_activities = activities.objects.filter(act_organizer_name=org_name)
 
             if whole_activities.all().count() != 0:  # 组织者有<活动>
-                context = {
-                    'act_name': whole_activities.values('act_name'),                                # 活动名称
-                    'act_start_time': whole_activities.values('act_start_time'),                    # 活动开始时间
-                    'act_end_time': whole_activities.values('act_end_time'),                        # 活动结束时间
-                    'act_state': whole_activities.values('act_state '),                             # 活动进行状态
-                    'act_total_number': whole_activities.values('act_total_number'),                # 活动总人数
-                    'act_participated_number': whole_activities.values('act_participated_number'),  # 活动已参加人数
-                    'act_available_number': whole_activities.values('act_available_number'),        # 活动剩余人数
-                    "func_state": FunctionStatus.NORMAL,                                            # 访问状态
-                    "message": "正常访问"                                                            # 待返回的信息
+                data = {
+                    'act_name': list(whole_activities.values('act_name')),                                # 活动名称
+                    'act_start_time': list(whole_activities.values('act_start_time')),                    # 活动开始时间
+                    'act_end_time': list(whole_activities.values('act_end_time')),                        # 活动结束时间
+                    'act_state': list(whole_activities.values('act_state ')),                             # 活动进行状态
+                    'act_total_number': list(whole_activities.values('act_total_number')),                # 活动总人数
+                    'act_participated_number': list(whole_activities.values('act_participated_number')),  # 活动已参加人数
+                    'act_available_number': list(whole_activities.values('act_available_number')),        # 活动剩余人数
+                    "func_state": FunctionStatus.NORMAL,                                                  # 访问状态
+                    "message": "正常访问"                                                                  # 待返回的信息
                 }
-                return render(request, 'org_home/org_view_posted_activity.html', context=context)
+                return JsonResponse(data)
             else:  # 组织者未组织过活动 - （待改）
-                context = {
+                data = {
                     "act_name": '无',                     # 活动名称
                     'act_start_time': '无',               # 活动开始时间
                     'act_end_time': '无',                 # 活动结束时间
@@ -477,9 +521,9 @@ def org_view_posted_activity(request):
                     "func_state": FunctionStatus.EMPTY,   # 访问状态
                     "message": "待显示的内容为空"           # 待返回的信息
                 }
-                return render(request, 'org_home/org_view_posted_activity.html', context=context)
+                return render(request, 'org_home/org_view_posted_activity.html', context=data)
         else:  # 参加者或管理员访问
-            context = {
+            data = {
                 "act_name": '无',                             # 活动名称
                 'act_start_time': '无',                       # 活动开始时间
                 'act_end_time': '无',                         # 活动结束时间
@@ -490,9 +534,9 @@ def org_view_posted_activity(request):
                 "func_state": FunctionStatus.NO_PERMISSION,   # 访问状态
                 "message": "非组织者身份访问，无权限"             # 待返回的信息
             }
-            return render(request, 'login.html', context=context)
+            return render(request, 'login.html', context=data)
     else:  # 通过get方法访问
-        context = {
+        data = {
             "act_name": '无',                         # 活动名称
             'act_start_time': '无',                   # 活动开始时间
             'act_end_time': '无',                     # 活动结束时间
@@ -503,7 +547,7 @@ def org_view_posted_activity(request):
             "func_state": FunctionStatus.NOT_POST,    # 访问状态
             "message": "非正常形式访问，请登录"          # 待返回的信息
         }
-        return render(request, 'login.html', context=context)
+        return render(request, 'login.html', context=data)
 
 
 def mag_home(request):
