@@ -24,7 +24,7 @@ urlpatterns = [
     path('stu_home/stu_join_activity/', views.stu_join_activity),
     # 1 2学生：个人中心
     path('stu_home/stu_center/', views.stu_center, name="stu_center"),
-    # 2 1学生：可参加活动页
+    # 2 1学生：可参加活动页 - (待改)
     path('stu_home/stu_activity_yes/', views.stu_activity_yes, name="stu_activity_yes"),
     # 2 学生：不可参加活动  - （秦浩廷）
     path('stu_home/stu_activity_no/', views.stu_activity_no, name="stu_activity_no"),
@@ -36,7 +36,6 @@ urlpatterns = [
     path('stu_home/stu_otherteam/', views.stu_otherteam, name="stu_other_team"),
 
 
-
     # 组织者 ：主页
     path('org_home/', views.org_home, name="org_home"),
     # 1组织者 ：发布活动
@@ -46,7 +45,7 @@ urlpatterns = [
     # 1 2组织者：修改活动
     path('org_home/org_modify_activity/', views.org_modify_activity, name="org_modify_activity"),
     # 2 组织者：查看已发活动 - （秦浩廷）
-    path('org_home/org_view_pasted_activity/', views.org_view_pasted_activity, name="org_view_pasted_activity"),
+    path('org_home/org_view_posted_activity/', views.org_view_posted_activity, name="org_view_pasted_activity"),
 
 
     # 管理者： 主页
