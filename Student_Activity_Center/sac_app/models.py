@@ -43,7 +43,7 @@ class teams(models.Model):
     # 队长联系方式
     team_header_phone = models.CharField(max_length=32)
     # 队成员
-    team_Member = models.ForeignKey(students, on_delete=models.PROTECT)
+    team_members = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
 # 管理员类
@@ -72,14 +72,14 @@ class activities(models.Model):
     act_max_team_number = models.IntegerField()
     # 活动进行状态
     act_state = models.IntegerField()
-    # 活动能否参加状态
-    act_flag = models.CharField(max_length=16, blank=False)
     # 活动总人数
     act_total_number = models.IntegerField()
     # 活动已参加人数
     act_participated_number = models.IntegerField()
     # 活动报名剩余人数
     act_available_number = models.IntegerField()
+    # 活动能否参加状态
+    act_flag = models.CharField(max_length=16, blank=False)
     # 活动附件
     act_planning_book = models.FileField(null=True)
     # 活动简介
@@ -115,9 +115,9 @@ class organizers(models.Model):
 # 活动已参加学生子表类
 class act_to_stu(models.Model):
     # 学生参加的活动对应的ID
-    act = models.ForeignKey(activities, on_delete=models.PROTECT)
+    act_id = models.ForeignKey(activities, on_delete=models.PROTECT)
     # 参加活动的学生对应的ID
-    stu = models.ForeignKey(students, on_delete=models.PROTECT)
+    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
 # 公告类
