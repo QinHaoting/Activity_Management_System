@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+        <link rel="stylesheet" type="text/css" href="../../src/css/bootstrap-clearmin.min.css">
+        <link rel="stylesheet" type="text/css" href="../../src/css/roboto.css">
+        <link rel="stylesheet" type="text/css" href="../../src/css/material-design.css">
+        <link rel="stylesheet" type="text/css" href="../../src/css/small-n-flat.css">
+        <link rel="stylesheet" type="text/css" href="../../src/css/font-awesome.min.css">
+        <link rel="stylesheet" type="text/css" href="../../src/css/c3.min.css">
+        <title>学生活动中心</title>
+    </head>
+    <body class="cm-no-transition cm-2-navbar">
+        <div id="cm-menu">
+            <nav class="cm-navbar cm-navbar-primary">
+                <div class="cm-flex"><a class="cm-logo"></a></div>
+                <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+            </nav>
+            <div id="cm-menu-content">
+                <div id="cm-menu-items-wrapper">
+                    <div id="cm-menu-scroller">
+                        <ul class="cm-menu-items">
+                            <li class="active"><a href="{% url 'app:stu_home' %}" class="sf-house">活动大厅</a></li>
+                            <li><a href="{% url 'app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                            <li><a href="{% url 'app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <header id="cm-header">
+            <nav class="cm-navbar cm-navbar-primary">
+                <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+                <div class="cm-flex">
+                    <div class="nav-tabs-container">
+                        <ul class="nav nav-tabs">
+                            <li><a href="{% url 'app:stu_home' %}">首页</a></li>
+                            <li><a href="{% url 'app:notice' %}">公告</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">消息数量</span> </button>
+                    <div class="popover cm-popover bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <div class="list-group">
+                                <a href="#" class="list-group-item">
+                                    <h4 class="list-group-item-heading text-overflow">
+                                        <i class="fa fa-fw fa-envelope"></i>现在有件大事通知您。
+                                    </h4>
+                                    <p class="list-group-item-text text-overflow">覃智科找了一个肥肥的女朋友</p>
+                                </a>
+                            </div>
+                            <div style="padding:10px"><a class="btn btn-success btn-block" href="#">展现更多</a></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="dropdown pull-right">
+                    <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+                    <ul class="dropdown-menu">
+                        <li class="disabled text-center">
+                            <a style="cursor:default;"><strong>用户名</strong></a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                        </li>
+                        <li>
+                            <a href=""><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        <script src="../../src/js/lib/jquery.min.js"></script>
+        <script src="../../src/js/jquery.mousewheel.min.js"></script>
+        <script src="../../src/js/jquery.cookie.min.js"></script>
+        <script src="../../src/js/fastclick.min.js"></script>
+        <script src="../../src/js/bootstrap.min.js"></script>
+        <script src="../../src/js/clearmin.min.js"></script>
+        <script src="../../src/js/lib/d3.min.js"></script>
+        <script src="../../src/js/lib/c3.min.js"></script>
+    </body>
+</html>

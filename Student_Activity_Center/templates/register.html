@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+
+    <title>学生注册</title>
+    <style></style>
+</head>
+<body class="cm-login">
+
+<div class="text-center" style="padding:90px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
+    <img src="{% static 'images/logo-big.svg' %}" width="300" height="45" >
+</div>
+
+<div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
+    <form method="post" action="">
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;账&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;</i></div>
+                    <input type="text" name="username" class="form-control" placeholder="Username" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码&nbsp;&nbsp;</i></div>
+                    <input type="password" name="password" class="form-control" placeholder="Password" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>确认密码</i></div>
+                    <input type="password" name="agpassword" class="form-control" placeholder="Confirm Password" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;邮&nbsp;&nbsp;&nbsp;箱&nbsp;&nbsp;</i></div>
+                    <input type="email" name="email" class="form-control" placeholder="Email" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;验证码&nbsp;&nbsp;</i></div>
+                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <img onclick="changeImage(this);" src="../../check_code/"  title="点击刷新">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-primary">立即注册</button>
+                <span style="color: red">{{ error }}</span>
+            </div>
+            <div class="form-group">
+                <div class="checkbox" style="color: black;"><label><input type="checkbox">我已阅读并同意相关服务条款和隐私政策</label></div>
+            </div>
+        </div>
+
+    </form>
+</div>
+<script>
+    function changeImage(ths) {
+        ths.src = ths.src + '?'
+
+    }
+</script>
+</body>
+</html>
