@@ -16,8 +16,41 @@ def login(request):
 # Create your views here.
 
 def register(request):
+    if request.method == POST:
+        re_id = request.POST.get('stu_id')
+        re_Email = requestPOST.get('stu_Email')
+        try:
+            student = students.objects.get(stu_id = re_id)
+            return render(request,'login.html',{'id_error':'该id已存在'})
+        except:
+            try:
+                student = students.objects.get(stu_Email=re_Email)
+                return ren已被使用der(request,'login.html',{'Email_error':'该Email已被占用'})
+            except:
+                re_password = request.POST.get('stu_password')
+                student = students.objects.create(stu_id = re_id,stu_Email = re_Email,stu_password = re_password)
+                token = str(uuid.uuid4()).replace('-', '')
+                request.session[token] = re_id
+                path = ''.format(token)
+                subject = '学生账号激活'
+                message = '''
+                                    欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
+                                    <br> <a herf = '{}'>点击激活</a>
+                                    <br>
+                                                            学生活动中心开发团队
+                                    '''.format(path)
+                send_mail(subject=subject, message='', from_email='',
+                          recipient_list=[re_Email, ],html_message = message)
+                return render(request,'login.html')
+    else:
+        return render(request, "register.html")
 
-    return render(request, "register.html")
+def stu_active(request):
+    token = request.GET.get('token')
+    re_id = request.session.get(token)
+    student = students.objects.get(stu_id = re_id)
+    student.stu_valid = 1
+    student.save()
 
 def forgetpwd(request):
 
