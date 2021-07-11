@@ -44,12 +44,12 @@ def stu_activity_no(request):
     :param request:
     :return:
     """
-    return render(request, 'stu_home/stu_activity_no.html')
+    return render(request, 'stu_home/')
 
 
 def stu_center(request):
     """
-    学生：个人中心
+    学生：个人中心stu_activity_no.html
     :param request:
     :return:
     """

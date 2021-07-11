@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="7da128f4-6c24-45e5-a5d8-7a25bb89574f" name="Default Changelist" comment="" />
+    <list default="true" id="7da128f4-6c24-45e5-a5d8-7a25bb89574f" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -17,6 +20,9 @@
         <entry key="FLASK_APP" value="app" />
       </map>
     </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1v9DDcTC79jV3ki6Go4j8nR8jj8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -41,6 +47,7 @@
       <option name="presentableId" value="Default" />
       <updated>1625965292813</updated>
       <workItem from="1625965294131" duration="604000" />
+      <workItem from="1625968467018" duration="9000" />
     </task>
     <servers />
   </component>
