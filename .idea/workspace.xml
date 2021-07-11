@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="46115ff8-67a1-4221-b925-730c14b3f03a" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/Student_Activity_Center/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/Student_Activity_Center/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/admin.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/apps.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/migrations/__init__.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/models.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/tests.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/views.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/urls (1).py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/urls.py" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/views.py" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1v9B9EW7Xq1lHy7Y9Dtc19mguny" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="46115ff8-67a1-4221-b925-730c14b3f03a" name="Default Changelist" comment="" />
+      <created>1625964271287</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1625964271287</updated>
+      <workItem from="1625964273024" duration="842000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
