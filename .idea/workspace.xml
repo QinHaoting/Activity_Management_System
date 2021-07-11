@@ -1,67 +1,50 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="46115ff8-67a1-4221-b925-730c14b3f03a" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/Student_Activity_Center/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/Student_Activity_Center/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/admin.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/apps.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/migrations/__init__.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/models.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/tests.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/common/views.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/Student_Activity_Center/sac_app/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/urls (1).py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/urls.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Student_Activity_Center/views.py" beforeDir="false" />
-    </list>
+    <list default="true" id="7da128f4-6c24-45e5-a5d8-7a25bb89574f" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="Git.Settings">
-    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  <component name="FlaskConsoleOptions" custom-start-script="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))">
+    <envs>
+      <env key="FLASK_APP" value="app" />
+    </envs>
+    <option name="myCustomStartScript" value="import sys&#10;sys.path.extend([WORKING_DIR_AND_PYTHON_PATHS])&#10;from flask.cli import ScriptInfo&#10;locals().update(ScriptInfo(create_app=None).load_app().make_shell_context())&#10;print(&quot;Python %s on %s\nApp: %s [%s]\nInstance: %s&quot; % (sys.version, sys.platform, app.import_name, app.env, app.instance_path))" />
+    <option name="myEnvs">
+      <map>
+        <entry key="FLASK_APP" value="app" />
+      </map>
+    </option>
   </component>
-  <component name="ProjectId" id="1v9B9EW7Xq1lHy7Y9Dtc19mguny" />
+  <component name="ProjectId" id="1v9DDcTC79jV3ki6Go4j8nR8jj8" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Student_Activity_Center" />
+    <property name="settings.editor.selected.configurable" value="project.propVCSSupport.Mappings" />
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
-      <changelist id="46115ff8-67a1-4221-b925-730c14b3f03a" name="Default Changelist" comment="" />
-      <created>1625964271287</created>
+      <changelist id="7da128f4-6c24-45e5-a5d8-7a25bb89574f" name="Default Changelist" comment="" />
+      <created>1625965292813</created>
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
-      <updated>1625964271287</updated>
-      <workItem from="1625964273024" duration="842000" />
+      <updated>1625965292813</updated>
+      <workItem from="1625965294131" duration="604000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
-  </component>
-  <component name="Vcs.Log.Tabs.Properties">
-    <option name="TAB_STATES">
-      <map>
-        <entry key="MAIN">
-          <value>
-            <State />
-          </value>
-        </entry>
-      </map>
-    </option>
   </component>
 </project>
