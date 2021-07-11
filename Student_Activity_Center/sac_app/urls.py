@@ -24,10 +24,10 @@ urlpatterns = [
     path('stu_home/stu_join_activity/', views.stu_join_activity),
     # 1 2学生：个人中心
     path('stu_home/stu_center/', views.stu_center, name="stu_center"),
-    # 2 1学生：可参加活动页 - (待改)
-    path('stu_home/stu_activity_yes/', views.stu_activity_yes, name="stu_activity_yes"),
-    # 2 学生：不可参加活动  - （秦浩廷）
-    path('stu_home/stu_activity_no/', views.stu_activity_no, name="stu_activity_no"),
+    # 2 1学生：活动详情页 - (待改)
+    path('stu_home/stu_activity_details/', views.stu_activity_details, name="stu_activity_yes"),
+    # 2 学生：活动列表页  - 可根据前端控制信号将活动分成<所有活动>，<可参加>，<不可参加>（秦浩廷）
+    path('stu_home/stu_activity_list/', views.stu_activity_list, name="stu_activity_no"),
     # 1 学生：创建队伍
     path('stu_home/stu_createteam/', views.stu_createteam, name="stu_create_team"),
     # 1 2 学生：我的队伍
