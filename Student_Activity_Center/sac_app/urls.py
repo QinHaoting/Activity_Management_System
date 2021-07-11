@@ -3,7 +3,7 @@
 
 from django.conf.urls import url
 
-from Student_Activity_Center.sac_app import views
+from sac_app import views
 
 app_name = "app"
 urlpatterns = [
