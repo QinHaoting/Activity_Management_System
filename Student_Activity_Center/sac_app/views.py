@@ -438,7 +438,7 @@ def org_modify_activity(request):
     return render(request, 'org_home/org_modify_activity.html')
 
 
-def org_view_pasted_activity(request):
+def org_view_posted_activity(request):
     """
     组织者：查看已发布活动
     :return: 组织者已发布活动的列表
