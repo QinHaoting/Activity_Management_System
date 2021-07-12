@@ -15,7 +15,6 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -26,7 +25,6 @@ SECRET_KEY = 'django-insecure-!qgj8)(yg9_uq5+3bn81%r789+57s=ly#9poxoj-rj+0t7w0r$
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -70,7 +68,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Student_Activity_Center.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
@@ -78,13 +75,12 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sac_database',
-        'USER': 'root',         # 注意调试连接自己的数据库
+        'USER': 'root',  # 注意调试连接自己的数据库
         'PASSWORD': '123456',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -104,21 +100,19 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
 # 语言编码
-LANGUAGE_CODE = 'zh-Hans'          # 汉字
+LANGUAGE_CODE = 'zh-Hans'  # 汉字
 
-TIME_ZONE = 'Asia/Shanghai'        # 时区
+TIME_ZONE = 'Asia/Shanghai'  # 时区
 
 USE_I18N = True
 
 USE_L10N = True
 
 USE_TZ = True
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
@@ -132,7 +126,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 EMAIL_HOST = 'smtp.qq.com'
 EMAIL_PORT = 25
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+EMAIL_HOST_USER = '2912784728@qq.com'
+EMAIL_HOST_PASSWORD = 'eaeizneosqsadeae'
 EMAIL_USE_TLS = True
-Email_DROM = ''
