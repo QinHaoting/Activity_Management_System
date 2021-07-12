@@ -63,8 +63,8 @@ urlpatterns = [
 
     # 2 公告：公告主页
     path('notice/', views.notice, name="notice"),
-    # 2 公告：活动公告
+    # 2 公告：展示活动公告
     path('notice/notice_activity/', views.notice_activity, name="notice_activity"),
-    # 2 公告：系统公告
+    # 2 公告：展示系统公告
     path('notice/notice_sys/', views.notice_sys, name="notice_sys"),
-]
+    ]
