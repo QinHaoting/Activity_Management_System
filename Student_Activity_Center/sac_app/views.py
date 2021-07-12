@@ -4,6 +4,7 @@ from django.urls import reverse
 from django.conf import settings
 from django.core.mail import send_mail
 import uuid
+import re
 
 from sac_app.check_code import gen_check_code
 
@@ -28,7 +29,7 @@ def login(request):
                             if student.stu_password == log_password:
                                 request.session['user_id'] = student.stu_id
                                 request.session['user_type'] = 'student'
-                                return RttpResponse('登陆成功')
+                                return HttpResponse('登陆成功')
                             else:
                                 return render(request, 'login.html', {'password_error': '密码错误'})
                         else:
@@ -41,7 +42,7 @@ def login(request):
                         if organizer.org_password == log_password:
                             request.session['user_id'] = organizer.org_id
                             request.session['user_type'] = 'organizer'
-                            return RttpResponse('登陆成功')
+                            return HttpResponse('登陆成功')
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     except:
@@ -52,15 +53,15 @@ def login(request):
                         if manager.man_password == log_password:
                             request.session['user_id'] = manager.man_id
                             request.session['user_type'] = 'manager'
-                            return RttpResponse('登陆成功')
+                            return HttpResponse('登陆成功')
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     except:
                         return render(request, 'login.html', {'id_error': 'id不存在'})
             else:
-                return render(request,'login.html',{'code_error':'验证码错误'})
+                return render(request, 'login.html', {'code_error':'验证码错误'})
         else:
-            return render(request,'login.html',{'fill_in_error':'ID,验证码和密码均不能为空'})
+            return render(request, 'login.html', {'fill_in_error':'ID,验证码和密码均不能为空'})
     else:
         return render(request, "login.html")
 # Create your views here.
@@ -68,7 +69,7 @@ def login(request):
 def register(request):
     if request.method == 'POST':
         re_id = request.POST.get('username')    #获取注册信息
-        re_Email = requestPOST.get('email')
+        re_Email = request.POST.get('email')
         re_password = request.POST.get('password')
         con_password = request.POST.get('agpassword')
         con_code = request.POST.get('idcode')
@@ -97,13 +98,13 @@ def register(request):
                                                 '''.format(token)
                             send_mail(subject=subject, message='', from_email='2912784728@qq.com',
                                       recipient_list=[re_Email, ], html_message=message)  # 给用户邮箱发送用于激活的邮件
-                            return RttpResponse('注册成功，请前去激活')
+                            return HttpResponse('注册成功，请前去激活')
                 else:
                     return render(request, 'register.html', {'password_error': '两次输入密码不同'})
             else:
-                return render(request,'register.html',{'code_error':'验证码错误'})
+                return render(request, 'register.html', {'code_error':'验证码错误'})
         else:
-            return render(request,'register.html',{'fill_in_error':'ID，邮箱，密码，确认密码和验证码均不能为空'})
+            return render(request, 'register.html', {'fill_in_error':'ID，邮箱，密码，确认密码和验证码均不能为空'})
     else:
         return render(request, "register.html")
 
@@ -117,6 +118,7 @@ def stu_active(request):
 def forgetpwd(request):
 
     return render(request, "forgetpwd.html")
+
 
 def check_code(request):
     img, code = gen_check_code()
