@@ -149,6 +149,7 @@ def register(request):
     else:
         return render(request, 'register.html')
 
+    return render(request, 'register.html')
 
 def stu_active(request):
     """
