@@ -5,12 +5,10 @@
     {% load static %}
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-
-
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}"/>
 
     <title>学生注册</title>
     <style></style>
@@ -18,10 +16,11 @@
 <body class="cm-login">
 
 <div class="text-center" style="padding:50px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
-    <img src="{% static 'img/login.bmp' %}" width="300" height="100" >
+    <img src="{% static 'img/logo2.jpg' %}" width="300" height="100">
 </div>
 
 <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
+    {% csrf_token %}
     <form method="post" action="">
         <div class="col-xs-12">
             <div class="form-group">
@@ -33,13 +32,15 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i>&nbsp;&nbsp;密&nbsp;&nbsp;&nbsp;码&nbsp;&nbsp;</i></div>
-                    <input type="password" name="password" class="form-control" placeholder="Password" required="required">
+                    <input type="password" name="password" class="form-control" placeholder="Password"
+                           required="required">
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i>确认密码</i></div>
-                    <input type="password" name="agpassword" class="form-control" placeholder="Confirm Password" required="required">
+                    <input type="password" name="agpassword" class="form-control" placeholder="Confirm Password"
+                           required="required">
                 </div>
             </div>
             <div class="form-group">
@@ -51,12 +52,13 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i>&nbsp;验证码&nbsp;&nbsp;</i></div>
-                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code" required="required">
+                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code"
+                           required="required">
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <img onclick="changeImage(this);" src="../../check_code/"  title="点击刷新">
+                    <img onclick="changeImage(this);" src="../../check_code/" title="点击刷新">
                 </div>
             </div>
             <div class="form-group">
@@ -64,10 +66,11 @@
                 <span style="color: red">{{ error }}</span>
             </div>
             <div class="form-group">
-                <div class="checkbox" style="color: black;"><label><input type="checkbox">我已阅读并同意相关服务条款和隐私政策</label></div>
+                <div class="checkbox" style="color: black;"><label><input type="checkbox">我已阅读并同<a
+                        href="">相关服务条款和隐私政策</a>意</label></div>
             </div>
             <div class="form-group">
-                <a href="../../login/" class="">点错了？返回登录</a>
+                <a href="{% url 'app:login' %}" class="">返回登录</a>
             </div>
         </div>
 

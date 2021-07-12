@@ -1,86 +1,149 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-        <link rel="stylesheet" type="text/css" href="../../src/css/bootstrap-clearmin.min.css">
-        <link rel="stylesheet" type="text/css" href="../../src/css/roboto.css">
-        <link rel="stylesheet" type="text/css" href="../../src/css/material-design.css">
-        <link rel="stylesheet" type="text/css" href="../../src/css/small-n-flat.css">
-        <link rel="stylesheet" type="text/css" href="../../src/css/font-awesome.min.css">
-        <link rel="stylesheet" type="text/css" href="../../src/css/c3.min.css">
-        <title>Clearmin template</title>
-    </head>
-    <body class="cm-no-transition cm-2-navbar">
-        <div id="cm-menu">
-            <nav class="cm-navbar cm-navbar-primary">
-                <div class="cm-flex"><a class="cm-logo"></a></div>
-                <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
-            </nav>
-            <div id="cm-menu-content">
-                <div id="cm-menu-items-wrapper">
-                    <div id="cm-menu-scroller">
-                        <ul class="cm-menu-items">
-                            <li><a href="{% url 'app:stu_home' %}" class="sf-house">活动大厅</a></li>
-                            <li><a href="{% url 'app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
-                            <li class="active"><a href="{% url 'app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a></li>
-                        </ul>
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>Clearmin template</title>
+</head>
+<body class="cm-no-transition cm-2-navbar" style="overflow-y: hidden">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
+                    <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">消息数量</span></button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading text-overflow">
+                                <i class="fa fa-fw fa-envelope"></i>现在有件大事通知您。
+                            </h4>
+                            <p class="list-group-item-text text-overflow">覃智科找了一个肥肥的女朋友</p>
+                        </a>
+                    </div>
+                    <div style="padding:10px"><a class="btn btn-success btn-block" href="#">展现更多</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body" style="min-height: 480px;">
+                    <h2 style="margin-top:0">个人信息</h2>
+                    <table class="table">
+                        <tbody>
+                        <tr>
+                            <td><strong>姓名</strong></td>
+                            <td>Mxmevol</td>
+                        </tr>
+                        <tr>
+                            <td><strong>性别</strong></td>
+                            <td>男</td>
+                        </tr>
+                        <tr>
+                            <td><strong>学号</strong></td>
+                            <td>DZ200031</td>
+                        </tr>
+                        <tr>
+                            <td><strong>年级</strong></td>
+                            <td>大二</td>
+                        </tr>
+                        <tr>
+                            <td><strong>专业</strong></td>
+                            <td>人工智能</td>
+                        </tr>
+                        <tr>
+                            <td><strong>学院</strong></td>
+                            <td>计算机科学与技术</td>
+                        </tr>
+                        <tr>
+                            <td><strong>电话</strong></td>
+                            <td>1520261449</td>
+                        </tr>
+                        <tr>
+                            <td><strong>邮箱</strong></td>
+                            <td>2425448479@qq.com</td>
+                        </tr>
+                        <tr>
+                            <td><strong>密码</strong></td>
+                            <td>2425448479</td>
+                        </tr>
+                        <tr>
+                            <td><strong>个人简介</strong></td>
+                            <td>帅气，多才</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 " style="left: 40%">
+                        <button class="btn btn-block btn-yellow" data-switch-color="yellow"><a
+                                href="{% url 'sac_app:stu_modify_message' %}">修改</a></button>
+                        <br>
                     </div>
                 </div>
             </div>
         </div>
-        <header id="cm-header">
-            <nav class="cm-navbar cm-navbar-primary">
-                <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
-                <div class="cm-flex">
-                    <div class="nav-tabs-container">
-                        <ul class="nav nav-tabs">
-                            <li><a href="{% url 'app:stu_home' %}">首页</a></li>
-                            <li><a href="{% url 'app:notice' %}">公告</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="dropdown pull-right">
-                    <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">消息数量</span> </button>
-                    <div class="popover cm-popover bottom">
-                        <div class="arrow"></div>
-                        <div class="popover-content">
-                            <div class="list-group">
-                                <a href="#" class="list-group-item">
-                                    <h4 class="list-group-item-heading text-overflow">
-                                        <i class="fa fa-fw fa-envelope"></i>现在有件大事通知您。
-                                    </h4>
-                                    <p class="list-group-item-text text-overflow">覃智科找了一个肥肥的女朋友</p>
-                                </a>
-                            </div>
-                            <div style="padding:10px"><a class="btn btn-success btn-block" href="#">展现更多</a></div>
-                        </div>
-                    </div>
-                </div>
-                <div class="dropdown pull-right">
-                    <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
-                    <ul class="dropdown-menu">
-                        <li class="disabled text-center">
-                            <a style="cursor:default;"><strong>用户名</strong></a>
-                        </li>
-                        <li class="divider"></li>
-                        <li>
-                            <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
-                        </li>
-                        <li>
-                            <a href=""><i class="fa fa-fw fa-sign-out"></i>注销</a>
-                        </li>
-                    </ul>
-                </div>
-            </nav>
-        </header>
-        <script src="../../src/js/lib/jquery.min.js"></script>
-        <script src="../../src/js/jquery.mousewheel.min.js"></script>
-        <script src="../../src/js/jquery.cookie.min.js"></script>
-        <script src="../../src/js/fastclick.min.js"></script>
-        <script src="../../src/js/bootstrap.min.js"></script>
-        <script src="../../src/js/clearmin.min.js"></script>
-        <script src="../../src/js/lib/d3.min.js"></script>
-        <script src="../../src/js/lib/c3.min.js"></script>
-    </body>
+    </div>
+</div>
+    <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
 </html>

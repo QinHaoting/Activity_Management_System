@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
-    <title>学生活动中心</title>
+    <title>Clearmin template</title>
 </head>
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
@@ -22,10 +22,10 @@
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
-                    <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
-                    <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
-                    </li>
+                    <li><a href="{% url 'sac_app:org_launch_activity' %}" class="sf-house">发布活动</a></li>
+                    <li><a href="{% url 'sac_app:org_view_pasted_activity' %}" class="sf-dashboard">已发布活动</a></li>
+                    <li><a href="{% url 'sac_app:org_launch_notice' %}" class="sf-box-out">发布公告</a></li>
+                    <li class="active"><a href="{% url 'sac_app:org_center' %}" class="sf-user-male-alt">组织中心</a></li>
                 </ul>
             </div>
         </div>
@@ -37,8 +37,8 @@
         <div class="cm-flex">
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
-                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
-                    <li class="active"><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                    <li><a href="{% url 'sac_app:org_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:org_notice' %}">公告</a></li>
                 </ul>
             </div>
         </div>
@@ -78,69 +78,47 @@
     </nav>
 </header>
 <div id="global" style="padding-top: 60px">
-    <div class="container-fluid">
-        <div class="col-md-12">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <table class="table table-bordered table-hover">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            <th width=30%>社团名称</th>
-                            <th width=35%>活动名称</th>
-                            <th width=10%>活动状态</th>
-                            <th width=10%>查看</th>
-                            <th>
-                                <select name="pets">
-                                    <option value="all_activity">全部活动</option>
-                                    <option value="ke_activity">可参加</option>
-                                    <option value="no_ke_activity">不可参加</option>
-                                </select>
-                            </th>
-
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <script type="text/javascript">
-                            var re = ""
-                            for (var i = 1; i <= 10; i++) {
-                                re += '<tr class="thd">' +
-                                    '<th scope="row">' + i + '</th>' +
-                                    '<td>重庆户外拓展协会</td>' +
-                                    '<td>穿越虎溪</td>' +
-                                    '<td>报名中</td>' +
-                                    '<td><a href="{% url "sac_app:stu_activity" %}">查看</a></td>' +
-                                    '<td>可参加</td>' +
-                                    '</tr>'
-                            }
-                            document.write(re)
-                        </script>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+    <div class="container-fluid cm-container-white">
+        <h2 style="margin-top:0">组织信息</h2>
+        <form>
+            <table class="table">
+                <tbody>
+                <tr>
+                    <td><strong>社团名称</strong></td>
+                    <td>户外拓展协会</td>
+                </tr>
+                <tr>
+                    <td><strong>社团负责人</strong></td>
+                    <td>马祥</td>
+                </tr>
+                <tr>
+                    <td><strong>电话</strong></td>
+                    <td>15202641449</td>
+                </tr>
+                <tr>
+                    <td><strong>学院</strong></td>
+                    <td>计算机科学与技术</td>
+                </tr>
+                <tr>
+                    <td><strong>邮箱</strong></td>
+                    <td>2425448479@qq.com</td>
+                </tr>
+                <tr>
+                    <td><strong>密码</strong></td>
+                    <td>2425448479</td>
+                </tr>
+                <tr>
+                    <td><strong>社团简介</strong></td>
+                    <td>帅气，多才</td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
+        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 " style="left: 40%">
+            <button class="btn btn-block btn-yellow" data-switch-color="yellow"><a
+                    href="{% url 'sac_app:org_modify_message' %}">修改</a></button>
+            <br>
         </div>
-        <nav>
-            <ul class="pagination shadowed" style="margin:0">
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-left"></i></span>
-                    </a>
-                </li>
-                <script type="text/javascript">
-                    var re = ""
-                    for (var i = 1; i <= 6; i++) {
-                        re += '<li><a href="#">' + i + '</a></li>'
-                    }
-                    document.write(re)
-                </script>
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-right"></i></span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>

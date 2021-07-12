@@ -5,12 +5,10 @@
     {% load static %}
     <meta charset="utf-8">
 
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-
-
-    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}"/>
 
     <title>登录学生活动中心</title>
     <style></style>
@@ -18,7 +16,7 @@
 <body class="cm-login">
 
 <div class="text-center" style="padding:50px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
-    <img src="{% static 'img/login.bmp' %}" width="300" height="100" >
+    <img src="{% static 'img/logo2.jpg' %}" width="300" height="100">
 </div>
 
 <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
@@ -28,7 +26,7 @@
                 <div class="input-group">
                     <div class="input-group-addon"><i>&nbsp;身&nbsp;&nbsp;份&nbsp;</i></div>
                     <select name="select" class="form-control">
-                        <option value="stu" selected = "selected">学生</option>
+                        <option value="stu" selected="selected">学生</option>
                         <option value="org">组织</option>
                         <option value="mag">管理员</option>
                     </select>
@@ -43,26 +41,28 @@
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i>&nbsp;密&nbsp;&nbsp;码&nbsp;</i></div>
-                    <input type="password" name="password" class="form-control" placeholder="Password" required="required">
+                    <input type="password" name="password" class="form-control" placeholder="Password"
+                           required="required">
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
                     <div class="input-group-addon"><i>验证码</i></div>
-                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code" required="required">
+                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code"
+                           required="required">
                 </div>
             </div>
             <div class="form-group">
                 <div class="input-group">
-                    <img onclick="changeImage(this);" src="../check_code/"  title="点击刷新">
+                    <img onclick="changeImage(this);" src="../check_code/" title="点击刷新">
                 </div>
             </div>
         </div>
 
         <div class="col-xs-6">
             <div class="checkbox" style="color: black;"><label><input type="checkbox">记住密码</label></div>
-            <div class="col-xs-6" style="color:black;">
-                <a href="forgetpwd/">忘记密码?</a>
+            <div class="col-xs-8" style="color:black;">
+                <a href="{% url 'app:forgetpwd' %}">忘记密码?</a>
             </div>
         </div>
         <div class="col-xs-6">
@@ -71,16 +71,14 @@
                 <span style="color: red">{{ error }}</span>
             </div>
             <div class="col-xs-6">
-                <a href="register/" class="btn btn-block btn-primary">注册</a>
+                <a href="{% url 'app:register' %}" class="btn btn-block btn-primary">注册</a>
             </div>
         </div>
-
     </form>
 </div>
 <script>
     function changeImage(ths) {
         ths.src = ths.src + '?'
-
     }
 </script>
 </body>
