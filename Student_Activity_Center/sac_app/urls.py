@@ -12,14 +12,13 @@ urlpatterns = [
     path('login/', views.login, name="login"),
     # 验证码
     path('check_code/', views.check_code, name="check_code"),
-    # 1 注册
+    # 1 注册 -
     path('login/register/', views.register, name="register"),
-    # 1 激活
+    # 1 激活 -
     path('active/', views.stu_active, name="active"),
-    # 1 忘记密码
+    # 1 忘记密码 -
     path('login/forgetpwd/', views.forgetpwd, name="forgetpwd"),
-
-    # 修改密码
+    # 1 修改密码 -
     path('changepwd/', views.changepwd, name="changepwd"),
 
     # 学生:主页
