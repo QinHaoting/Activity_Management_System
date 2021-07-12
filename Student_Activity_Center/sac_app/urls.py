@@ -14,6 +14,8 @@ urlpatterns = [
     path('check_code/', views.check_code),
     # 1 注册
     path('login/register/', views.register),
+    # 1 激活
+    path('active/',views.stu_active),
     # 1 忘记密码
     path('login/forgetpwd/', views.forgetpwd),
     # 学生:主页

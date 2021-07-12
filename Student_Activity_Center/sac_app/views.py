@@ -14,82 +14,96 @@ from django.contrib import auth
 
 def login(request):
     if request.method == 'POST':
-        method = request.POST.get('method')    #获取登录信息（暂未加入验证码）
-        log_id = request.POST.get('id')
+        method = request.POST.get('method')    #获取登录信息
+        log_id = request.POST.get('username')
         log_password = request.POST.get('password')
-        if log_id and log_password:
-            if method == 'student':    #如果选择学生登录
-                try:
-                    student = students.objects.get(stu_id=log_id)
-                    if student.stu_valid == 1:
-                        if student.stu_password == log_password:
-                            request.session['user_id'] = student.stu_id
-                            request.session['user_type'] = 'student'
-                            return redirect()
+        con_code = request.POST.get('idcode')
+        check_code = request.session.get('check_code')
+        if log_id and log_password and con_code:
+            if con_code == check_code:
+                if method == 'student':  # 如果选择学生登录
+                    try:
+                        student = students.objects.get(stu_id=log_id)
+                        if student.stu_valid == 1:
+                            if student.stu_password == log_password:
+                                request.session['user_id'] = student.stu_id
+                                request.session['user_type'] = 'student'
+                                return RttpResponse('登陆成功')
+                            else:
+                                return render(request, 'login.html', {'password_error': '密码错误'})
                         else:
-                            return render(request,'login.html',{'password_error':'密码错误'})
-                    else:
-                        return render(request,'login.html',{'valid_error':'账户未激活'})
-                except:
-                    return render(request,'login.html',{'id_error':'id不存在'})
-            elif method == 'organizer':    #如果选择组织者登录
-                try:
-                    organizer = organizers.objects.get(org_id=log_id)
-                    if organizer.org_password == log_password:
-                        request.session['user_id'] = organizer.org_id
-                        request.session['user_type'] = 'organizer'
-                        return redirect()
-                    else:
-                        return render(request, 'login.html', {'password_error': '密码错误'})
-                except:
-                    return render(request, 'login.html', {'id_error': 'id不存在'})
-            elif method == 'manager':    #如果选择管理者登录
-                try:
-                    manager = managers.objects.get(man_id = log_id)
-                    if manager.man_password == log_password:
-                        request.session['user_id'] = manager.man_id
-                        request.session['user_type'] = 'manager'
-                        return redirect()
-                    else:
-                        return render(request, 'login.html', {'password_error': '密码错误'})
-                except:
-                    return render(request, 'login.html', {'id_error': 'id不存在'})
+                            return render(request, 'login.html', {'valid_error': '账户未激活'})
+                    except:
+                        return render(request, 'login.html', {'id_error': 'id不存在'})
+                elif method == 'organizer':  # 如果选择组织者登录
+                    try:
+                        organizer = organizers.objects.get(org_id=log_id)
+                        if organizer.org_password == log_password:
+                            request.session['user_id'] = organizer.org_id
+                            request.session['user_type'] = 'organizer'
+                            return RttpResponse('登陆成功')
+                        else:
+                            return render(request, 'login.html', {'password_error': '密码错误'})
+                    except:
+                        return render(request, 'login.html', {'id_error': 'id不存在'})
+                elif method == 'manager':  # 如果选择管理者登录
+                    try:
+                        manager = managers.objects.get(man_id=log_id)
+                        if manager.man_password == log_password:
+                            request.session['user_id'] = manager.man_id
+                            request.session['user_type'] = 'manager'
+                            return RttpResponse('登陆成功')
+                        else:
+                            return render(request, 'login.html', {'password_error': '密码错误'})
+                    except:
+                        return render(request, 'login.html', {'id_error': 'id不存在'})
+            else:
+                return render(request,'login.html',{'code_error':'验证码错误'})
         else:
-            return render(request,'',{'fill_in_error':'ID和密码均不能为空'})
+            return render(request,'login.html',{'fill_in_error':'ID,验证码和密码均不能为空'})
     else:
         return render(request, "login.html")
 # Create your views here.
 
 def register(request):
     if request.method == 'POST':
-        re_id = request.POST.get('stu_id')    #获取注册信息（暂未加入验证码）
-        re_Email = requestPOST.get('stu_Email')
-        re_password = request.POST.get('stu_password')
-        if re_id and re_Email and re_password:
-            try:
-                student = students.objects.get(stu_id=re_id)
-                return render(request, 'login.html', {'id_error': '该id已存在'})
-            except:
-                try:
-                    student = students.objects.get(stu_Email=re_Email)
-                    return render(request, 'login.html', {'Email_error': '该Email已被占用'})
-                except:
-                    student = students.objects.create(stu_id=re_id, stu_Email=re_Email, stu_password=re_password)
-                    token = str(uuid.uuid4()).replace('-', '')    #生成随机字符串
-                    request.session[token] = re_id    #session利用生成的随机字符串存储用户id
-                    path = ''.format(token)    #邮件的主题、激活地址、内容
-                    subject = '学生账号激活'
-                    message = '''
-                                        欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
-                                        <br> <a herf = '{}'>点击激活</a>
-                                        <br>
-                                                                学生活动中心开发团队
-                                        '''.format(path)
-                    send_mail(subject=subject, message='', from_email='2912784728@qq.com',
-                              recipient_list=[re_Email, ], html_message=message)    #给用户邮箱发送用于激活的邮件
-                    return render(request, 'login.html')
+        re_id = request.POST.get('username')    #获取注册信息
+        re_Email = requestPOST.get('email')
+        re_password = request.POST.get('password')
+        con_password = request.POST.get('agpassword')
+        con_code = request.POST.get('idcode')
+        check_code = request.session.get('check_code')
+        if re_id and re_Email and re_password and con_password and con_code:
+            if con_code == check_code:
+                if re_password == con_password:
+                    try:
+                        student = students.objects.get(stu_id=re_id)
+                        return render(request, 'login.html', {'id_error': '该id已存在'})
+                    except:
+                        try:
+                            student = students.objects.get(stu_Email=re_Email)
+                            return render(request, 'login.html', {'Email_error': '该Email已被占用'})
+                        except:
+                            student = students.objects.create(stu_id=re_id, stu_Email=re_Email,
+                                                              stu_password=re_password)
+                            token = str(uuid.uuid4()).replace('-', '')  # 生成随机字符串
+                            request.session[token] = re_id  # session利用生成的随机字符串存储用户id
+                            subject = '学生账号激活'
+                            message = '''
+                                                欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
+                                                <br> <a herf = "http://127.0.0.1:8000/sac_app/active?token={}">点击激活</a>
+                                                <br>
+                                                                        学生活动中心开发团队
+                                                '''.format(token)
+                            send_mail(subject=subject, message='', from_email='2912784728@qq.com',
+                                      recipient_list=[re_Email, ], html_message=message)  # 给用户邮箱发送用于激活的邮件
+                            return RttpResponse('注册成功，请前去激活')
+                else:
+                    return render(request, 'register.html', {'password_error': '两次输入密码不同'})
+            else:
+                return render(request,'register.html',{'code_error':'验证码错误'})
         else:
-            return render(request,'login.html',{'fill_in_error':'ID，邮箱，密码均不能为空'})
+            return render(request,'register.html',{'fill_in_error':'ID，邮箱，密码，确认密码和验证码均不能为空'})
     else:
         return render(request, "register.html")
 
