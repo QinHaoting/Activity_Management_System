@@ -1,31 +1,30 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
     {% load static %}
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-
-    <link rel="stylesheet" type="text/css" href="../../src/css/bootstrap-clearmin.min.css">
-    <link rel="stylesheet" type="text/css" href="../../src/css/roboto.css">
-    <link rel="stylesheet" type="text/css" href="../../src/css/material-design.css">
-    <link rel="stylesheet" type="text/css" href="../../src/css/small-n-flat.css">
-    <link rel="stylesheet" type="text/css" href="../../src/css/font-awesome.min.css">
-    <link rel="stylesheet" type="text/css" href="../../src/css/c3.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/bootstrap-clearmin.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/roboto.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/material-design.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/small-n-flat.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../../../src/css/c3.min.css">
     <title>校园活动中心</title>
 </head>
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
     <nav class="cm-navbar cm-navbar-primary">
-        <div class="cm-flex"><img src="../../src/img/logo.png" width="180px" height="50px"></div>
+        <div class="cm-flex"><img src="../../../src/img/logo.png" width="180px" height="50px"></div>
         <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
     </nav>
     <div id="cm-menu-content">
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li><a href="mag_examine/" class="sf-pencil">审核活动</a></li>
-                    <li><a href="mag_manage/" class="sf-user-male">管理组织者</a></li>
-                    <li><a href="mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
+                    <li><a href="../mag_examine/" class="sf-pencil">审核活动</a></li>
+                    <li><a href="../mag_manage/" class="sf-user-male">管理组织者</a></li>
+                    <li><a href="../mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
 
                 </ul>
             </div>
@@ -34,20 +33,6 @@
 </div>
 <div class="container-fluid">
     <div class="tab-content">
-        <div>
-        </div>
-        <div class="tab-pane fade in active" id="ipsum" style="margin-top:20px">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h1 style="margin-top:0">欢迎来到学生活动中心<strong> s a c </strong></h1>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 <header id="cm-header">
@@ -56,8 +41,8 @@
         <div class="cm-flex">
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class="active"><a href="../mag_home/">首页</a></li>
-                    <li class=""><a href="mag_notice/">公告</a></li>
+                    <li class=""><a href="../../mag_home/">首页</a></li>
+                    <li class="active"><a href="../mag_notice/">公告</a></li>
                 </ul>
             </div>
         </div>
@@ -95,13 +80,30 @@
         </div>
     </nav>
 </header>
-<script type="text/javascript" src="../../src/js/lib/jquery.min.js"></script>
-<script type="text/javascript" src="../../src/js/jquery.mousewheel.min.js"></script>
-<script type="text/javascript" src="../../src/js/jquery.cookie.min.js"></script>
-<script type="text/javascript" src="../../src/js/fastclick.min.js"></script>
-<script type="text/javascript" src="../../src/js/bootstrap.min.js"></script>
-<script type="text/javascript" src="../../src/js/clearmin.min.js"></script>
-<script type="text/javascript" src="../../src/js/lib/d3.min.js"></script>
-<script type="text/javascript" src="../../src/js/lib/c3.min.js"></script>
+<div id="global" >
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div>
+                        <h2>{{ sys.notice_title }}</h2>
+                    </div>
+                    <div>
+                        {{ sys.notice_content }}
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    <script type="text/javascript" src="../../../../src/js/lib/jquery.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/jquery.mousewheel.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/jquery.cookie.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/fastclick.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/clearmin.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/lib/d3.min.js"></script>
+    <script type="text/javascript" src="../../../../src/js/lib/c3.min.js"></script>
 </body>
 </html>
