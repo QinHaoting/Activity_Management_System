@@ -1,6 +1,5 @@
 from django.db import models
 
-
 import datetime
 
 
@@ -30,30 +29,6 @@ class students(models.Model):
     stu_valid = models.IntegerField()
 
 
-# 参加活动队伍类
-class teams(models.Model):
-    # 队伍ID
-    team_id = models.CharField(max_length=64, primary_key=True)
-    # 队伍人数
-    team_number = models.IntegerField()
-    # 队名
-    team_name = models.CharField(max_length=64, null=True)
-    # 队长名
-    team_header_name = models.CharField(max_length=64)
-    # 队长联系方式
-    team_header_phone = models.CharField(max_length=32)
-    # 队成员
-    team_members = models.ForeignKey(students, on_delete=models.PROTECT)
-
-
-# 管理员类
-class managers(models.Model):
-    # 管理员ID
-    man_id = models.CharField(max_length=64)
-    # 管理员登入密码
-    man_password = models.CharField(max_length=64)
-
-
 # 活动类
 class activities(models.Model):
     # 活动ID
@@ -61,15 +36,19 @@ class activities(models.Model):
     # 活动名称
     act_name = models.CharField(max_length=64, blank=False)
     # 活动开始时间
-    act_start_time = models.DateField(default=1970-1-1, blank=False)
+    act_start_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动结束时间
-    act_end_time = models.DateField(default=1970-1-1, blank=False)
+    act_end_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动负责人名字
     act_organizer_name = models.CharField(max_length=64, blank=False)
     # 活动负责人联系方式
     act_organizer_phone = models.CharField(max_length=32, blank=False)
-    # 活动人员限制
+    # 活动组队最多人数
     act_max_team_number = models.IntegerField()
+    # 活动组队最少人数
+    act_min_team_number = models.IntegerField()
+    # 活动组数
+    act_team_number = models.IntegerField()
     # 活动进行状态
     act_state = models.IntegerField()
     # 活动总人数
@@ -89,7 +68,15 @@ class activities(models.Model):
     act_to_stu_table = models.ManyToManyField(students, through='act_to_stu')
     # 一对多表间关系
     # 参加活动队伍名单
-    act_to_stu_team_table = models.ForeignKey(teams, on_delete=models.PROTECT)
+    # act_to_stu_team_table = models.ManyToManyField(teams, through='act_to_team')
+
+
+# 管理员类
+class managers(models.Model):
+    # 管理员ID
+    man_id = models.CharField(max_length=64)
+    # 管理员登入密码
+    man_password = models.CharField(max_length=64)
 
 
 # 组织类
@@ -120,6 +107,30 @@ class act_to_stu(models.Model):
     stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
+# class act_to_team(models.Model):
+#     # 学生参加的活动对应的ID
+#     act_id = models.ForeignKey(activities, on_delete=models.PROTECT)
+#     # 参加活动的队伍对应的ID
+#     team_id = models.ForeignKey(teams, on_delete=models.PROTECT)
+
+# 参加活动队伍类
+class teams(models.Model):
+    # 队伍ID
+    team_id = models.CharField(max_length=64, primary_key=True)
+    # 队伍人数
+    team_number = models.IntegerField()
+    # 队名
+    team_name = models.CharField(max_length=64, null=True)
+    # 队长名
+    team_header_name = models.CharField(max_length=64)
+    # 队长联系方式
+    team_header_phone = models.CharField(max_length=32)
+    # 队成员
+    team_members = models.ManyToManyField(students, through="stu_to_team")
+    # 队伍参加活动的名称
+    team_act = models.ForeignKey(activities, on_delete=models.PROTECT)
+
+
 # 公告类
 class notices(models.Model):
     # 公告ID
@@ -132,3 +143,9 @@ class notices(models.Model):
     notice_content = models.TextField(blank=False)
     # 公告附件
     notice_appendix = models.FileField(null=True)
+
+
+# 学生队伍子表类
+class stu_to_team(models.Model):
+    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
+    team_id = models.ForeignKey(teams, on_delete=models.PROTECT)
