@@ -44,6 +44,8 @@ class teams(models.Model):
     team_header_phone = models.CharField(max_length=32)
     # 队成员
     team_members = models.ForeignKey(students, on_delete=models.PROTECT)
+    # 队伍参加活动的名称
+    team_act_name = models.CharField(max_length=64)
 
 
 # 管理员类
