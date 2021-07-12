@@ -423,7 +423,7 @@ def org_home(request):
 
 def org_launch_activity(request):  # 需要修改
     """
-    组织者：发布活动
+    组织者：发布活动，可以不用判断时间重复
     :param request:
     :return:
     """
@@ -437,10 +437,10 @@ def org_launch_activity(request):  # 需要修改
         act_organizer_name = request.POST.get('act_organizer_name')
         act_organizer_phone = request.POST.get('act_organizer_phone')
         act_max_team_number = request.POST.get('act_max_team_number')
-        act_state = request.POST.get('act_state')  # 0:审核中 1：报名中 2：活动进行中 3：活动已结束
-        act_total_number = request.POST.get('act_total_number')
-        act_participated_number = request.POST.get('act_participated_number')
-        act_available_number = request.POST.get('act_available_number')
+        act_state = 0  # 0:审核中 1：报名中 2：活动进行中 3：活动已结束
+        act_total_number = request.POST.get('act_total_number')#针对不需要组队的活动而言
+        act_participated_number = 0 #默认已参加人数为0人
+        act_available_number = 100 #默认可参加人数为100人
         act_flag = request.POST.get('act_flag')
         act_planning_book = request.POST.get('act_planning_book')
         act_introduction = request.POST.get('act_introduction')
@@ -459,7 +459,7 @@ def org_launch_activity(request):  # 需要修改
                 act_max_team_number=act_max_team_number,
                 act_state=act_state,
                 act_total_number=act_total_number,
-                act_participated_number=act_participated_number,
+                #act_participated_number=act_participated_number,
                 act_available_number=act_available_number,
                 act_flag=act_flag,
                 act_planning_book=act_planning_book,
@@ -488,7 +488,7 @@ def org_launch_notice(request):
                 and notice_appendix):
             return render(request, 'org_home/org_launch_notice.html', {'empty_notice_content': '公告所有部分均不能为空'})
         notices.objects.create(
-            notice_id = notice_id,
+            notice_id=notice_id,
             notice_title=notice_title,
             notice_create_time=notice_create_time,
             notice_content=notice_content,
