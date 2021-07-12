@@ -3,7 +3,9 @@ import uuid
 from typing import re
 
 from django.core.mail import send_mail
+from django.core.paginator import Paginator
 from django.db import DatabaseError
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.shortcuts import render, HttpResponse, redirect
 from django.urls import reverse
@@ -143,6 +145,9 @@ def register(request):
 
 
 def stu_active(request):
+    """
+    激活函数
+    """
     token = request.GET.get('token')  # 获得token再利用session获得学生id
     re_id = request.session.get(token)
     student = students.objects.get(stu_id=re_id)
@@ -152,6 +157,9 @@ def stu_active(request):
 
 
 def changepwd(request):
+    """
+    修改密码页
+    """
     if request.method == 'POST':
         re_password = request.POST.get('password')
         con_password = request.POST.get('agpassword')
@@ -173,6 +181,9 @@ def changepwd(request):
 
 
 def forgetpwd(request):
+    """
+    忘记密码页
+    """
     if request.method == 'POST':
         re_id = request.POST.get('stu_id')
         re_Email = request.POST.get('stu_Email')
@@ -236,11 +247,54 @@ def stu_activity(request):
 
 def stu_join_activity(request):
     """
-    学生：已参加活动
-    :param request:
+    学生：已参加活动   request.session['user_id']
+    :param stu_id:
+    :param request:models.students.stu_id
     :return:
     """
-    return render(request, 'stu_home/stu_join_activity.html')
+    if request.method == 'POST':  #检测是否用Post请求
+        user_id = request.session.get("user_id", None)  #从前端获取user_id
+        if user_id:
+            # act_id = act_to_stu.objects.filter(user_id=stu_id).values()
+            # act = activities.objects.filter(act_id=act_id)
+
+            stu = students.objects.get(stu_id=user_id)
+            act = stu.activities_set.all().order_by('act_id')
+            # 进行分页操作
+            pagesize = request.params['pagesize']
+            pagenum = request.params['pagenum']
+
+            pgnt1 = Paginator(act, pagesize)  # 分页结果
+            page1 = pgnt1.page(pagenum)       # 分页操作后的页
+
+            pagelist = list(page1)            # 处理成序列字典
+
+            # act_organizer_name = act.act_organizer_name
+            # act_name = act.act_name
+            # act_state = act.act_state
+            # act_flag = act.act_flage
+            # value = {
+            #     "act_organizer_name": act_organizer_name,
+            #     "act_name": act_name,
+            #     "act_state": act_state,
+            #     "act_flag": act_flag
+            # }
+            # act=act_to_stu.objects.filter(students__stu_id=user_id).values()
+            act_organizer_name = list(act.values('act_organizer_name'))     # 形成序列字典
+            act_name = list(act.values('act_name'))
+            act_state = list(act.values('act_state'))
+            act_flag = list(act.values('act_flag'))
+
+            return JsonResponse({'act_organizer_name': act_organizer_name,   # JsonResponse响应
+                                 'act_name': act_name,
+                                 'act_state': act_state,
+                                 'act_flag': act_flag,
+                                 "pagelist": pagelist})
+        # return render(request, {"act_list":act_list},'stu_home/stu_join_activity.html')
+        else:
+            return render(request, 'stu_home/stu_join_activity.html', context={'message': 'No user_id'})
+    else:
+        return render(request, 'stu_home/stu_join_activity.html', context={'message': 'Do not use GET'})
 
 
 def stu_center(request):
@@ -602,6 +656,10 @@ def org_view_posted_activity(request):
         return render(request, 'login.html', context=context)
 
 
+def org_activity_details(request):
+    return None
+
+
 def org_notice(request):
     """
     组织者: 公告界面
@@ -725,9 +783,5 @@ def notice_sys(request):
     :return:
     """
     return render(request, 'notice/notice_sys.html')
-
-
-def org_activity_details(request):
-    return None
 
 
