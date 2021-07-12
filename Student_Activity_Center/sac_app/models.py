@@ -1,6 +1,5 @@
 from django.db import models
 
-
 import datetime
 
 
@@ -63,15 +62,19 @@ class activities(models.Model):
     # 活动名称
     act_name = models.CharField(max_length=64, blank=False)
     # 活动开始时间
-    act_start_time = models.DateField(default=1970-1-1, blank=False)
+    act_start_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动结束时间
-    act_end_time = models.DateField(default=1970-1-1, blank=False)
+    act_end_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动负责人名字
     act_organizer_name = models.CharField(max_length=64, blank=False)
     # 活动负责人联系方式
     act_organizer_phone = models.CharField(max_length=32, blank=False)
-    # 活动人员限制
+    # 活动组队最多人数
     act_max_team_number = models.IntegerField()
+    # 活动组队最少人数
+    act_min_team_number = models.IntegerField()
+    # 活动组数
+    act_team_number = models.IntegerField()
     # 活动进行状态
     act_state = models.IntegerField()
     # 活动总人数
@@ -91,7 +94,7 @@ class activities(models.Model):
     act_to_stu_table = models.ManyToManyField(students, through='act_to_stu')
     # 一对多表间关系
     # 参加活动队伍名单
-    act_to_stu_team_table = models.ForeignKey(teams, on_delete=models.PROTECT)
+    act_to_stu_team_table = models.ManyToManyField(teams, through='act_to_team')
 
 
 # 组织类
@@ -122,7 +125,16 @@ class act_to_stu(models.Model):
     stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
+class act_to_team(models.Model):
+    # 学生参加的活动对应的ID
+    act_id = models.ForeignKey(activities, on_delete=models.PROTECT)
+    # 参加活动的队伍对应的ID
+    team_id = models.ForeignKey(teams, on_delete=models.PROTECT)
+
+
 # 公告类
+
+
 class notices(models.Model):
     # 公告ID
     notice_id = models.CharField(max_length=64, primary_key=True)
