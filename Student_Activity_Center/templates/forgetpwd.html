@@ -17,8 +17,8 @@
 </head>
 <body class="cm-login">
 
-<div class="text-center" style="padding:90px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
-    <img src="{% static 'images/logo-big.svg' %}" width="300" height="45" >
+<div class="text-center" style="padding:50px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
+    <img src="{% static 'img/login.bmp' %}" width="300" height="100" >
 </div>
 
 <div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
@@ -50,6 +50,9 @@
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-primary">立即找回</button>
                 <span style="color: red">{{ error }}</span>
+            </div>
+            <div class="form-group">
+                <a href="../../login/" class="">点错了？返回登录</a>
             </div>
         </div>
 
