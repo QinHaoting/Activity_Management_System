@@ -62,7 +62,7 @@ def login(request):
                             if student.stu_password == log_password:
                                 request.session['user_id'] = student.stu_id
                                 request.session['user_type'] = 'student'
-                                return HttpResponse('登陆成功')
+                                return redirect(reverse("sac_app:stu_home"))
                             else:
                                 return render(request, 'login.html', {'password_error': '密码错误'})
                         else:
@@ -75,7 +75,7 @@ def login(request):
                         if organizer.org_password == log_password:
                             request.session['user_id'] = organizer.org_id
                             request.session['user_type'] = 'organizer'
-                            return HttpResponse('登陆成功')
+                            return redirect(reverse("sac_app:org_home"))
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     except:
@@ -86,7 +86,7 @@ def login(request):
                         if manager.man_password == log_password:
                             request.session['user_id'] = manager.man_id
                             request.session['user_type'] = 'manager'
-                            return HttpResponse('登陆成功')
+                            return redirect(reverse("sac_app:mag_home"))
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     except:
@@ -131,7 +131,7 @@ def register(request):
                                                 '''.format(token)
                             send_mail(subject=subject, message='', from_email='2912784728@qq.com',
                                       recipient_list=[re_Email, ], html_message=message)  # 给用户邮箱发送用于激活的邮件
-                            return HttpResponse('注册成功，请前去激活')
+                            return HttpResponse('注册成功，请前去激活')  # !!!!!!!!!!!!!!!!!!!!!!!!!!!
                 else:
                     return render(request, 'register.html', {'password_error': '两次输入密码不同'})
             else:
@@ -148,6 +148,7 @@ def stu_active(request):
     student = students.objects.get(stu_id=re_id)
     student.stu_valid = 1
     student.save()
+    redirect(reverse("sac_app:login"))  # ? 可能有问题
 
 
 def changepwd(request):
@@ -412,6 +413,33 @@ def stu_otherteam(request):
     return render(request, 'stu_home/stu_otherteam.html')
 
 
+def stu_notice(request):
+    """
+    学生：公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'stu_home/stu_notice.html')
+
+
+def stu_notice_act(request):
+    """
+    学生：公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'stu_home/stu_notice_act.html', locals())
+
+
+def stu_notice_sys(request):
+    """
+    学生：公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'stu_home/stu_notice_sys.html', locals())
+
+
 def org_home(request):
     """
     组织者：主页
@@ -574,6 +602,33 @@ def org_view_posted_activity(request):
         return render(request, 'login.html', context=context)
 
 
+def org_notice(request):
+    """
+    组织者: 公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'org_home/org_notice.html')
+
+
+def org_notice_act(request):
+    """
+    组织者：活动公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'org_home/org_notice_act.html', locals())
+
+
+def org_notice_sys(request):
+    """
+    组织者：系统公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'org_home/org_notice_sys.html', locals())
+
+
 def mag_home(request):
     """
     管理者：主页
@@ -592,7 +647,10 @@ def mag_examine_list(request):
     return render(request, 'mag_home/mag_examine.html')
 
 
-def mag_details(request):
+def mag_examine_details(request):
+    """
+    管理者：审核详情页
+    """
     return None
 
 
@@ -603,6 +661,43 @@ def mag_manage(request):
     :return:
     """
     return render(request, 'mag_home/mag_manage.html')
+
+
+def mag_launch_notice(request):
+    """
+    管理者：管理组织者
+    :param request:
+    :return:
+    """
+    return render(request, 'mag_home/mag_launch_notice.html')
+
+
+def mag_notice(request):
+    """
+    管理者：公告界面
+    :param request:
+    :return:
+    """
+
+    return render(request, 'mag_home/mag_notice.html', locals())
+
+
+def mag_notice_act(request):
+    """
+    管理者：公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'mag_home/mag_notice_act.html', locals())
+
+
+def mag_notice_sys(request):
+    """
+    管理者：公告界面
+    :param request:
+    :return:
+    """
+    return render(request, 'mag_home/mag_notice_sys.html', locals())
 
 
 def notice(request):
@@ -634,3 +729,5 @@ def notice_sys(request):
 
 def org_activity_details(request):
     return None
+
+
