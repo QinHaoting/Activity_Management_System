@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="../../src/css/bootstrap-clearmin.min.css">
+    <link rel="stylesheet" type="text/css" href="../../src/css/roboto.css">
+    <link rel="stylesheet" type="text/css" href="../../src/css/material-design.css">
+    <link rel="stylesheet" type="text/css" href="../../src/css/small-n-flat.css">
+    <link rel="stylesheet" type="text/css" href="../../src/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="../../src/css/c3.min.css">
+    <title>Clearmin template</title>
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="../../src/img/logo.png" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
+                    <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">消息数量</span></button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading text-overflow">
+                                <i class="fa fa-fw fa-envelope"></i>现在有件大事通知您。
+                            </h4>
+                            <p class="list-group-item-text text-overflow">覃智科找了一个肥肥的女朋友</p>
+                        </a>
+                    </div>
+                    <div style="padding:10px"><a class="btn btn-success btn-block" href="#">展现更多</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid cm-container-white">
+        <h2 style="margin-top:0">个人信息</h2>
+        <div class="col-lg-12">
+            <div class="panel panel-default">
+                、
+                <div class="panel-body" style="min-height: 264px;">
+                    <form class="form-horizontal" action="" method="post">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">姓名</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="username" value="{{ username }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学号</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="ID" value="{{ ID }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">性别</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="gender" value="{{ gender }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">年级</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="grade" value="{{ grade }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">学院</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="college" value="{{ college }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">专业</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="major" value="{{ major }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">电话</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="phone" value="{{ phone }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">邮箱</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="email" value="{{ email }}">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label">个人简介</label>
+                            <div class="col-sm-10">
+                                <input type="text" class="form-control" name="introduction" value="{{ introduction }}">
+                            </div>
+                        </div>
+                        <div class="col-xs-6 col-sm-12 col-md-3 col-lg-2" style="left:45% ">
+                            <button type="button" class="btn btn-default"><a href="{% url 'app:stu_center' %}">取消</a>
+                            </button>
+                            <button type="submit" class="btn btn-danger" id="bt"><a
+                                    href="{% url 'app:stu_center' %}">提交</a></button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
+                            aria-hidden="true">×</span></button>
+                </div>
+                <div class="modal-body">
+                    <p>This <a href="#" role="button" class="btn btn-default popover-test" title=""
+                               data-content="And here's some amazing content. It's very engaging. right?"
+                               data-original-title="A Title">button</a> should trigger a popover on click.</p>
+                    <p><a href="#" class="tooltip-test" title="" data-original-title="Tooltip">This link</a> and <a
+                            href="#" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> should
+                        have tooltips on hover.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+            <!-- /.modal-content -->
+        </div>
+        <!-- /.modal-dialog -->
+    </div>
+</div>
+<script src="../../src/js/lib/jquery.min.js"></script>
+<script src="../../src/js/jquery.mousewheel.min.js"></script>
+<script src="../../src/js/jquery.cookie.min.js"></script>
+<script src="../../src/js/fastclick.min.js"></script>
+<script src="../../src/js/bootstrap.min.js"></script>
+<script src="../../src/js/clearmin.min.js"></script>
+<script src="../../src/js/lib/d3.min.js"></script>
+<script src="../../src/js/lib/c3.min.js"></script>
+</body>
+</html>
+
+<script type="text/javascript">
+    window.onload = function () {
+        var bt = document.getElementById("bt");
+        bt.onclick = function () {
+            if (confirm("确认提交")) {
+                alert("点击了确认按钮");
+            } else {
+                alert("点击了取消按钮");
+            }
+        }
+    }
+</script>
