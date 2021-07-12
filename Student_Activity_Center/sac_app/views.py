@@ -132,7 +132,7 @@ def register(request):
                                                                         学生活动中心开发团队
                                                 '''.format(token)
                             send_mail(subject=subject, message='', from_email='2912784728@qq.com',
-                                      recipient_list=[re_Email, ], html_message=message)  # 给用户邮箱发送用于激活的邮件
+                                      recipient_list=[re_Email], html_message=message)  # 给用户邮箱发送用于激活的邮件
                             return HttpResponse('注册成功，请前去激活')  # !!!!!!!!!!!!!!!!!!!!!!!!!!!
                 else:
                     return render(request, 'register.html', {'password_error': '两次输入密码不同'})
