@@ -50,53 +50,56 @@ class Status(enum.Enum):
 
 def login(request):
     if request.method == 'POST':
-        method = request.POST.get('method')  # 获取登录信息
+        method = request.POST.get('select')    #获取登录信息
         log_id = request.POST.get('username')
         log_password = request.POST.get('password')
         con_code = request.POST.get('idcode')
         check_code = request.session.get('check_code')
-        if log_id and log_password and con_code:
-            if con_code == check_code:
-                if method == 'student':  # 如果选择学生登录
-                    try:
-                        student = students.objects.get(stu_id=log_id)
-                        if student.stu_valid == 1:
-                            if student.stu_password == log_password:
-                                request.session['user_id'] = student.stu_id
-                                request.session['user_type'] = 'student'
-                                return redirect(reverse("sac_app:stu_home"))
-                            else:
-                                return render(request, 'login.html', {'password_error': '密码错误'})
-                        else:
-                            return render(request, 'login.html', {'valid_error': '账户未激活'})
-                    except:
-                        return render(request, 'login.html', {'id_error': 'id不存在'})
-                elif method == 'organizer':  # 如果选择组织者登录
-                    try:
-                        organizer = organizers.objects.get(org_id=log_id)
-                        if organizer.org_password == log_password:
-                            request.session['user_id'] = organizer.org_id
-                            request.session['user_type'] = 'organizer'
-                            return redirect(reverse("sac_app:org_home"))
+        print(method)
+        print(log_id)
+        print(log_password)
+        print(con_code)
+        print(check_code)
+        if con_code.upper() == check_code.upper():
+            if method == 'stu':  # 如果选择学生登录
+                try:
+                    student = students.objects.get(stu_id=log_id)
+                    if student.stu_valid == 1:
+                        if student.stu_password == log_password:
+                            request.session['user_id'] = student.stu_id
+                            request.session['user_type'] = 'student'
+                            return HttpResponse('登陆成功')
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
-                    except:
-                        return render(request, 'login.html', {'id_error': 'id不存在'})
-                elif method == 'manager':  # 如果选择管理者登录
-                    try:
-                        manager = managers.objects.get(man_id=log_id)
-                        if manager.man_password == log_password:
-                            request.session['user_id'] = manager.man_id
-                            request.session['user_type'] = 'manager'
-                            return redirect(reverse("sac_app:mag_home"))
-                        else:
-                            return render(request, 'login.html', {'password_error': '密码错误'})
-                    except:
-                        return render(request, 'login.html', {'id_error': 'id不存在'})
-            else:
-                return render(request, 'login.html', {'code_error': '验证码错误'})
+                    else:
+                        return render(request, 'login.html', {'valid_error': '账户未激活'})
+                except:
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
+            elif method == 'org':  # 如果选择组织者登录
+                try:
+                    organizer = organizers.objects.get(org_id=log_id)
+                    if organizer.org_password == log_password:
+                        request.session['user_id'] = organizer.org_id
+                        request.session['user_type'] = 'organizer'
+                        return HttpResponse('登陆成功')
+                    else:
+                        return render(request, 'login.html', {'password_error': '密码错误'})
+                except:
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
+            elif method == 'mag':  # 如果选择管理者登录
+                try:
+                    manager = managers.objects.get(man_id=log_id)
+                    if manager.man_password == log_password:
+                        request.session['user_id'] = manager.man_id
+                        request.session['user_type'] = 'manager'
+                        return HttpResponse('登陆成功')
+                    else:
+                        return render(request, 'login.html', {'password_error': '密码错误'})
+                except:
+                    return render(request, 'login.html', {'id_error': 'id不存在'})
         else:
-            return render(request, 'login.html', {'fill_in_error': 'ID,验证码和密码均不能为空'})
+            return render(request,'login.html',{'code_error':'验证码错误'})
+
     else:
         return render(request, "login.html")
 
@@ -109,39 +112,42 @@ def register(request):
         con_password = request.POST.get('agpassword')
         con_code = request.POST.get('idcode')
         check_code = request.session.get('check_code')
-        if re_id and re_Email and re_password and con_password and con_code:
-            if con_code == check_code:
-                if re_password == con_password:
+        print(re_id)
+        print(re_Email)
+        print(re_password)
+        print(con_code)
+        print(con_password)
+        print(check_code)
+        if con_code.upper() == check_code.upper():
+            if re_password == con_password:
+                try:
+                    student = students.objects.get(stu_id=re_id)
+                    return render(request, 'register.html', {'id_error': '该id已存在'})
+                except:
                     try:
-                        student = students.objects.get(stu_id=re_id)
-                        return render(request, 'login.html', {'id_error': '该id已存在'})
+                        student = students.objects.get(stu_Email=re_Email)
+                        return render(request, 'register.html', {'Email_error': '该Email已被占用'})
                     except:
-                        try:
-                            student = students.objects.get(stu_Email=re_Email)
-                            return render(request, 'login.html', {'Email_error': '该Email已被占用'})
-                        except:
-                            student = students.objects.create(stu_id=re_id, stu_Email=re_Email,
-                                                              stu_password=re_password)
-                            token = str(uuid.uuid4()).replace('-', '')  # 生成随机字符串
-                            request.session[token] = re_id  # session利用生成的随机字符串存储用户id
-                            subject = '学生账号激活'
-                            message = '''
+                        student = students.objects.create(stu_id=re_id, stu_Email=re_Email,
+                                                          stu_password=re_password, stu_valid=0)
+                        token = str(uuid.uuid4()).replace('-', '')  # 生成随机字符串
+                        request.session[token] = re_id  # session利用生成的随机字符串存储用户id
+                        subject = '学生账号激活'
+                        message = '''
                                                 欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
-                                                <br> <a herf = "http://127.0.0.1:8000/sac_app/active?token={}">点击激活</a>
+                                                <br>http://127.0.0.1:8000/sac_app/active?token={}
                                                 <br>
                                                                         学生活动中心开发团队
                                                 '''.format(token)
-                            send_mail(subject=subject, message='', from_email='2912784728@qq.com',
-                                      recipient_list=[re_Email, ], html_message=message)  # 给用户邮箱发送用于激活的邮件
-                            return HttpResponse('注册成功，请前去激活')  # !!!!!!!!!!!!!!!!!!!!!!!!!!!
-                else:
-                    return render(request, 'register.html', {'password_error': '两次输入密码不同'})
+                        send_mail(subject=subject, message='', from_email='2912784728@qq.com',
+                                  recipient_list=[re_Email], html_message=message)  # 给用户邮箱发送用于激活的邮件
+                        return HttpResponse('注册成功，请前去激活')
             else:
-                return render(request, 'register.html', {'code_error': '验证码错误'})
+                return render(request, 'register.html', {'password_error': '两次输入密码不同'})
         else:
-            return render(request, 'register.html', {'fill_in_error': 'ID，邮箱，密码，确认密码和验证码均不能为空'})
+            return render(request, 'register.html', {'code_error': '验证码错误'})
     else:
-        return render(request, "register.html")
+        return render(request, 'register.html')
 
 
 def stu_active(request):
@@ -236,15 +242,6 @@ def stu_home(request):
     return render(request, 'stu_home/stu_home.html')
 
 
-def stu_activity(request):
-    """
-    学生：活动大厅
-    :param request:
-    :return:
-    """
-    return render(request, 'stu_home/stu_activity.html')
-
-
 def stu_join_activity(request):
     """
     学生：已参加活动   request.session['user_id']
@@ -298,6 +295,11 @@ def stu_join_activity(request):
 
 
 def stu_center(request):
+
+    return render(request,'stu_home/stu_center.html')
+
+
+def stu_modify_message(request):
     """
     学生：个人中心
     :param request:
@@ -346,8 +348,7 @@ def stu_activity_details(request):
     """
     return render(request, 'stu_home/stu_activity_yes.html')
 
-
-def stu_activity_list(request):
+def stu_activity(request):
     """
     学生：显示活动列表
     根据前端的control信号返回对应的活动列表
@@ -365,48 +366,44 @@ def stu_activity_list(request):
                 show_activities = whole_activities.filter(act_state=Status.SIGN_UP)
             elif control == Control.cannot_join:  # 显示不可参加活动
                 show_activities = whole_activities.filter().exclude(act_state=Status.SIGN_UP)
-
+            # 返回相关活动集
             if show_activities.all().count() != 0:  # 待显示的活动不为空
                 context = {
-                    "act_name": show_activities.values('act_name'),  # 活动名称        - 列表
-                    "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
-                    "act_state": show_activities.values('act_state'),  # 活动状态        - 列表
-                    "act_flag": whole_activities.values('act_flag'),  # 活动可否参加状态 - 列表
-                    "func_state": FunctionStatus.NORMAL,  # 访问状态
-                    "message": "正常访问"  # 待返回的信息
+                    'activities': show_activities,        # <待显示活动对象>列表
+                    'func_state': FunctionStatus.NORMAL,  # 访问状态
+                    'message': '正常访问'                  # 消息
                 }
                 return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
+                # context = {
+                #     "act_name": show_activities.values('act_name'),  # 活动名称        - 列表
+                #     "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
+                #     "act_state": show_activities.values('act_state'),  # 活动状态        - 列表
+                #     "act_flag": whole_activities.values('act_flag'),  # 活动可否参加状态 - 列表
+                #     "func_state": FunctionStatus.NORMAL,  # 访问状态
+                #     "message": "正常访问"  # 待返回的信息
+                # }
+                # return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
             else:  # 待显示列表为空
                 context = {
-                    "act_name": '无',
-                    "act_organizer_name": '无',
-                    "act_state": '无',
-                    "act_flag": '无',
-                    "func_state": FunctionStatus.EMPTY,
+                    'activities': None,       # <待显示活动对象>列表
+                    "func_state": FunctionStatus.EMPTY,  # 访问状态
                     "message": "待显示的内容为空"
                 }
                 return render(request, 'org_home/org_view_posted_activity.html', context=context)
-        else:  # 非学生登录访问（无权限）
+        else:  # 非学生登录访问（无权限）    前端保证不触发
             context = {
-                "act_name": '无',  # 活动名称        - 列表
-                "act_organizer_name": '无',  # 组织者名称      - 列表
-                "act_state": '无',  # 活动状态        - 列表
-                "act_flag": '无',  # 活动可否参加状态 - 列表
+                'activities': None,  # <待显示活动对象>列表
                 "func_state": FunctionStatus.NO_PERMISSION,  # 访问状态
                 "message": "非学生身份访问，无权限"  # 待返回的信息
             }
-            return render(request, 'login.html', context=context)
+            return render(request, 'login.html', context=context)    # 返回到哪？？？
     else:  # 非正常方式访问（GET）
         context = {
-            "act_name": '无',  # 活动名称        - 列表
-            "act_organizer_name": '无',  # 组织者名称      - 列表
-            "act_state": '无',  # 活动状态        - 列表
-            "act_flag": '无',  # 活动可否参加状态 - 列表
+            'activities': None,                     # <待显示活动对象>列表
             "func_state": FunctionStatus.NOT_POST,  # 访问状态
-            "message": "非正常形式访问，请登录"  # 待返回的信息
+            "message": "非正常形式访问，请登录"        # 待返回的信息
         }
         return render(request, 'login.html', context=context)
-
 
 def stu_createteam(request):
     """
@@ -501,6 +498,20 @@ def org_home(request):
     :return:
     """
     return render(request, 'org_home/org_home.html')
+
+
+def org_center(request):
+    """
+    组织者中心：组织者的所有信息（除了id）
+    """
+    return render(request,'org_home/org_center.html')
+
+
+def org_modify_message(request):
+    """
+    组织者修改页面：修改组织者信息
+    """
+    return render(request,'org_home/org_modify_message.html')
 
 
 def org_launch_activity(request):  # 需要修改
@@ -604,57 +615,32 @@ def org_view_posted_activity(request):
 
             if whole_activities.all().count() != 0:  # 组织者有<活动>
                 context = {
-                    'act_name': whole_activities.values('act_name'),  # 活动名称
-                    'act_start_time': whole_activities.values('act_start_time'),  # 活动开始时间
-                    'act_end_time': whole_activities.values('act_end_time'),  # 活动结束时间
-                    'act_state': whole_activities.values('act_state '),  # 活动进行状态
-                    'act_total_number': whole_activities.values('act_total_number'),  # 活动总人数
-                    'act_participated_number': whole_activities.values('act_participated_number'),  # 活动已参加人数
-                    'act_available_number': whole_activities.values('act_available_number'),  # 活动剩余人数
+                    'activities': whole_activities,       # 返回活动集
                     "func_state": FunctionStatus.NORMAL,  # 访问状态
-                    "message": "正常访问"  # 待返回的信息
+                    "message": "正常访问"                  # 待返回的信息
                 }
                 return render(request, 'org_home/org_view_posted_activity.html', context=context)
-            else:  # 组织者未组织过活动 - （待改）
+            else:  # 组织者未组织过活动，即无数据显示
                 context = {
-                    "act_name": '无',  # 活动名称
-                    'act_start_time': '无',  # 活动开始时间
-                    'act_end_time': '无',  # 活动结束时间
-                    'act_state': '无',  # 活动进行状态
-                    'act_total_number': '无',  # 活动总人数
-                    'act_participated_number': '无',  # 活动已参加人数
-                    'act_available_number': '无',  # 活动剩余人数
+                    'activities': None,      # 返回活动集
                     "func_state": FunctionStatus.EMPTY,  # 访问状态
                     "message": "待显示的内容为空"  # 待返回的信息
                 }
                 return render(request, 'org_home/org_view_posted_activity.html', context=context)
-        else:  # 参加者或管理员访问
+        else:  # 非组织者访问，即参加者或管理员访问，不能显示纤细
             context = {
-                "act_name": '无',  # 活动名称
-                'act_start_time': '无',  # 活动开始时间
-                'act_end_time': '无',  # 活动结束时间
-                'act_state': '无',  # 活动进行状态
-                'act_total_number': '无',  # 活动总人数
-                'act_participated_number': '无',  # 活动已参加人数
-                'act_available_number': '无',  # 活动剩余人数
+                'activities': None,  # 返回活动集
                 "func_state": FunctionStatus.NO_PERMISSION,  # 访问状态
                 "message": "非组织者身份访问，无权限"  # 待返回的信息
             }
             return render(request, 'login.html', context=context)
     else:  # 通过get方法访问
         context = {
-            "act_name": '无',  # 活动名称
-            'act_start_time': '无',  # 活动开始时间
-            'act_end_time': '无',  # 活动结束时间
-            'act_state': '无',  # 活动进行状态
-            'act_total_number': '无',  # 活动总人数
-            'act_participated_number': '无',  # 活动已参加人数
-            'act_available_number': '无',  # 活动剩余人数
+            'activities': None,  # 返回活动集
             "func_state": FunctionStatus.NOT_POST,  # 访问状态
             "message": "非正常形式访问，请登录"  # 待返回的信息
         }
         return render(request, 'login.html', context=context)
-
 
 def org_activity_details(request):
     return None
@@ -696,7 +682,7 @@ def mag_home(request):
     return render(request, 'mag_home/mag_home.html')
 
 
-def mag_examine_list(request):
+def mag_examine(request):
     """
     管理者：审核列表页
     :param request:
@@ -756,32 +742,3 @@ def mag_notice_sys(request):
     :return:
     """
     return render(request, 'mag_home/mag_notice_sys.html', locals())
-
-
-def notice(request):
-    """
-    公告:主页
-    :param request:
-    :return:
-    """
-    return render(request, 'notice/notice.html')
-
-
-def notice_activity(request):
-    """
-    公告：活动发布
-    :param request:
-    :return:
-    """
-    return render(request, 'notice/notice_activity.html')
-
-
-def notice_sys(request):
-    """
-    公告：系统发布
-    :param request:
-    :return:
-    """
-    return render(request, 'notice/notice_sys.html')
-
-
