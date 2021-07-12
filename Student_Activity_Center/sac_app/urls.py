@@ -2,6 +2,7 @@
 from django.conf.urls import url
 from django.contrib import admin
 from django.urls import path
+
 from sac_app import views
 
 app_name = "sac_app"
@@ -13,8 +14,8 @@ urlpatterns = [
     path('check_code/', views.check_code),
     # 1 注册
     path('login/register/', views.register),
-    # 1 邮箱找回函数
-    path('active/', views.stu_active),
+    # 1 激活
+    path('active/',views.stu_active),
     # 1 忘记密码
     path('login/forgetpwd/', views.forgetpwd),
     # 学生:主页
