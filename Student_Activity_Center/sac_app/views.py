@@ -99,8 +99,6 @@ def login(request):
         return render(request, "login.html")
 
 
-# Create your views here.
-
 def register(request):
     if request.method == 'POST':
         re_id = request.POST.get('username')  # 获取注册信息
@@ -232,7 +230,6 @@ def stu_activity(request):
     :param request:
     :return:
     """
-
     return render(request, 'stu_home/stu_activity.html')
 
 
@@ -433,7 +430,7 @@ def org_launch_activity(request):  # 需要修改
     if request.method == 'GET':
         return render(request, 'org_home/org_launch_activity.html')
     elif request.method == 'POST':
-        # act_id = request.POST.get('act_id')
+        act_id = request.POST.get('act_id')
         act_name = request.POST.get('act_name')
         act_start_time = request.POST.get('act_start_time')
         act_end_time = request.POST.get('acct_end_time')
@@ -453,7 +450,7 @@ def org_launch_activity(request):  # 需要修改
             return render(request, 'org_home/org_launch_activity.html', {'message': '不能为空'})
         try:
             activities.objects.create(
-                # act_id=act_id,
+                act_id=act_id,
                 act_name=act_name,
                 act_start_time=act_start_time,
                 act_end_time=act_end_time,
@@ -482,7 +479,7 @@ def org_launch_notice(request):
     if request.method != 'POST':
         return render(request, 'org_home/org_launch_notice.html')
     if request.method == 'POST':
-        # notice_id = request.POST.get('notice_id')
+        notice_id = request.POST.get('notice_id')
         notice_title = request.POST.get('notice_title')
         notice_create_time = request.POST.get('notice_create_time')
         notice_content = request.POST.get('notice_content')
@@ -491,7 +488,7 @@ def org_launch_notice(request):
                 and notice_appendix):
             return render(request, 'org_home/org_launch_notice.html', {'empty_notice_content': '公告所有部分均不能为空'})
         notices.objects.create(
-            # notice_id = notice_id,
+            notice_id = notice_id,
             notice_title=notice_title,
             notice_create_time=notice_create_time,
             notice_content=notice_content,
