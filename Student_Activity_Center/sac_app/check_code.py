@@ -1,5 +1,5 @@
 import random
-from PIL import Image,ImageDraw,ImageFont,ImageFilter
+from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 
 def gen_check_code(width=120, height=30, char_length=5, font_file=r'static/img/Monaco.ttf', font_size=28):

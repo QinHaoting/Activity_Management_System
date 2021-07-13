@@ -68,7 +68,7 @@ def login(request):
                         if student.stu_password == log_password:
                             request.session['user_id'] = student.stu_id
                             request.session['user_type'] = 'student'
-                            return HttpResponse('登陆成功')
+                            return render(request, 'stu_home/stu_home.html')
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     else:
@@ -81,7 +81,7 @@ def login(request):
                     if organizer.org_password == log_password:
                         request.session['user_id'] = organizer.org_id
                         request.session['user_type'] = 'organizer'
-                        return HttpResponse('登陆成功')
+                        return render(request, 'org_home/org_home.html')
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
@@ -92,14 +92,13 @@ def login(request):
                     if manager.man_password == log_password:
                         request.session['user_id'] = manager.man_id
                         request.session['user_type'] = 'manager'
-                        return HttpResponse('登陆成功')
+                        return render(request, 'mag_home/mag_home.html')
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
                     return render(request, 'login.html', {'id_error': 'id不存在'})
         else:
             return render(request,'login.html',{'code_error':'验证码错误'})
-
     else:
         return render(request, "login.html")
 
@@ -112,21 +111,17 @@ def register(request):
         con_password = request.POST.get('agpassword')
         con_code = request.POST.get('idcode')
         check_code = request.session.get('check_code')
-        print(re_id)
-        print(re_Email)
-        print(re_password)
-        print(con_code)
-        print(con_password)
-        print(check_code)
         if con_code.upper() == check_code.upper():
             if re_password == con_password:
                 try:
+                    print(1)
                     student = students.objects.get(stu_id=re_id)
-                    return render(request, 'register.html', {'id_error': '该id已存在'})
+                    return render(request, 'register.html', {'message': '该id已存在'})
                 except:
                     try:
+                        print(2)
                         student = students.objects.get(stu_Email=re_Email)
-                        return render(request, 'register.html', {'Email_error': '该Email已被占用'})
+                        return render(request, 'register.html', {'message': '该Email已被占用'})
                     except:
                         student = students.objects.create(stu_id=re_id, stu_Email=re_Email,
                                                           stu_password=re_password, stu_valid=0)
@@ -141,7 +136,9 @@ def register(request):
                                                 '''.format(token)
                         send_mail(subject=subject, message='', from_email='2912784728@qq.com',
                                   recipient_list=[re_Email], html_message=message)  # 给用户邮箱发送用于激活的邮件
-                        return HttpResponse('注册成功，请前去激活')
+                        # return HttpResponse('注册成功，请前去激活')
+                        return redirect(reverse("sac_app:login"))
+                        # return render(request, 'login.html', {'message': '注册成功，请激活后登录'})
             else:
                 return render(request, 'register.html', {'password_error': '两次输入密码不同'})
         else:
@@ -149,7 +146,6 @@ def register(request):
     else:
         return render(request, 'register.html')
 
-    return render(request, 'register.html')
 
 def stu_active(request):
     """
@@ -160,7 +156,8 @@ def stu_active(request):
     student = students.objects.get(stu_id=re_id)
     student.stu_valid = 1
     student.save()
-    redirect(reverse("sac_app:login"))  # ? 可能有问题
+    return HttpResponse('注册成功，请前去激活')
+    # return redirect(reverse("sac_app:login"))
 
 
 def changepwd(request):
@@ -296,13 +293,15 @@ def stu_join_activity(request):
 
 
 def stu_center(request):
-
-    return render(request,'stu_home/stu_center.html')
+    """
+    个人中心：显示学生的所有可显示信息
+    """
+    return render(request, 'stu_home/stu_center.html')
 
 
 def stu_modify_message(request):
     """
-    学生：个人中心
+    学生：修改个人信息
     :param request:
     :return:
     """
@@ -349,62 +348,65 @@ def stu_activity_details(request):
     """
     return render(request, 'stu_home/stu_activity_yes.html')
 
+
 def stu_activity(request):
     """
     学生：显示活动列表
     根据前端的control信号返回对应的活动列表
     :return: 活动列表
     """
-    if request.method == 'POST':  # 正常方式访问
-        if request.session.get("user_type") == 'student':  # 学生登录访问
-            # 获取待显示活动集
-            whole_activities = activities.objects.filter().exclude(act_state=Status.CHECKING)  # 可显示的活动集
-            show_activities = None  # 待显示的活动集 - 筛选后的活动集
-            control = request.POST.get('control')  # 控制信号
-            if control == Control.whole:  # 显示所有活动
-                show_activities = whole_activities
-            elif control == Control.can_join:  # 显示可参加活动
-                show_activities = whole_activities.filter(act_state=Status.SIGN_UP)
-            elif control == Control.cannot_join:  # 显示不可参加活动
-                show_activities = whole_activities.filter().exclude(act_state=Status.SIGN_UP)
-            # 返回相关活动集
-            if show_activities.all().count() != 0:  # 待显示的活动不为空
-                context = {
-                    'activities': show_activities,        # <待显示活动对象>列表
-                    'func_state': FunctionStatus.NORMAL,  # 访问状态
-                    'message': '正常访问'                  # 消息
-                }
-                return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
-                # context = {
-                #     "act_name": show_activities.values('act_name'),  # 活动名称        - 列表
-                #     "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
-                #     "act_state": show_activities.values('act_state'),  # 活动状态        - 列表
-                #     "act_flag": whole_activities.values('act_flag'),  # 活动可否参加状态 - 列表
-                #     "func_state": FunctionStatus.NORMAL,  # 访问状态
-                #     "message": "正常访问"  # 待返回的信息
-                # }
-                # return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
-            else:  # 待显示列表为空
-                context = {
-                    'activities': None,       # <待显示活动对象>列表
-                    "func_state": FunctionStatus.EMPTY,  # 访问状态
-                    "message": "待显示的内容为空"
-                }
-                return render(request, 'org_home/org_view_posted_activity.html', context=context)
-        else:  # 非学生登录访问（无权限）    前端保证不触发
+    # if request.method == 'POST':  # 正常方式访问
+    if request.session.get("user_type") == 'student':  # 学生登录访问
+        # 获取待显示活动集
+        whole_activities = activities.objects.filter().exclude(act_state=Status.CHECKING)  # 可显示的活动集
+        print()
+        show_activities = None  # 待显示的活动集 - 筛选后的活动集
+        control = request.POST.get('control')  # 控制信号
+        if control == Control.whole:  # 显示所有活动
+            show_activities = whole_activities
+        elif control == Control.can_join:  # 显示可参加活动
+            show_activities = whole_activities.filter(act_state=Status.SIGN_UP)
+        elif control == Control.cannot_join:  # 显示不可参加活动
+            show_activities = whole_activities.filter().exclude(act_state=Status.SIGN_UP)
+        # 返回相关活动集
+        if show_activities.all().count() != 0:  # 待显示的活动不为空
             context = {
-                'activities': None,  # <待显示活动对象>列表
-                "func_state": FunctionStatus.NO_PERMISSION,  # 访问状态
-                "message": "非学生身份访问，无权限"  # 待返回的信息
+                'activities': show_activities,        # <待显示活动对象>列表
+                'func_state': FunctionStatus.NORMAL,  # 访问状态
+                'message': '正常访问'                  # 消息
             }
-            return render(request, 'login.html', context=context)    # 返回到哪？？？
-    else:  # 非正常方式访问（GET）
+            return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
+            # context = {
+            #     "act_name": show_activities.values('act_name'),  # 活动名称        - 列表
+            #     "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
+            #     "act_state": show_activities.values('act_state'),  # 活动状态        - 列表
+            #     "act_flag": whole_activities.values('act_flag'),  # 活动可否参加状态 - 列表
+            #     "func_state": FunctionStatus.NORMAL,  # 访问状态
+            #     "message": "正常访问"  # 待返回的信息
+            # }
+            # return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
+        else:  # 待显示列表为空
+            context = {
+                'activities': None,       # <待显示活动对象>列表
+                "func_state": FunctionStatus.EMPTY,  # 访问状态
+                "message": "待显示的内容为空"
+            }
+            return render(request, 'org_home/org_view_posted_activity.html', context=context)
+    else:  # 非学生登录访问（无权限）    前端保证不触发
         context = {
-            'activities': None,                     # <待显示活动对象>列表
-            "func_state": FunctionStatus.NOT_POST,  # 访问状态
-            "message": "非正常形式访问，请登录"        # 待返回的信息
+            'activities': None,  # <待显示活动对象>列表
+            "func_state": FunctionStatus.NO_PERMISSION,  # 访问状态
+            "message": "非学生身份访问，无权限"  # 待返回的信息
         }
-        return render(request, 'login.html', context=context)
+        return render(request, 'login.html', context=context)    # 返回到哪？？？
+    # else:  # 非正常方式访问（GET）
+    #     context = {
+    #         'activities': None,                     # <待显示活动对象>列表
+    #         "func_state": FunctionStatus.NOT_POST,  # 访问状态
+    #         "message": "非正常形式访问，请登录"        # 待返回的信息
+    #     }
+    #     return render(request, 'login.html', context=context)
+
 
 def stu_createteam(request):
     """
@@ -535,7 +537,7 @@ def org_launch_activity(request):  # 需要修改
         act_total_number = request.POST.get('act_total_number')#针对不需要组队的活动而言
         act_participated_number = 0 #默认已参加人数为0人
         act_available_number = 100 #默认可参加人数为100人
-        act_flag = request.POST.get('act_flag')
+        act_flag = "不可参加"  # 默认不可参加
         act_planning_book = request.POST.get('act_planning_book')
         act_introduction = request.POST.get('act_introduction')
         if not (act_name and act_start_time and act_end_time and act_organizer_name and act_organizer_phone
@@ -643,8 +645,12 @@ def org_view_posted_activity(request):
         }
         return render(request, 'login.html', context=context)
 
-def org_activity_details(request):
-    return None
+
+# def org_activity_details(request):
+#     """
+#     组织者：查看活动详情
+#     """
+#     return None
 
 
 def org_notice(request):
