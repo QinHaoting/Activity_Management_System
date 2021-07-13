@@ -47,6 +47,8 @@ class activities(models.Model):
     act_max_team_number = models.IntegerField()
     # 活动组队最少人数
     act_min_team_number = models.IntegerField()
+    # 特定活动已创建的队伍数
+    act_created_team_number = models.IntegerField()
     # 活动组数
     act_team_number = models.IntegerField()
     # 活动进行状态

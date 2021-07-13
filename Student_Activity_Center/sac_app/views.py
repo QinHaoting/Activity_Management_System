@@ -68,7 +68,8 @@ def login(request):
                         if student.stu_password == log_password:
                             request.session['user_id'] = student.stu_id
                             request.session['user_type'] = 'student'
-                            return render(request, 'stu_home/stu_home.html')
+                            # return render(request, 'stu_home/stu_home.html')
+                            return redirect(reverse('sac_app:stu_home'))
                         else:
                             return render(request, 'login.html', {'password_error': '密码错误'})
                     else:
@@ -81,7 +82,8 @@ def login(request):
                     if organizer.org_password == log_password:
                         request.session['user_id'] = organizer.org_id
                         request.session['user_type'] = 'organizer'
-                        return render(request, 'org_home/org_home.html')
+                        # return render(request, 'org_home/org_home.html')
+                        return redirect(reverse('sac_app:org_home'))
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
@@ -92,13 +94,14 @@ def login(request):
                     if manager.man_password == log_password:
                         request.session['user_id'] = manager.man_id
                         request.session['user_type'] = 'manager'
-                        return render(request, 'mag_home/mag_home.html')
+                        # return render(request, 'mag_home/mag_home.html')
+                        return redirect(reverse('sac_app:mag_home'))
                     else:
                         return render(request, 'login.html', {'password_error': '密码错误'})
                 except:
                     return render(request, 'login.html', {'id_error': 'id不存在'})
         else:
-            return render(request,'login.html',{'code_error':'验证码错误'})
+            return render(request, 'login.html', {'code_error': '验证码错误'})
     else:
         return render(request, "login.html")
 
@@ -173,7 +176,7 @@ def changepwd(request):
             token = request.GET.get('token')
             re_id = request.session.get(token)
             stu1 = students.objects.get(stu_id=re_id)
-            stu1.stu_password = re_password
+            stu1.stu_password=re_password
             stu1.save()
             return redirect(reverse("sac_app:stu_home"))  # 重定向到首页
     else:
@@ -210,7 +213,6 @@ def forgetpwd(request):
             return redirect(reverse("sac_app:login"))  # 重定向到登录界面
     else:
         return render(request, "forgetpwd.html")
-
 
 def check_code(request):
     img, code = gen_check_code()
