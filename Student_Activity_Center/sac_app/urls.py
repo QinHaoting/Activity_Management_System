@@ -1,5 +1,5 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, re_path
 
 from sac_app import views
 
@@ -21,8 +21,10 @@ urlpatterns = [
 
     # 学生:主页 ~~~~~
     path('stu_home', views.stu_home, name="stu_home"),
-    # 2 学生: 活动大厅 ----- (袁丰) ~~~~~
+    # 2 学生: 活动大厅 ----- (秦浩廷) ~~~~~
     path('stu_home/stu_activity/', views.stu_activity, name="stu_activity"),
+    # 2 学生：活动详情页 ~~~~~
+    re_path(r'^stu_home/stu_activity/stu_activity_details/(\d+)', views.stu_activity_details, name="stu_activity_details"),
     # 2 学生：已参加活动页 ----- (袁丰) ~~~~~
     path('stu_home/stu_join_activity/', views.stu_join_activity, name="stu_join_activity"),
     # 1 学生：创建队伍 ----- (李渊科) ~~~~~

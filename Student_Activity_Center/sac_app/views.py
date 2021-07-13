@@ -1,5 +1,6 @@
 import enum
 import uuid
+from random import random
 from typing import re
 
 from django.core.mail import send_mail
@@ -332,15 +333,6 @@ def stu_modify_message(request):
         return render(request, 'stu_home/stu_center.html', {'modify_succeed': '修改信息成功'})
 
 
-def stu_activity_details(request):
-    """
-    学生：可参加活动
-    :param request:
-    :return:
-    """
-    return render(request, 'stu_home/stu_activity_yes.html')
-
-
 def stu_activity(request):
     """
     学生：显示活动列表
@@ -350,44 +342,41 @@ def stu_activity(request):
     # if request.method == 'POST':  # 正常方式访问
     if request.session.get("user_type") == 'student':  # 学生登录访问
         # 获取待显示活动集
-        whole_activities = activities.objects.filter().exclude(act_state=Status.CHECKING)  # 可显示的活动集
-        print()
+        whole_activities = activities.objects.filter().exclude(act_state=0)  # 可显示的活动集
         show_activities = None  # 待显示的活动集 - 筛选后的活动集
-        control = request.POST.get('control')  # 控制信号
-        if control == Control.whole:  # 显示所有活动
+        control = 0     # 控制信号，默认显示所有活动
+        if request.GET.get('control'):
+            control = int(request.GET.get('control'))
+        print(control)
+        print(type(control))
+        if control == 0:  # 显示所有活动
             show_activities = whole_activities
-        elif control == Control.can_join:  # 显示可参加活动
-            show_activities = whole_activities.filter(act_state=Status.SIGN_UP)
-        elif control == Control.cannot_join:  # 显示不可参加活动
-            show_activities = whole_activities.filter().exclude(act_state=Status.SIGN_UP)
+        elif control == 1:  # 显示可参加活动
+            show_activities = whole_activities.filter(act_state=2)
+        elif control == 2:  # 显示不可参加活动
+            show_activities = whole_activities.filter().exclude(act_state=2)
+        print(show_activities.values())
         # 返回相关活动集
-        if show_activities.all().count() != 0:  # 待显示的活动不为空
+        if show_activities:  # 待显示的活动不为空
             context = {
                 'activities': show_activities,        # <待显示活动对象>列表
-                'func_state': FunctionStatus.NORMAL,  # 访问状态
+                'func_state': 0,  # 访问状态
                 'message': '正常访问'                  # 消息
             }
-            return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
-            # context = {
-            #     "act_name": show_activities.values('act_name'),  # 活动名称        - 列表
-            #     "act_organizer_name": show_activities.values('act_organizer_name'),  # 组织者名称      - 列表
-            #     "act_state": show_activities.values('act_state'),  # 活动状态        - 列表
-            #     "act_flag": whole_activities.values('act_flag'),  # 活动可否参加状态 - 列表
-            #     "func_state": FunctionStatus.NORMAL,  # 访问状态
-            #     "message": "正常访问"  # 待返回的信息
-            # }
-            # return render(request, 'stu_home/stu_activity_no.html', context=context)  # 访问成功
+            print('xxxxx')
+            return render(request, 'stu_home/stu_activity.html', context=context)  # 访问成功
         else:  # 待显示列表为空
             context = {
                 'activities': None,       # <待显示活动对象>列表
-                "func_state": FunctionStatus.EMPTY,  # 访问状态
+                "func_state": 1,  # 访问状态
                 "message": "待显示的内容为空"
             }
-            return render(request, 'org_home/org_view_posted_activity.html', context=context)
+            print("待显示的内容为空")
+            return render(request, 'stu_home/stu_activity.html', context=context)
     else:  # 非学生登录访问（无权限）    前端保证不触发
         context = {
             'activities': None,  # <待显示活动对象>列表
-            "func_state": FunctionStatus.NO_PERMISSION,  # 访问状态
+            "func_state": 2,  # 访问状态
             "message": "非学生身份访问，无权限"  # 待返回的信息
         }
         return render(request, 'login.html', context=context)    # 返回到哪？？？
@@ -398,6 +387,19 @@ def stu_activity(request):
     #         "message": "非正常形式访问，请登录"        # 待返回的信息
     #     }
     #     return render(request, 'login.html', context=context)
+
+
+def stu_activity_details(request, id):
+    """
+    学生：可参加活动
+    :param request:
+    :return:
+    """
+    act = activities.objects.filter(act_id=id).first()
+    context = {
+        'activity': act
+    }
+    return render(request, 'stu_home/stu_activity_details.html', context=context)
 
 
 def stu_createteam(request):
@@ -515,13 +517,16 @@ def org_launch_activity(request):  # 需要修改
     :param request:
     :return:
     """
-    if request.method == 'GET':
-        return render(request, 'org_home/org_launch_activity.html')
-    elif request.method == 'POST':
-        act_id = request.POST.get('act_id')
+
+    if request.method == 'POST':
+
+        act_id = random()
         act_name = request.POST.get('act_name')
         act_start_time = request.POST.get('act_start_time')
-        act_end_time = request.POST.get('acct_end_time')
+        act_end_time = request.POST.get('act_end_time')
+        print(type(act_start_time))
+        print(act_start_time)
+        print()
         act_organizer_name = request.POST.get('act_organizer_name')
         act_organizer_phone = request.POST.get('act_organizer_phone')
         act_max_team_number = request.POST.get('act_max_team_number')
@@ -532,30 +537,37 @@ def org_launch_activity(request):  # 需要修改
         act_flag = "不可参加"  # 默认不可参加
         act_planning_book = request.POST.get('act_planning_book')
         act_introduction = request.POST.get('act_introduction')
+        print(1)
+
         if not (act_name and act_start_time and act_end_time and act_organizer_name and act_organizer_phone
                 and act_max_team_number and act_state and act_total_number and act_participated_number
                 and act_available_number and act_flag and act_planning_book and act_introduction):
+            print(2)
             return render(request, 'org_home/org_launch_activity.html', {'message': '不能为空'})
-        try:
-            activities.objects.create(
-                act_id=act_id,
-                act_name=act_name,
-                act_start_time=act_start_time,
-                act_end_time=act_end_time,
-                act_organizer_name=act_organizer_name,
-                act_organizer_phone=act_organizer_phone,
-                act_max_team_number=act_max_team_number,
-                act_state=act_state,
-                act_total_number=act_total_number,
-                #act_participated_number=act_participated_number,
-                act_available_number=act_available_number,
-                act_flag=act_flag,
-                act_planning_book=act_planning_book,
-                act_introduction=act_introduction,
-            )
-        except:
-            return render(request, 'org_home/org_launch_activity.html', {'message': '创建公告失败'})
-        return render(request, 'org_home/org_view_posted_activity.html')
+        else:
+            try:
+                activities.objects.create(
+                    act_id=act_id,
+                    act_name=act_name,
+                    act_start_time=act_start_time,
+                    act_end_time=act_end_time,
+                    act_organizer_name=act_organizer_name,
+                    act_organizer_phone=act_organizer_phone,
+                    act_max_team_number=act_max_team_number,
+                    act_state=act_state,
+                    act_total_number=act_total_number,
+                    # act_participated_number=act_participated_number,
+                    act_available_number=act_available_number,
+                    act_flag=act_flag,
+                    act_planning_book=act_planning_book,
+                    act_introduction=act_introduction,
+                )
+                print(3)
+                return redirect(reverse('org_home'))
+            except:
+                return render(request, 'org_home/org_launch_activity.html', {'message': '创建公告失败'})
+    return render(request, 'org_home/org_launch_activity.html')
+        # return render(request, 'org_home/org_view_posted_activity.html')
 
 
 def org_launch_notice(request):
