@@ -114,12 +114,10 @@ def register(request):
         if con_code.upper() == check_code.upper():
             if re_password == con_password:
                 try:
-                    print(1)
                     student = students.objects.get(stu_id=re_id)
                     return render(request, 'register.html', {'message': '该id已存在'})
                 except:
                     try:
-                        print(2)
                         student = students.objects.get(stu_Email=re_Email)
                         return render(request, 'register.html', {'message': '该Email已被占用'})
                     except:
@@ -156,29 +154,27 @@ def stu_active(request):
     student = students.objects.get(stu_id=re_id)
     student.stu_valid = 1
     student.save()
-    return HttpResponse('注册成功，请前去激活')
+    return HttpResponse('激活成功，请前去登录')
     # return redirect(reverse("sac_app:login"))
 
 
 def changepwd(request):
     """
-    修改密码页
+    修改密码
+    :param request:
+    :return:
     """
     if request.method == 'POST':
         re_password = request.POST.get('password')
         con_password = request.POST.get('agpassword')
-        con_code = request.POST.get('idcode')
-        check_code = request.session.get('check_code')
-        if not all([re_password, con_password, con_code]):
-            return render(request, 'forgetpwd.html', {'empty_error': '请填写必要信息'})
         if re_password != con_password:
             return render(request, 'forgetpwd.html', {'password_error': '密码不一致'})
-        if con_code != check_code:
-            return render(request, 'forgetpwd.html', {'che_code_error': '验证码错误'})
         else:
             token = request.GET.get('token')
             re_id = request.session.get(token)
-            students.objects.filter(stu_id=re_id).update(stu_password=re_password)
+            stu1 = students.objects.get(stu_id=re_id)
+            stu1.stu_password = re_password
+            stu1.save()
             return redirect(reverse("sac_app:stu_home"))  # 重定向到首页
     else:
         return render(request, "changepwd.html")
@@ -189,34 +185,28 @@ def forgetpwd(request):
     忘记密码页
     """
     if request.method == 'POST':
-        re_id = request.POST.get('stu_id')
-        re_Email = request.POST.get('stu_Email')
+        re_id = request.POST.get('username')
+        re_Email = request.POST.get('email')
         code = request.POST.get('idcode')
-        real_code = request.POST.get('check_code')
-        if not re_id:
-            return render(request, 'forgetpwd.html', {'no_id_error': '请填写学号'})
-        if not re_Email:
-            return render(request, 'forgetpwd.html', {'no_email_error': '请填写邮箱'})
-        if not code:
-            return render(request, 'forgetpwd.html', {'no_idcode_error': '请填写验证码'})
+        real_code = request.session.get('check_code')
         if students.objects.filter(stu_id=re_id).count == 0:
             return render(request, 'forgetpwd.html', {'no_stu_error': '用户不存在'})
-        if code != real_code:
+        if code.upper() != real_code.upper():
             return render(request, 'forgetpwd.html', {'check_code_error': '验证码错误'})
         else:
             students.objects.get(stu_id=re_id)
             token = str(uuid.uuid4()).replace('-', '')
             request.session[token] = re_id
-            subject = '学生账号激活'
+            subject = '修改密码'
             # 超链接里面的链接地址根据实际情况修改（修改密码的链接）
             message = '''
-                                        欢迎注册使用学生活动中心！亲爱的用户赶快激活使用吧！
-                                        <br> <a herf = "http://127.0.0.1:8000/sac_app/changepwd?token={}">点击激活</a>
+                                        ！
+                                        <br>http://127.0.0.1:8000/sac_app/changepwd?token={}
                                         <br>
                                                                 学生活动中心开发团队
                         '''.format(token)
-            send_mail(subject=subject, message='', from_email='',
-                      recipient_list=[re_Email, ], html_message=message)
+            send_mail(subject=subject, message='', from_email='2912784728@qq.com',
+                      recipient_list=[re_Email], html_message=message)
             return redirect(reverse("sac_app:login"))  # 重定向到登录界面
     else:
         return render(request, "forgetpwd.html")

@@ -16,8 +16,8 @@ urlpatterns = [
     path('active/', views.stu_active, name='active'),
     # 1 忘记密码 ----- （李渊科）----- %
     path('login/forgetpwd/', views.forgetpwd, name="forgetpwd"),
-
-
+    # 1 修改密码 ----- （李渊科）----- %
+    path('login/changepwd', views.changepwd, name="changepwd"),
     # 学生:主页 ~~~~~
     path('stu_home', views.stu_home, name="stu_home"),
     # 2 学生: 活动大厅 ----- (袁丰) ~~~~~
