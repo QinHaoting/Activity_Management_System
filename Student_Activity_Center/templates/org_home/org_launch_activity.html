@@ -26,7 +26,7 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li class="active"><a href="{% url 'sac_app:org_launch_activity' %}" class="sf-house">发布活动</a></li>
-                    <li><a href="{% url 'sac_app:org_view_pasted_activity' %}" class="sf-dashboard">已发布活动</a></li>
+                    <li><a href="{% url 'sac_app:org_view_posted_activity' %}" class="sf-dashboard">已发布活动</a></li>
                     <li><a href="{% url 'sac_app:org_launch_notice' %}" class="sf-box-out">发布公告</a></li>
                     <li><a href="{% url 'sac_app:org_center' %}" class="sf-user-male-alt">组织中心</a></li>
                 </ul>
@@ -39,7 +39,8 @@
         <div class="col-sm-12">
             <div class="panel panel-default">
                 <div class="panel-body" style="min-height: 480px;">
-                    <form>
+                    <form method="POST" action="">
+                        {% csrf_token %}
                         <div class="col-sm-6">
                             <div class="panel panel-default">
                                 <div class="panel-body" style="min-height: 480px;">
@@ -73,35 +74,21 @@
                                         <div class="col-sm-6">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="optionsRadios" id="optionsRadios2"
+                                                    <input type="radio" name="act_type1"
                                                            value="0" onclick="switchItem('one')">单人活动
                                                 </label>
                                             </div>
                                         </div>
-                                        <div class="col-sm-6">
-                                            <div class="radio">
-                                                <label>
-                                                    <input type="radio" name="optionsRadios" id="optionsRadios1"
-                                                           value="1" onclick="switchItem('number')">组队活动
-                                                </label>
-                                            </div>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <div class="radio">
+                                            <label>
+                                                <input type="radio" name="act_type2"
+                                                       value="1" onclick="switchItem('number')">组队活动
+                                            </label>
                                         </div>
                                     </div>
-                                    <div class="form-group" id="one" style="display: none">
-                                        <label class=input-group>活动限制人数</label>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" name="act_max_team_number"
-                                                   required="required" list="act_people_number">
-                                            <datalist id="act_people_number">
-                                                <option>10</option>
-                                                <option>20</option>
-                                                <option>30</option>
-                                                <option>40</option>
-                                                <option>50</option>
-                                                <option>无限制</option>
-                                            </datalist>
-                                        </div>
-                                    </div>
+
                                     <div class="form-group" id="number" style="display: none">
                                         <label class=input-group>活动限制组数</label>
                                         <div class="col-sm-12">
@@ -112,21 +99,37 @@
                                                 <option>20</option>
                                                 <option>30</option>
                                                 <option>40</option>
-                                                <option>无限制</option>
+                                                <option>100</option>
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="one" style="display: none">
+                                        <label class=input-group>活动限制人数</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" name="act_total_number"
+                                                   required="required" list="act_pro_total_number">
+                                            <datalist id="act_pro_total_number">
+                                                <option>10</option>
+                                                <option>20</option>
+                                                <option>30</option>
+                                                <option>40</option>
+                                                <option>100</option>
                                             </datalist>
                                         </div>
                                     </div>
                                     <div class="form-group">
                                         <label class=input-group>开始时间</label>
                                         <div class="col-sm-12">
-                                            <input type="datetime-local" class="measureDate" placeholder="请选择日期">
+                                            <input type="datetime-local" class="measureDate" placeholder="请选择日期"
+                                                   name="act_start_time">
                                         </div>
                                     </div>
                                     <hr>
                                     <div class="form-group">
                                         <label class=input-group>结束时间</label>
                                         <div class="col-sm-12">
-                                            <input type="datetime-local" class="measureDate" placeholder="请选择日期">
+                                            <input type="datetime-local" class="measureDate" placeholder="请选择日期"
+                                                   name="act_end_time">
                                         </div>
                                     </div>
                                     <hr>
@@ -151,12 +154,18 @@
                                                    required="required">
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <input type="submit" class="btn btn-yellow col-sm-2" value="提交">
+                                    </div>
                                     <hr>
                                 </div>
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-yellow col-sm-2">提交</button>
                     </form>
+                    {#                    <form method="post">#}
+                    {#                        <input type="text" name="j">#}
+                    {#                        <input type="submit" value="提交">#}
+                    {#                    </form>#}
                 </div>
             </div>
         </div>
@@ -239,11 +248,9 @@
         if (tag == 'one') {
             s1.style.display = '';
             s2.style.display = 'none';
-            s3.style.display = 'none';
         } else {
             s1.style.display = 'none';
             s2.style.display = '';
-            s3.style.display = '';
         }
     }
 </script>

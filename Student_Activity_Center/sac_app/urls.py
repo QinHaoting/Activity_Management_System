@@ -1,32 +1,35 @@
 from django.conf.urls import url
-from django.urls import path
+from django.urls import path, re_path
 
 from sac_app import views
 
 app_name = "sac_app"
 
 urlpatterns = [
-    # 1 登录 ----- （封正泽）----- %
+    # 1 登录 ----- （封正泽）----- (秦浩廷)
     path('login/', views.login, name="login"),
-    # 1 验证码 ----- （赵碧）----- %
+    # 1 验证码 ----- （赵碧）----- （秦浩廷）
     path('check_code/', views.check_code),
-    # 1 注册 ----- （封正泽）----- %
+    # 1 注册 ----- （封正泽）----- （秦浩廷）
     path('login/register/', views.register, name="register"),
-    # 1 激活 ----- （封正泽）----- %
+    # 1 激活 ----- （封正泽）----- （秦浩廷）
     path('active/', views.stu_active, name='active'),
-    # 1 忘记密码 ----- （李渊科）----- %
+    # 1 忘记密码 ----- （李渊科）----- （秦浩廷）
     path('login/forgetpwd/', views.forgetpwd, name="forgetpwd"),
-    # 1 修改密码 ----- （李渊科）----- %
-    path('login/changepwd', views.changepwd, name="changepwd"),
+    # 1 修改密码 ----- （李渊科）----- （秦浩廷）
+    path('changepwd/', views.changepwd, name="changepwd"),
+
     # 学生:主页 ~~~~~
     path('stu_home', views.stu_home, name="stu_home"),
-    # 2 学生: 活动大厅 ----- (袁丰) ~~~~~
-    path('stu_home/stu_activity', views.stu_activity, name="stu_activity"),
+    # 2 学生: 活动大厅 ----- (秦浩廷) ~~~~~
+    path('stu_home/stu_activity/', views.stu_activity, name="stu_activity"),
+    # 2 学生：活动详情页 ~~~~~
+    re_path(r'^stu_home/stu_activity/stu_activity_details/(\d+)', views.stu_activity_details, name="stu_activity_details"),
     # 2 学生：已参加活动页 ----- (袁丰) ~~~~~
     path('stu_home/stu_join_activity/', views.stu_join_activity, name="stu_join_activity"),
     # 1 学生：创建队伍 ----- (李渊科) ~~~~~
     path('stu_home/stu_create_team/', views.stu_createteam, name="stu_create_team"),
-    # 1 2 学生：我的队伍 ~~~~~ 1
+    # 1 2 学生：我的队伍 ~~~~~ 2
     path('stu_home/stu_my_team/', views.stu_myteam, name="stu_my_team"),
     # 1 2 学生：其他队伍 ~~~~~ 1
     path('stu_home/stu_other_team/', views.stu_otherteam, name="stu_other_team"),

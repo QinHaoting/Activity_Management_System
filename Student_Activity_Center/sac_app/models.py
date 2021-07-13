@@ -5,8 +5,8 @@ import datetime
 
 # 学生类
 class students(models.Model):
-    # 学生ID
-    stu_id = models.CharField(max_length=64, primary_key=True)
+    # 学生账号
+    stu_id = models.CharField(max_length=64)
     # 学生姓名
     stu_name = models.CharField(max_length=64)
     # 学生登入密码
@@ -32,7 +32,7 @@ class students(models.Model):
 # 活动类
 class activities(models.Model):
     # 活动ID
-    act_id = models.CharField(max_length=128, primary_key=True)
+    act_id = models.CharField(max_length=128)
     # 活动名称
     act_name = models.CharField(max_length=64, blank=False)
     # 活动开始时间
@@ -40,7 +40,7 @@ class activities(models.Model):
     # 活动结束时间
     act_end_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动负责人名字
-    act_organizer_name = models.CharField(max_length=64, blank=False)
+    act_organizer_name = models.ForeignKey(organizers, on_delete=models.PROTECT)
     # 活动负责人联系方式
     act_organizer_phone = models.CharField(max_length=32, blank=False)
     # 活动组队最多人数
@@ -73,7 +73,7 @@ class activities(models.Model):
 
 # 管理员类
 class managers(models.Model):
-    # 管理员ID
+    # 管理员账号
     man_id = models.CharField(max_length=64)
     # 管理员登入密码
     man_password = models.CharField(max_length=64)
@@ -81,8 +81,8 @@ class managers(models.Model):
 
 # 组织类
 class organizers(models.Model):
-    # 组织ID
-    org_id = models.CharField(max_length=64, primary_key=True)
+    # 组织账号
+    org_id = models.CharField(max_length=64)
     # 组织姓名
     org_name = models.CharField(max_length=64, blank=False)
     # 组织负责人姓名
@@ -96,15 +96,15 @@ class organizers(models.Model):
     # 组织简介
     org_introduction = models.TextField(blank=False)
     # 承办的活动
-    org_act = models.ForeignKey(activities, on_delete=models.PROTECT)
+    # org_act = models.ForeignKey(activities, on_delete=models.PROTECT)
 
 
 # 活动已参加学生子表类
 class act_to_stu(models.Model):
     # 学生参加的活动对应的ID
-    act_id = models.ForeignKey(activities, on_delete=models.PROTECT)
+    act = models.ForeignKey(activities, on_delete=models.PROTECT)
     # 参加活动的学生对应的ID
-    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
+    stu = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
 # class act_to_team(models.Model):
@@ -115,8 +115,6 @@ class act_to_stu(models.Model):
 
 # 参加活动队伍类
 class teams(models.Model):
-    # 队伍ID
-    team_id = models.CharField(max_length=64, primary_key=True)
     # 队伍人数
     team_number = models.IntegerField()
     # 队名
@@ -133,8 +131,6 @@ class teams(models.Model):
 
 # 公告类
 class notices(models.Model):
-    # 公告ID
-    notice_id = models.CharField(max_length=64, primary_key=True)
     # 公告标题
     notice_title = models.CharField(max_length=64, blank=False)
     # 创建公告时间
@@ -143,9 +139,11 @@ class notices(models.Model):
     notice_content = models.TextField(blank=False)
     # 公告附件
     notice_appendix = models.FileField(null=True)
+    # 公告类型
+    notice_tag = models.IntegerField(max_length=1)
 
 
 # 学生队伍子表类
 class stu_to_team(models.Model):
-    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
-    team_id = models.ForeignKey(teams, on_delete=models.PROTECT)
+    stu = models.ForeignKey(students, on_delete=models.PROTECT)
+    team = models.ForeignKey(teams, on_delete=models.PROTECT)
