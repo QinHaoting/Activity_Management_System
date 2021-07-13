@@ -525,7 +525,7 @@ def org_launch_activity(request):  # 需要修改
         act_organizer_name = request.POST.get('act_organizer_name')
         act_organizer_phone = request.POST.get('act_organizer_phone')
         act_max_team_number = request.POST.get('act_max_team_number')
-        act_state = 0  # 0:审核中 1：报名中 2：活动进行中 3：活动已结束
+        act_state = 0  # 0：审核中	1：未发布（不通过）2：报名阶段（通过）	3：进行中	4：已结束
         act_total_number = request.POST.get('act_total_number')#针对不需要组队的活动而言
         act_participated_number = 0 #默认已参加人数为0人
         act_available_number = 100 #默认可参加人数为100人
