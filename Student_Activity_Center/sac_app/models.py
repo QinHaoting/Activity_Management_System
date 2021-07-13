@@ -29,32 +29,6 @@ class students(models.Model):
     stu_valid = models.IntegerField()
 
 
-# 管理员类
-class managers(models.Model):
-    # 管理员ID
-    man_id = models.CharField(max_length=64)
-    # 管理员登入密码
-    man_password = models.CharField(max_length=64)
-
-
-# 组织类
-class organizers(models.Model):
-    # 组织ID
-    org_id = models.CharField(max_length=64, primary_key=True)
-    # 组织姓名
-    org_name = models.CharField(max_length=64, blank=False)
-    # 组织负责人姓名
-    org_header_name = models.CharField(max_length=64, blank=False)
-    # 组织账号密码
-    org_password = models.CharField(max_length=128)
-    # 组织负责人联系方式
-    org_header_phone = models.CharField(max_length=32, blank=False)
-    # 组织负责人所在学院
-    org_header_college = models.CharField(max_length=128, null=True)
-    # 组织简介
-    org_introduction = models.TextField(blank=False)
-
-
 # 活动类
 class activities(models.Model):
     # 活动ID
@@ -66,7 +40,7 @@ class activities(models.Model):
     # 活动结束时间
     act_end_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动负责人名字
-    act_organizer_name = models.ForeignKey(organizers, blank=False, on_delete=models.PROTECT)
+    act_organizer_name = models.CharField(max_length=64, blank=False)
     # 活动负责人联系方式
     act_organizer_phone = models.CharField(max_length=32, blank=False)
     # 活动组队最多人数
@@ -97,12 +71,40 @@ class activities(models.Model):
     # act_to_stu_team_table = models.ManyToManyField(teams, through='act_to_team')
 
 
+# 管理员类
+class managers(models.Model):
+    # 管理员ID
+    man_id = models.CharField(max_length=64)
+    # 管理员登入密码
+    man_password = models.CharField(max_length=64)
+
+
+# 组织类
+class organizers(models.Model):
+    # 组织ID
+    org_id = models.CharField(max_length=64, primary_key=True)
+    # 组织姓名
+    org_name = models.CharField(max_length=64, blank=False)
+    # 组织负责人姓名
+    org_header_name = models.CharField(max_length=64, blank=False)
+    # 组织账号密码
+    org_password = models.CharField(max_length=128)
+    # 组织负责人联系方式
+    org_header_phone = models.CharField(max_length=32, blank=False)
+    # 组织负责人所在学院
+    org_header_college = models.CharField(max_length=128, null=True)
+    # 组织简介
+    org_introduction = models.TextField(blank=False)
+    # 承办的活动
+    org_act = models.ForeignKey(activities, on_delete=models.PROTECT)
+
+
 # 活动已参加学生子表类
 class act_to_stu(models.Model):
     # 学生参加的活动对应的ID
-    act = models.ForeignKey(activities, on_delete=models.PROTECT)
+    act_id = models.ForeignKey(activities, on_delete=models.PROTECT)
     # 参加活动的学生对应的ID
-    stu = models.ForeignKey(students, on_delete=models.PROTECT)
+    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
 
 
 # class act_to_team(models.Model):
@@ -145,5 +147,5 @@ class notices(models.Model):
 
 # 学生队伍子表类
 class stu_to_team(models.Model):
-    stu= models.ForeignKey(students, on_delete=models.PROTECT)
-    team = models.ForeignKey(teams, on_delete=models.PROTECT)
+    stu_id = models.ForeignKey(students, on_delete=models.PROTECT)
+    team_id = models.ForeignKey(teams, on_delete=models.PROTECT)
