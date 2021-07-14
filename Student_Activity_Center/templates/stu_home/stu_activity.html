@@ -108,15 +108,21 @@
     {#                                <th scope="row"></th>#}
                                     <td>{{ act.act_organizer_name }}</td>
                                     <td>{{ act.act_name }}</td>
+                                    <!--活动进行状态判断-->
                                     {% if act.act_state == 2 %}
                                     <td>报名中</td>
-                                    {% elif act.act_state == 3%}
+                                    {% elif act.act_state == 3 %}
                                     <td>进行中</td>
-                                    {% else %}
+                                    {% elif act.act_state == 4 %}
                                     <td>已结束</td>
                                     {% endif %}
                                     <td><a href="stu_activity_details/{{ act.act_id }}">查看</a></td>
                                     <td>{{ act.act_flag }}</td>
+{#                                    {% if act.act_flag == 0 %}#}
+{#                                    <td>不可参加</td>#}
+{#                                    {% else act.act_state == 1 %}#}
+{#                                    <td>可参加</td>#}
+{#                                    {% endif %}#}
                                 </tr>
                             {% endfor %}
                         </tbody>
