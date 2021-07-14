@@ -181,6 +181,8 @@ class act_to_stu(models.Model):
 
 # 参加活动队伍类
 class teams(models.Model):
+    #队伍id
+    team_id=models.CharField(max_length=128)
     # 队伍人数
     team_number = models.IntegerField()
     # 队名
@@ -197,6 +199,8 @@ class teams(models.Model):
 
 # 公告类
 class notices(models.Model):
+    # 公告id
+    notice_id = models.CharField(max_length=128)
     # 公告标题
     notice_title = models.CharField(max_length=64, blank=False)
     # 创建公告时间
