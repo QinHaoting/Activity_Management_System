@@ -63,17 +63,16 @@
             </div>
             <div class="form-group">
                 <button type="submit" class="btn btn-block btn-primary">立即注册</button>
-                <span style="color: red">{{ error }}</span>
+                <span style="color: red">{{ message }}</span>
             </div>
             <div class="form-group">
                 <div class="checkbox" style="color: black;"><label><input type="checkbox">我已阅读并同<a
                         href="">相关服务条款和隐私政策</a>意</label></div>
             </div>
             <div class="form-group">
-                <a href="../../login/" class="">返回登录</a>
+                <a href="{% url 'sac_app:login' %}" class="">返回登录</a>
             </div>
         </div>
-
     </form>
 </div>
 <script>

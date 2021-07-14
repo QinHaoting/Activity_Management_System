@@ -85,13 +85,40 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <div>
-                        <h2>{{ act.notice_title }}</h2>
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th width=100%>活动公告</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for act in page_act %}
+                            <tr>
+                                <td>{{ act.notice_id }}</td>
+                                <td><a href="mag_notice_act?token={{act.notice_id}}/" name="act_notice_id">{{ act.notice_title }}</a></td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
                     </div>
-                    <div>
-                        {{ act.notice_content }}
+                    <div class="col-md-6">
+                        <table class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th width=100%>系统公告</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sys in page_sys %}
+                        <tr>
+                            <td><a href="mag_notice_act?token={{sys.notice_id}}/" name="sys_notice_id">{{ sys.notice_title }}</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                        </table>
                     </div>
-
                 </div>
             </div>
         </div>
@@ -114,8 +141,9 @@
                 </li>
             </ul>
         </nav>
+        <footer class="cm-footer"><span class="pull-left">Connected as John Smith</span><span class="pull-right">&copy; PAOMEDIA SARL</span></footer>
     </div>
-
+</div>
     <footer class="cm-footer"><span class="pull-left">Connected as John Smith</span><span class="pull-right">&copy; PAOMEDIA SARL</span></footer>
     <script type="text/javascript" src="../../../../src/js/lib/jquery.min.js"></script>
     <script type="text/javascript" src="../../../../src/js/jquery.mousewheel.min.js"></script>

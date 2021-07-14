@@ -9,8 +9,8 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
-    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css'%}">
-    <title>校园活动中心</title>
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
 </head>
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
@@ -22,9 +22,11 @@
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li><a href="{% url 'sac_app:mag_examine' %}" class="sf-pencil">活动审核</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_act' %}" class="sf-pencil">审核活动</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_org'%}" class="sf-device-computer">审核组织</a></li>
                     <li class="active"><a href="{% url 'sac_app:mag_manage' %}" class="sf-user-male">管理组织者</a></li>
-                    <li><a href="{% url 'sac_app:mag_launch_notice' %}" class="sf-box-out">发布系统公告</a></li>
+                    <li><a href="{%url 'sac_app:mag_add_org'%}" class="sf-sign-add">添加组织者</a></li>
+                    <li><a href="{% url 'sac_app:mag_launch_notice'%}" class="sf-box-out">发布系统公告</a></li>
                 </ul>
             </div>
         </div>
@@ -32,16 +34,6 @@
 </div>
 <div class="container-fluid">
     <div class="tab-content">
-        <div>
-        </div>
-        <div class="tab-pane fade in active" id="ipsum" style="margin-top:20px">
-            <div class="panel panel-default">
-                <div class="panel-body">
-                    <h2 style="margin-top:0">Header Level 2</h2>
-                </div>
-            </div>
-
-        </div>
     </div>
 </div>
 <header id="cm-header">
@@ -50,8 +42,8 @@
         <div class="cm-flex">
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class=""><a href="{% url 'sac_app:mag_home'%}">首页</a></li>
-                    <li class=""><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
+                    <li><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>>
                 </ul>
             </div>
         </div>
@@ -89,6 +81,106 @@
         </div>
     </nav>
 </header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+
+                            <tr>
+                                <th width=5%></th>
+                                <th width=20%>组织 ID </th>
+                                <th width=25%>组织名称</th>
+                                <th width=20%>联系电话</th>
+                                <th width=10%>详情</th>
+                                <th width=10%>修改</th>
+                                <th width=10%>删除</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for org in org_list %}
+                            <tr>
+                                <td>{{org.id}}</td>
+                                <td>{{ org.org_id }}</a></td>
+                                <td>{{ org.org_name }}</a></td>
+                                <td>{{ org.org_header_phone }}</a></td>
+                                <td><a href="mag_look_mag_org/{{org.org_id}}">查看</a></td>
+                                <td><a href="mag_revise/{{org.org_id}}">修改</a></td>
+                                <td><a href="mag_delete/{{org.org_id}}">删除</a></td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <form  method="post" action="">
+            {% csrf_token %}
+            <div>
+                <div class="col-xs-1">
+                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
+                </div>
+                <div class="col-xs-1">
+                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
+                    <span style="color: red">{{ error }}</span>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div>共-{{pgnt1.num_pages}}-页</div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">消息数量</span> </button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <div class="list-group">
+                        <a href="#" class="list-group-item">
+                            <h4 class="list-group-item-heading text-overflow">
+                                <i class="fa fa-fw fa-envelope"></i>现在有件大事通知您。
+                            </h4>
+                            <p class="list-group-item-text text-overflow">覃智科找了一个肥肥的女朋友</p>
+                        </a>
+                    </div>
+                    <div style="padding:10px"><a class="btn btn-success btn-block" href="#">展现更多</a></div>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
@@ -96,6 +188,6 @@
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>cript>
 </body>
 </html>

@@ -11,6 +11,46 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
     <title>学生活动中心</title>
+    <style type="text/css">
+        @font-face {
+            font-family: jianzhi;
+            src: url(FZJZ.TTF);
+        }
+
+        body {
+            color: #128095;
+        }
+
+        h3 {
+            font-family: jianzhi;
+            font-size: 32px;
+            text-align: center;
+            letter-spacing: 10px;
+            text-shadow: 2px 10px 20px #CCC;
+        }
+
+        h4 {
+            font-family: "楷体";
+            text-align: center;
+        }
+
+        p {
+            line-height: 28px;
+        }
+
+        .indent {
+            text-indent: 2em;
+        }
+
+        .space {
+            white-space: pre;
+        }
+
+        .right {
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
@@ -22,7 +62,7 @@
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li class="active"><a href="{% url 'sac_app:stu_home' %}" class="sf-house">活动大厅</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
                     <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a></li>
                 </ul>
@@ -80,8 +120,57 @@
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-heading" font-size="89px"><h2>{{ activity.act_name }}</h2></div>
+                <div class="panel-heading" font-size="89px"><h2>社团：{{ activity.act_organizer_name }}</h2></div>
                 <div class="panel-body" style="min-height: 500px;">
+                    <h4><strong>活动名称：{{ activity.act_name }}</strong></h4>
+                    <hr/>
+                    <p><strong>{{ activity.act_introduction }}</strong></p>
+                    <p class="indent">{{ activity.act_introduction }}</p>
+                    <p class="space">
+                        {% if activity.act_type == "0" %}
+                            <strong>详情如下</strong>
+                            <mark>活动类型：</mark>单人参加
+                            <mark>活动还剩名额：</mark>仅剩{{ activity.act_available_number }}个大家冲啊！
+                            <mark>开始时间：</mark>
+                            {{ activity.act_start_time }}
+                            <mark>结束时间：</mark>
+                            {{ activity.act_end_time }}
+                        {% else %}
+                            <mark>活动类型：</mark>组队参加
+                            <mark>活动还剩名额：</mark>仅剩{{ activity.act_team_number }}
+                            <mark>开始时间：</mark>
+                            {{ activity.act_start_time }}
+                            <mark>结束时间：</mark>
+                            {{ activity.act_end_time }}
+                        {% endif %}
+                    </p>
+                    <div class="right">
+                        {% csrf_token %}
+                        {% if activity.act_flag == "可参加" %}
+                            {% if activity.act_state == 2 %}
+                                {% if activity.act_type == "1" %}
+                                    <button class="btn-sm btn-yellow">点击报名</button>
+                                {% else %}
+                                    <div class="col-xs-6">
+                                        {% if activity.act_team_number <= activity.act_created_team_number %}
+                                            <a href="{% url 'sac_app:stu_create_team' %} "
+                                               class="btn-yellow button">组建自己的队伍</a>
+                                        {% else %}
+                                            <a class="btn-yellow" href="{% url 'sac_app:stu_join_other_team' %}">队伍数已满，请加入其它队伍</a>
+                                        {% endif %}
+                                    </div>
+                                    <a href="stu_join_other_team/{{ activity.act_id }}"
+                                       class="btn-yellow">点击查看(加入)其他队伍</a>
+                                {% endif %}
+                            {% elif activity.act_state == 3 %}
+                                <button class="btn-sm btn-yellow">活动进行中！报名已结束！</button>
+                            {% else %}
+                                <button class="btn-sm btn-yellow">活动已结束！下次再来！</button>
+                            {% endif %}
+                        {% else %}
+                            <button class="btn-sm btn-yellow">活动已结束！下次再来！</button>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         </div>

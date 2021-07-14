@@ -48,7 +48,7 @@
                                         <label class=input-group>社团名称</label>
                                         <div class="col-sm-12">
                                             <input type="text" class="form-control" name="act_organizer_name"
-                                                   value="hutuo" disabled="disabled"
+                                                   value="{{ org.org_name }}" disabled="disabled"
                                                    required="required">
                                         </div>
                                     </div>
@@ -74,8 +74,8 @@
                                         <div class="col-sm-6">
                                             <div class="radio">
                                                 <label>
-                                                    <input type="radio" name="act_type1"
-                                                           value="0" onclick="switchItem('one')">单人活动
+                                                    <input type="radio" name="act_type" id="optionsRadios2"
+                                                           value="0" onclick="switchItem('one')" checked="">单人活动
                                                 </label>
                                             </div>
                                         </div>
@@ -83,18 +83,38 @@
                                     <div class="col-sm-6">
                                         <div class="radio">
                                             <label>
-                                                <input type="radio" name="act_type2"
+                                                <input type="radio" name="act_type" id="optionsRadios1"
                                                        value="1" onclick="switchItem('number')">组队活动
                                             </label>
                                         </div>
                                     </div>
-
-                                    <div class="form-group" id="number" style="display: none">
-                                        <label class=input-group>活动限制组数</label>
+                                    <div class="form-group" id="one">
+                                        <label class=input-group>单人活动限制人数</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" name="act_max_team_number"
-                                                   required="required" list="act_people_number">
+                                            <input type="text" class="form-control" name="act_total_number"
+                                                   id="a"
+                                                   required="required" list="act_people_number" value="0"
+                                                  >
                                             <datalist id="act_people_number">
+                                                <option>10</option>
+                                                <option>20</option>
+                                                <option>30</option>
+                                                <option>40</option>
+                                                <option>50</option>
+                                                <option>无限制</option>
+                                            </datalist>
+                                        </div>
+                                    </div>
+                                    <div class="form-group" id="number">
+                                        <label>活动限制组数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                        <label>最少人数&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+                                        <label>最多人数</label>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="act_created_team_numbers"
+                                                   required="required" list="act_created_team_numbers" id="b"
+                                                "
+                                                   value="0">
+                                            <datalist id="act_created_team_numbers">
                                                 <option>10</option>
                                                 <option>20</option>
                                                 <option>30</option>
@@ -102,18 +122,29 @@
                                                 <option>100</option>
                                             </datalist>
                                         </div>
-                                    </div>
-                                    <div class="form-group" id="one" style="display: none">
-                                        <label class=input-group>活动限制人数</label>
-                                        <div class="col-sm-12">
-                                            <input type="text" class="form-control" name="act_total_number"
-                                                   required="required" list="act_pro_total_number">
-                                            <datalist id="act_pro_total_number">
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="act_min_team_number"
+                                                   required="required" list="act_min_team_number" id="c"
+
+                                                   value="0">
+                                            <datalist id="act_min_team_number">
+                                                <option>1</option>
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                            </datalist>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <input type="text" class="form-control" name="act_max_team_number"
+                                                   required="required" list="act_max_team_number" id="d"
+
+                                                   value="0">
+                                            <datalist id="act_max_team_number">
+                                                <option>2</option>
+                                                <option>3</option>
+                                                <option>4</option>
+                                                <option>5</option>
                                                 <option>10</option>
-                                                <option>20</option>
-                                                <option>30</option>
-                                                <option>40</option>
-                                                <option>100</option>
                                             </datalist>
                                         </div>
                                     </div>
@@ -142,7 +173,7 @@
                                     <div class="form-group">
                                         <label class=input-group>活动简介</label>
                                         <div class="col-sm-12">
-                                            <input type="text" class="form-control" name="act_organizer_phone"
+                                            <input type="text" class="form-control" name="act_introduction"
                                                    required="required" style="height: 20pc">
                                         </div>
                                     </div>
@@ -150,7 +181,7 @@
                                     <div class="form-group">
                                         <label class=input-group>活动策划书</label>
                                         <div class="col-sm-12">
-                                            <input type="file" class="form-control" name="act_organizer_phone"
+                                            <input type="file" class="form-control" name="act_planning_book"
                                                    required="required">
                                         </div>
                                     </div>
@@ -246,11 +277,15 @@
         var s1 = document.getElementById('one');
         var s2 = document.getElementById('number');
         if (tag == 'one') {
-            s1.style.display = '';
-            s2.style.display = 'none';
+            s1.style.display = ""
+            s2.style.display = 'none'
+            document.getElementById("a").setAttribute("disabled")
         } else {
-            s1.style.display = 'none';
-            s2.style.display = '';
+            s1.style.display = 'none'
+            s2.style.display = ""
+            document.getElementById("b").setAttribute('disabled')
+            document.getElementById("c").setAttribute('disabled')
+            document.getElementById("d").setAttribute('disabled')
         }
     }
 </script>

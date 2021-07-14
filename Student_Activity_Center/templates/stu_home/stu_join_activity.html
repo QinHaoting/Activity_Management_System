@@ -23,7 +23,8 @@
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
-                    <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a>
+                    </li>
                     <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -85,7 +86,6 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th></th>
                             <th width=30%>社团名称</th>
                             <th width=35%>活动名称</th>
                             <th width=15%>活动状态</th>
@@ -93,49 +93,41 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <script type="text/javascript">
-                            var re = ""
-                            for (var i = 1; i <= 10; i++) {
-                                re += '<tr class="thd">' +
-                                    '<th scope="row">' + i + '</th>' +
-                                    '<td>护卫拓展协会</td>' +
-                                    '<td>重庆大学穿越虎溪竞赛</td>' +
-                                    '<td>报名中</td>' +
-                                    '<td><a href="{% url "sac_app:stu_activity" %}">查看</a></td>' +
-                                    '</tr>'
-                            }
-                            document.write(re)
-                        </script>
+                        {% for act in pagelist %}
+                            <tr>
+                                {#                                <th scope="row"></th>#}
+                                <td>{{ act.act_organizer_name }}</td>
+                                <td>{{ act.act_name }}</td>
+                                {% if act.act_state == 2 %}
+                                    <td>报名中</td>
+                                {% elif act.act_state == 3 %}
+                                    <td>进行中</td>
+                                {% elif act.act_state == 4 %}
+                                    <td>已结束</td>
+                                {% endif %}
+                                <td><a href="stu_join_activity_details/{{ act.act_id }}">查看</a></td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
-        <nav>
-            <ul class="pagination shadowed" style="margin:0">
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-left"></i></span>
-                    </a>
-                </li>
-                <script type="text/javascript">
-                    var re = ""
-                    for (var i = 1; i <= 6; i++) {
-                        re += '<li><a href="#">' + i + '</a></li>'
-                    }
-                    document.write(re)
-                </script>
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-right"></i></span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
+        <form method="post" action="">
+            <div>
+                <div class="col-xs-1">
+                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
+                </div>
+                <div class="col-xs-1">
+                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
+                    <span style="color: red">{{ error }}</span>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div>共-{{ pgnt1.num_pages }}-页</div>
+            </div>
+        </form>
     </div>
-
-    <footer class="cm-footer"><span class="pull-left">Connected as John Smith</span><span class="pull-right">&copy; PAOMEDIA SARL</span>
-    </footer>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>

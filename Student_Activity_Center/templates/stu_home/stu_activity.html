@@ -70,7 +70,7 @@
                     <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
                 </li>
                 <li>
-                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
                 </li>
             </ul>
         </div>
@@ -81,50 +81,57 @@
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
-                        {{ message }}
+                    {{ message }}
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-{#                            <th></th>#}
-                            <th width=30%>社团名称</th>
-                            <th width=35%>活动名称</th>
+                            {#                            <th></th>#}
+                            <th width=22%>社团名称</th>
+                            <th width=22%>活动名称</th>
+                            <th width="14%">开始时间</th>
+                            <th width="14%">结束时间</th>
                             <th width=10%>活动状态</th>
-                            <th width=10%>查看</th>
                             <th>
                                 <form action="">
-                                    <select name="control" class="form-control">
-                                        <option value=0 selected="selected">全部活动</option>
-                                        <option value=1>可参加</option>
-                                        <option value=2>不可参加</option>
-                                    </select>
-                                    <button class="button" type="submit">提交</button>
+                                    <div class="col-1">
+                                        <select name="control" >
+                                            <option value=0 selected="selected">全部活动</option>
+                                            <option value=1>可参加</option>
+                                            <option value=2>不可参加</option>
+                                        </select>
+                                        <button class="button" type="submit">提交</button>
+                                    </div>
                                 </form>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
-                            {% for act in activities %}
-                                <tr>
-    {#                                <th scope="row"></th>#}
-                                    <td>{{ act.act_organizer_name }}</td>
-                                    <td>{{ act.act_name }}</td>
-                                    {% if act.act_state == 2 %}
+                        {% for act in org_list %}
+                            <tr>
+                                {#                                <th scope="row"></th>#}
+                                <td>{{ act.act_organizer_name }}</td>
+                                <td><a href="stu_activity_details/{{ act.act_id }}">{{ act.act_name }}</a></td>
+                                <td>{{ act.act_start_time }}</td>
+                                <td>{{ act.act_end_time }}</td>
+                                <!--活动进行状态判断-->
+                                {% if act.act_state == 2 %}
                                     <td>报名中</td>
-                                    {% elif act.act_state == 3%}
+                                {% elif act.act_state == 3 %}
                                     <td>进行中</td>
-                                    {% else %}
+                                {% elif act.act_state == 4 %}
                                     <td>已结束</td>
-                                    {% endif %}
-                                    <td><a href="stu_activity_details/{{ act.act_id }}">查看</a></td>
-                                    <td>{{ act.act_flag }}</td>
-                                </tr>
-                            {% endfor %}
+                                {% endif %}
+{#                                <td><a href="stu_activity_details/{{ act.act_id }}">查看</a></td>#}
+                                <td>{{ act.act_flag }}</td>
+                            </tr>
+                        {% endfor %}
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <form method="post" action="">
+            {% csrf_token %}
             <div>
                 <div class="col-xs-1">
                     <input type="text" name="page" class="form-control" placeholder="page" required="required">

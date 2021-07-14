@@ -10,7 +10,7 @@
     <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
-    <title>校园活动中心</title>
+    <title>学生活动中心</title>
 </head>
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
@@ -22,9 +22,12 @@
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li><a href="{% url 'sac_app:mag_examine' %}" class="sf-pencil">活动审核</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_act' %}" class="sf-pencil">审核活动</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_org' %}" class="sf-device-computer">审核组织</a></li>
                     <li><a href="{% url 'sac_app:mag_manage' %}" class="sf-user-male">管理组织者</a></li>
-                    <li class="active"><a href="{% url 'sac_app:mag_launch_notice' %}" class="sf-box-out">发布系统公告</a></li>
+                    <li><a href="{% url 'sac_app:mag_add_org' %}" class="sf-sign-add">添加组织者</a></li>
+                    <li class="active"><a href="{% url 'sac_app:mag_launch_notice' %}" class="sf-box-out">发布系统公告</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -34,36 +37,58 @@
     <div class="container-fluid">
         <div class="col-sm-12">
             <div class="panel panel-default">
-                <div class="panel-body">
+                <div class="panel-body" style="min-height: 560px;">
                     <form method="post" action="">
-                        <div class="form-group">
-                            <label class="input-group">公告标题</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" name="title" placeholder="Title"
-                                       required="required">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="input-group">公告内容</label>
-                            <div class="col-sm-12">
-                                <input type="text" class="form-control" name="content" placeholder="Content"
-                                       required="required" style="height: 250px ;">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="input-group">公告附件</label>
-                            <div class="col-sm-3">
-                                <input type="file" class="form-control" name="attachment"
-                                       placeholder="Attachment">
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 " style="left: 40%">
-                            <button type="submit" class="btn btn-block btn-yellow">发布系统公告
-                                <tton>
+                        {% csrf_token %}
+                        <div class="col-sm-12">
+                            <div class="panel-body" style="min-height: 560px;">
+                                <div class="col-sm-12">
+                                    <h3>{{success}}</h3>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">公告id</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="id"  placeholder="ID" required="required">
+                                    </div>
+                                </div>
+                                    <div class="form-group">
+                                        <label class="input-group">公告标题</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" name="title"  placeholder="Title" required="required">
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <div class="col-sm-12">
+                                        &nbsp;
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="input-group">公告内容</label>
+                                        <div class="col-sm-12">
+                                            <input type="text" class="form-control" name="content"  placeholder="Content" required="required" style="height: 250px;">
+                                        </div>
+                                    </div>
+                                    <hr>
+
+                                    <div class="col-sm-12">
+                                        &nbsp;
+                                    </div>
+                                    <div class="form-group">
+                                        <label class="input-group">公告附件</label>
+                                        <div class="col-sm-3">
+                                            <input type="file" class="form-control" name="attachment" placeholder="Attachment">
+                                        </div>
+                                    </div>
+                                <div class="col-sm-12">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-8">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-block btn-primary">发布系统公告</button>
                                     <span style="color: red">{{ error }}</span>
-                                    <br>
-                                </tton>
-                            </button>
+                                </div>
+                            </div>
                         </div>
                     </form>
                 </div>
@@ -71,14 +96,15 @@
         </div>
     </div>
 </div>
+
 <header id="cm-header">
     <nav class="cm-navbar cm-navbar-primary">
         <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
         <div class="cm-flex">
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class=""><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
-                    <li class=""><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
+                    <li><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
                 </ul>
             </div>
         </div>
@@ -111,12 +137,36 @@
                     <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
                 </li>
                 <li>
-                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
+<script language="javascript">
+
+    function MsgBox() //声明标识符
+
+    {
+
+        alert("确定要发布公告吗？"); //弹出对话框
+
+    }
+
+
+</script>
+<script language="javascript">
+
+    function Box() //声明标识符
+
+    {
+
+        alert("发布成功"); //弹出对话框
+
+    }
+
+
+</script>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>

@@ -87,50 +87,51 @@
                         <tbody>
                         <tr>
                             <td><strong>姓名</strong></td>
-                            <td>Mxmevol</td>
+                            <td>{{ stu.stu_name }}</td>
                         </tr>
                         <tr>
                             <td><strong>性别</strong></td>
-                            <td>男</td>
+                            <td>{{ stu.stu_gender }}</td>
                         </tr>
                         <tr>
                             <td><strong>学号</strong></td>
-                            <td>DZ200031</td>
+                            <td>{{ stu.stu_id }}</td>
                         </tr>
                         <tr>
                             <td><strong>年级</strong></td>
-                            <td>大二</td>
+                            <td>{{ stu.stu_grade }}</td>
                         </tr>
                         <tr>
                             <td><strong>专业</strong></td>
-                            <td>人工智能</td>
+                            <td>{{ stu.stu_major }}</td>
                         </tr>
                         <tr>
                             <td><strong>学院</strong></td>
-                            <td>计算机科学与技术</td>
+                            <td>{{ stu.stu_college }}</td>
                         </tr>
                         <tr>
                             <td><strong>电话</strong></td>
-                            <td>1520261449</td>
+                            <td>{{ stu.stu_phone }}</td>
                         </tr>
                         <tr>
                             <td><strong>邮箱</strong></td>
-                            <td>2425448479@qq.com</td>
+                            <td>{{ stu.stu_Email }}</td>
                         </tr>
                         <tr>
                             <td><strong>密码</strong></td>
-                            <td>2425448479</td>
+                            <td>{{ stu.stu_password }}</td>
                         </tr>
                         <tr>
                             <td><strong>个人简介</strong></td>
-                            <td>帅气，多才</td>
+                            <td>{{ stu.stu_introduction }}</td>
                         </tr>
                         </tbody>
                     </table>
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 " style="left: 40%">
-                        <button class="btn btn-block btn-yellow" data-switch-color="yellow"><a
-                                href="{% url 'sac_app:stu_modify_message' %}">修改</a></button>
-                        <br>
+                        <div class="col-xs-6">
+                            <a href="stu_modify_message/{{ stu.stu_id }}">修改</a>
+                            <br>
+                        </div>
                     </div>
                 </div>
             </div>
