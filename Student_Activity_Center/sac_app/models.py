@@ -101,6 +101,17 @@ class organizers(models.Model):
     # org_act = models.ForeignKey(activities, on_delete=models.PROTECT)
 
 
+# 组织修改组织信息中间表单
+class organizers_modified(models.Model):
+    org_id = models.CharField(max_length=64)
+    org_password = models.CharField(max_length=128)
+    org_name = models.CharField(max_length=64)
+    org_header_name = models.CharField(max_length=64)
+    org_header_phone = models.CharField(max_length=32)
+    org_introduction = models.TextField()
+    org_valid = models.IntegerField()
+
+
 # 活动已参加学生子表类
 class act_to_stu(models.Model):
     # 学生参加的活动对应的ID
