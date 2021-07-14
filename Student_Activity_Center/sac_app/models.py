@@ -40,7 +40,9 @@ class activities(models.Model):
     # 活动结束时间
     act_end_time = models.DateField(default=1970 - 1 - 1, blank=False)
     # 活动负责人名字
-    act_organizer_name = models.ForeignKey(organizers, on_delete=models.PROTECT)
+    act_organizer_name = models.CharField(max_length=64, null=True)
+    # 活动社团表间关系
+    act_organizer = models.ForeignKey('organizers', on_delete=models.PROTECT)
     # 活动负责人联系方式
     act_organizer_phone = models.CharField(max_length=32, blank=False)
     # 活动组队最多人数
