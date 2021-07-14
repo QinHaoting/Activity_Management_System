@@ -24,7 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="../../mag_examine_act/" class="sf-pencil">审核活动</a></li>
                     <li><a href="../../mag_examine_org/" class="sf-device-computer">审核组织</a></li>
-                    <li><a href="../../mag_manage/" class="sf-user-male">管理组织者</a></li>
+                    <li class="active"><a href="../../mag_manage/" class="sf-user-male">管理组织者</a></li>
                     <li><a href="../../mag_add_org/" class="sf-sign-add">添加组织者</a></li>
                     <li><a href="../../mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
                 </ul>
@@ -43,7 +43,7 @@
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
                     <li class=""><a href="../../../mag_home/">首页</a></li>
-                    <li class="active"><a href="../../mag_notice/">公告</a></li>
+                    <li class=""><a href="../../mag_notice/">公告</a></li>
                 </ul>
             </div>
         </div>
@@ -85,27 +85,64 @@
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-body" style="min-height: 560px;">
+                <div class="panel-body" style="min-height: 480px;">
+                    <div class="col-md-1">&nbsp;</div>
+                    <div class="col-md-10">
                     <div>
-                        <h1 style="text-align:center;">{{ act.notice_title }}</h1>
+                        <h1 style="text-align:center;">组织名称:&nbsp;&nbsp;{{ org.org_name }}</h1>
                     </div>
-                    <div>
-                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ act.notice_content }}
-                    </div>
+                    <div class="col-md-12">&nbsp;</div>
+                    <div><h4>
+                        组织账号:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_id }}
+                    </h4></div>
+                    <div class="col-md-12">&nbsp;</div>
 
+                    <div><h4>
+                        组织密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_password }}
+                    </h4></div>
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div><h4>
+                        组织负责人姓名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_name }}
+                    </h4></div>
+
+                    <div class="col-md-12">&nbsp;</div>
+                    <div><h4>
+                        组织负责人联系方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_phone }}
+                    </h4></div>
+
+                    <div class="col-md-12">&nbsp;</div>
+                    <div><h4>
+                        组织负责人所在学院:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_college }}
+                    </h4></div>
+
+                    <div class="col-md-12">&nbsp;</div>
+                    <div><h4>
+                        组织简介:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_introduction }}
+                    </h4></div>
+                    <form method="post" action="">
+                        <div class="col-xs-12">
+                            <div class="col-xs-8">&nbsp;</div>
+                            <div class="col-xs-4">
+                                <button type="submit" class="btn btn-block btn-primary">返回上一级</button>
+                                <span style="color: red">{{ error }}</span>
+                            </div>
+                        </div>
+                    </form>
+                    </div>
+                    <div class="col-md-1">&nbsp;</div>
                 </div>
             </div>
         </div>
-
     </div>
 </div>
-    <script type="text/javascript" src="../../../../src/js/lib/jquery.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/jquery.mousewheel.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/jquery.cookie.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/fastclick.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/clearmin.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/lib/d3.min.js"></script>
-    <script type="text/javascript" src="../../../../src/js/lib/c3.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/lib/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/jquery.mousewheel.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/jquery.cookie.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/fastclick.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/clearmin.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/lib/d3.min.js"></script>
+<script type="text/javascript" src="../../../../src/js/lib/c3.min.js"></script>
 </body>
 </html>

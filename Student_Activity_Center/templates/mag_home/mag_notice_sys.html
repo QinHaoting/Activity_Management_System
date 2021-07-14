@@ -15,17 +15,18 @@
 <body class="cm-no-transition cm-2-navbar">
 <div id="cm-menu">
     <nav class="cm-navbar cm-navbar-primary">
-        <div class="cm-flex"><img src="../../../src/img/logo.png" width="180px" height="50px"></div>
+        <div class="cm-flex"><img src="../../../../src/img/logo.png" width="180px" height="50px"></div>
         <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
     </nav>
     <div id="cm-menu-content">
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li><a href="../mag_examine/" class="sf-pencil">审核活动</a></li>
-                    <li><a href="../mag_manage/" class="sf-user-male">管理组织者</a></li>
-                    <li><a href="../mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
-
+                    <li><a href="../../mag_examine_act/" class="sf-pencil">审核活动</a></li>
+                    <li><a href="../../mag_examine_org/" class="sf-device-computer">审核组织</a></li>
+                    <li><a href="../../mag_manage/" class="sf-user-male">管理组织者</a></li>
+                    <li><a href="../../mag_add_org/" class="sf-sign-add">添加组织者</a></li>
+                    <li><a href="../../mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
                 </ul>
             </div>
         </div>
@@ -41,8 +42,8 @@
         <div class="cm-flex">
             <div class="nav-tabs-container">
                 <ul class="nav nav-tabs">
-                    <li class=""><a href="../../mag_home/">首页</a></li>
-                    <li class="active"><a href="../mag_notice/">公告</a></li>
+                    <li class=""><a href="../../../mag_home/">首页</a></li>
+                    <li class="active"><a href="../../mag_notice/">公告</a></li>
                 </ul>
             </div>
         </div>
@@ -84,12 +85,12 @@
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-body">
+                <div class="panel-body" style="min-height: 560px;">
                     <div>
-                        <h2>{{ sys.notice_title }}</h2>
+                        <h1 style="text-align:center;">{{ sys.notice_title }}</h1>
                     </div>
                     <div>
-                        {{ sys.notice_content }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ sys.notice_content }}
                     </div>
 
                 </div>

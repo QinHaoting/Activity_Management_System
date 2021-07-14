@@ -24,70 +24,82 @@
                 <ul class="cm-menu-items">
                     <li><a href="../mag_examine_act/" class="sf-pencil">审核活动</a></li>
                     <li><a href="../mag_examine_org/" class="sf-device-computer">审核组织</a></li>
-                    <li class="active"><a href="../mag_manage/" class="sf-user-male">管理组织者</a></li>
-                    <li><a href="../mag_add_org/" class="sf-sign-add">添加组织者</a></li>
+                    <li><a href="../mag_manage/" class="sf-user-male">管理组织者</a></li>
+                    <li class="active"><a href="../mag_add_org/" class="sf-sign-add">添加组织者</a></li>
                     <li><a href="../mag_launch_notice/" class="sf-box-out">发布系统公告</a></li>
                 </ul>
             </div>
         </div>
     </div>
 </div>
-
-
 <div id="global">
     <div class="container-fluid">
-        <div class="col-md-12">
+        <div class="col-sm-12">
             <div class="panel panel-default">
-                <div class="panel-body" style="min-height: 560px;">
-                    <div class="col-md-12">
-                        <table class="table table-bordered table-hover">
-                            <thead>
-
-                            <tr>
-                                <th width=5%></th>
-                                <th width=20%>组织 ID </th>
-                                <th width=25%>组织名称</th>
-                                <th width=20%>联系电话</th>
-                                <th width=10%>详情</th>
-                                <th width=10%>修改</th>
-                                <th width=10%>删除</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for org in org_list %}
-                            <tr>
-                                <td>{{org.id}}</td>
-                                <td>{{ org.org_id }}</a></td>
-                                <td>{{ org.org_name }}</a></td>
-                                <td>{{ org.org_header_phone }}</a></td>
-                                <td><a href="mag_look_mag_org/{{org.org_id}}">查看</a></td>
-                                <td><a href="mag_revise/{{org.org_id}}">修改</a></td>
-                                <td><a href="mag_delete/{{org.org_id}}">删除</a></td>
-                            </tr>
-                            {% endfor %}
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="panel-body" style="min-height: 480px;">
+                    <form method="post" action="">
+                        <div class="col-sm-12">
+                            <div class="panel-body" style="min-height: 480px;">
+                                <div class="col-sm-12"><h3>{{success}}</h3></div>
+                                <div class="form-group ">
+                                    <label class="input-group">组织id</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="id"  placeholder="ID" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织名称</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="name"  placeholder="Name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人名字</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_name"  placeholder="header_name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织密码</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="password"  placeholder="Password" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人电话</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_phone"  placeholder="Header_phone" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人学院</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_college"  placeholder="Header_college" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织介绍</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="introduction"  placeholder="Introduction" required="required" style="height: 200px;">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-sm-12">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-8">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-block btn-primary">添加组织</button>
+                                    <span style="color: red">{{ error }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <form  method="post" action="">
-            <div>
-                <div class="col-xs-1">
-                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
-                </div>
-                <div class="col-xs-1">
-                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
-                    <span style="color: red">{{ error }}</span>
-                </div>
-            </div>
-            <div class="col-md-1">
-                <div>共-{{pgnt1.num_pages}}-页</div>
-            </div>
-        </form>
-
-
-        <footer class="cm-footer"><span class="pull-left">Connected as John Smith</span><span class="pull-right">&copy; PAOMEDIA SARL</span></footer>
     </div>
 </div>
 
