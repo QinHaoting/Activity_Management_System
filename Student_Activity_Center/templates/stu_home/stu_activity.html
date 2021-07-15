@@ -22,8 +22,9 @@
         <div id="cm-menu-items-wrapper">
             <div id="cm-menu-scroller">
                 <ul class="cm-menu-items">
-                    <li class="active"><a href="{% url 'sac_app:stu_home' %}" class="sf-house">活动大厅</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a></li>
                 </ul>
             </div>
@@ -94,7 +95,7 @@
                             <th>
                                 <form action="">
                                     <div class="col-1">
-                                        <select name="control" >
+                                        <select name="control">
                                             <option value=0 selected="selected">全部活动</option>
                                             <option value=1>可参加</option>
                                             <option value=2>不可参加</option>
@@ -121,31 +122,32 @@
                                 {% elif act.act_state == 4 %}
                                     <td>已结束</td>
                                 {% endif %}
-{#                                <td><a href="stu_activity_details/{{ act.act_id }}">查看</a></td>#}
+                                {#                                <td><a href="stu_activity_details/{{ act.act_id }}">查看</a></td>#}
                                 <td>{{ act.act_flag }}</td>
                             </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div>
+                            <div class="col-xs-1">
+                                <input type="text" name="page" class="form-control" placeholder="page"
+                                       required="required">
+                            </div>
+                            <div class="col-xs-1">
+                                <button type="submit" class="btn btn-block btn-primary">跳转</button>
+                                <span style="color: red">{{ error }}</span>
+                            </div>
+
+                        </div>
+                        <div class="col-md-1">
+                            <div>共-{{ pgnt1.num_pages }}-页</div>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        <form method="post" action="">
-            {% csrf_token %}
-            <div>
-                <div class="col-xs-1">
-                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
-                </div>
-                <div class="col-xs-1">
-                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
-                    <span style="color: red">{{ error }}</span>
-                </div>
-
-            </div>
-            <div class="col-md-1">
-                <div>共-{{ pgnt1.num_pages }}-页</div>
-            </div>
-        </form>
     </div>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>

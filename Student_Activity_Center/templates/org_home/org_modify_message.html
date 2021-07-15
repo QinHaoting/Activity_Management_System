@@ -81,79 +81,117 @@
     </nav>
 </header>
 <div id="global" style="padding-top: 60px">
-    <div class="container-fluid cm-container-white">
-        <h2 style="margin-top:0">组织信息</h2>
-        <div class="col-lg-12">
+    <div class="container-fluid">
+        <div class="col-md-12">
             <div class="panel panel-default">
-                <div class="panel-body" style="min-height: 264px;">
-                    <form class="form-horizontal" action="" method="post">
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">社团名称</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="org_name" value="{{ org.org_name }}">
+                <div class="panel-body" style="min-height: 480px;">
+                    <div class="col-md-1">&nbsp;</div>
+                    <div class="col-md-5">
+
+                        <div class="col-md-12">
+                            <h2 style="text-align:center;">组织名称:&nbsp;&nbsp;{{ org.org_name }}</h2>
+                        </div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织账号:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_id }}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_password }}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织负责人姓名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_name }}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织负责人联系方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_phone }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织负责人所在学院:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_college }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div class="col-md-12"><h4>
+                            组织简介:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_introduction }}
+                        </h4></div>
+                    </div>
+                    <div class="col-md-5">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="col-md-12">
+                                <div class="col-md-12">&nbsp;</div>
+                                <div class="col-md-12">&nbsp;</div>
+                                <div class="col-md-12">&nbsp;</div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新名称</div>
+                                        <input type="text" name="name" class="form-control" placeholder="Name"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新账号</div>
+                                        <input type="text" name="id" class="form-control"
+                                               required="required" value="{{ org.org_id }}" disabled="disabled">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新密码</div>
+                                        <input type="text" name="password" class="form-control" placeholder="Password"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新负责人姓名:</div>
+                                        <input type="text" name="header_name" class="form-control"
+                                               placeholder="Header_name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新负责人联系方式</div>
+                                        <input type="text" name="header_phone" class="form-control"
+                                               placeholder="Header_phone" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新负责人所在学院</div>
+                                        <input type="text" name="header_college" class="form-control"
+                                               placeholder="Header_college" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="input-group">
+                                        <div class="input-group-addon">组织新简介</div>
+                                        <input type="text" name="introduction" class="form-control"
+                                               placeholder="Introduction" required="required">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">社团负责人</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="org_heard_name"
-                                       value="{{ org.org_header_name }}">
+                            <div class="col-md-6">&nbsp;</div>
+                            <div class="col-md-6">
+                                <button type="submit" class="btn btn-block btn-yellow">立即修改</button>
+                                <span style="color: red">{{ error }}</span>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">负责人电话</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="org_phone" value="{{ org.org_header_phone }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">负责人学院</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="org_header_college"
-                                       value="{{ org.org_header_college }}">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-2 control-label">社团简介</label>
-                            <div class="col-sm-10">
-                                <input type="text" class="form-control" name="org_introduction"
-                                       value="{{ org.org_introduction }}">
-                            </div>
-                        </div>
-                        <div class="col-xs-6 col-sm-12 col-md-3 col-lg-2" style="left:45% ">
-                            <button type="button" class="btn btn-default"><a href="{% url 'sac_app:org_center' %}">取消</a>
-                            </button>
-                            <button type="submit" class="btn btn-danger" id="bt"><a
-                                    href="{% url 'sac_app:org_center' %}">提交</a></button>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
+                    <div class="col-md-1">&nbsp;</div>
                 </div>
             </div>
         </div>
-    </div>
-    <div id="myModal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span
-                            aria-hidden="true">×</span></button>
-                </div>
-                <div class="modal-body">
-                    <p>This <a href="#" role="button" class="btn btn-default popover-test" title=""
-                               data-content="And here's some amazing content. It's very engaging. right?"
-                               data-original-title="A Title">button</a> should trigger a popover on click.</p>
-                    <p><a href="#" class="tooltip-test" title="" data-original-title="Tooltip">This link</a> and <a
-                            href="#" class="tooltip-test" title="" data-original-title="Tooltip">that link</a> should
-                        have tooltips on hover.</p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
-                </div>
-            </div>
-            <!-- /.modal-content -->
-        </div>
-        <!-- /.modal-dialog -->
     </div>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>

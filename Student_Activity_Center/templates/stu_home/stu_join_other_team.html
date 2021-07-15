@@ -25,6 +25,7 @@
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a>
                     </li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -86,39 +87,43 @@
                     <table class="table table-bordered table-hover">
                         <thead>
                         <tr>
-                            <th width=30%>活动名称</th>
+                            <th width=20%>活动名称</th>
                             <th width=15%>小队名称</th>
                             <th width=15%>小队队长</th>
                             <th width=35%>小队简介</th>
-                            <th width="5%">是否加入</th>
+                            <th width=15%">查看</th>
                         </tr>
                         </thead>
                         <tbody>
                         {% for team in page %}
                             <tr>
-                                {#                                <th scope="row"></th>#}
-                                <td>{{ team.team_act.act_name }}</td>
-                                <td>{{ team.team_name }}</td>
-                                <td>{{ team.team_header_name }}</td>
-                                <td>{{ team.team_introduction}}</td>
-                            <form method="post">
-                                <td><input value="加入" class="button"></td>
-                            </form>
-                            </tr>
+                            {#                                <th scope="row"></th>#}
+                            <td>{{ team.team_act.act_name }}</td>
+                            <td>{{ team.team_name }}</td>
+                            <td>{{ team.team_header_name }}</td>
+                            <td>{{ team.team_introduction }}</td>
+                            <td>
+                                <a href="stu_view_other_team/{{ team.id }}">查看</a>
+                            </td>
+                            {% csrf_token %}
                         {% endfor %}
+                        </tr>
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
         <form method="post" action="">
+            {% csrf_token %}
             <div>
                 <div class="col-xs-1">
-                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
+                    <input type="text" name="page" class="form-control" placeholder="page" value="1">
                 </div>
-                <div class="col-xs-1">
-                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
-                    <span style="color: red">{{ error }}</span>
+                <div class="main">
+                    <div class="col-xs-1">
+                        <button type="submit" class="btn btn-block btn-primary">跳转</button>
+                        <span style="color: red">{{ error }}</span>
+                    </div>
                 </div>
             </div>
             <div class="col-md-1">

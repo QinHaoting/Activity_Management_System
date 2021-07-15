@@ -19,7 +19,8 @@ from sac_app.check_code import gen_check_code
 from io import BytesIO
 from django.contrib import auth
 
-from sac_app.models import activities, organizers, notices, managers, students, teams, act_to_stu, stu_to_team
+from sac_app.models import activities, organizers, notices, managers, students, teams, act_to_stu, stu_to_team, \
+    organizers_modified, activities_modified
 
 
 class FunctionStatus(enum.Enum):
@@ -89,7 +90,7 @@ def login(request):
                     student = students.objects.get(stu_id=log_id)
                     if student.stu_valid == 1:
                         if student.stu_password == log_password:
-                            request.session['user_id'] = student.stu_id
+                            request.session['user_id'] = student.id
                             request.session['user_type'] = 'student'
                             # return render(request, 'stu_home/stu_home.html')
                             return redirect(reverse('sac_app:stu_home'))
@@ -103,7 +104,7 @@ def login(request):
                 try:
                     organizer = organizers.objects.get(org_id=log_id)
                     if organizer.org_password == log_password:
-                        request.session['user_id'] = organizer.org_id
+                        request.session['user_id'] = organizer.id
                         request.session['user_type'] = 'organizer'
                         # return render(request, 'org_home/org_home.html')
                         return redirect(reverse('sac_app:org_home'))
@@ -240,7 +241,6 @@ def forgetpwd(request):
 def check_code(request):
     img, code = gen_check_code()
     obj = BytesIO()
-    print(obj.getvalue())
     img.save(obj, format='png')
     request.session['check_code'] = code  # 将验证码保存到session里面
     return HttpResponse(obj.getvalue())
@@ -268,7 +268,7 @@ def stu_join_activity(request):
         user_id = request.session.get("user_id", None)  # 从前端获取user_id
         if user_id:
             pagesize = 10
-            stu = students.objects.get(stu_id=user_id)
+            stu = students.objects.get(id=user_id)
             acts = stu.activities_set.all()  # 获取对象
             page = request.POST.get('page', 1)
             # 进行分页操作
@@ -291,21 +291,41 @@ def stu_activity_details(request, id):
     """
     request.session['curr_act_id'] = id
     stu_id = request.session['user_id']
-    stu = students.objects.get(stu_id=stu_id)
+    stu = students.objects.filter(id=stu_id).first()
+    print(stu_id)
+    print(stu)
+    act = activities.objects.filter(act_id=id).first()
     acts = stu.activities_set.all()
-    if acts.filter(act_id=id):
-        act = activities.objects.filter(act_id=id).first()
+    ok = request.POST.get('ok')
+    if act in acts:
         context = {
-            'activity': act,
-            'control': 1
+            "activity": act,
+            "control": 0,  # 已参加活动
         }
         return render(request, 'stu_home/stu_activity_details.html', context=context)
     else:
-        context = {
-            'activity': None,
-            'control': 0
-        }
-        return render(request, 'stu_home/stu_activity_details.html', context=context)
+        if act.act_type == 0:
+            if ok == "1":  # 单人活动报名
+                act_to_stu.objects.create(act_id=id, stu_id=stu.id)
+                act.act_available_number = act.act_available_number - 1
+                act.save()
+                context = {
+                    'activity': act,
+                    'control': 0  # 单人活动已报名报名
+                }
+                return render(request, 'stu_home/stu_activity_details.html', context=context)
+            else:
+                context = {
+                    'activity': act,
+                    'control': 1,  # 单人活动未报名
+                }
+                return render(request, 'stu_home/stu_activity_details.html', context=context)
+        else:
+            context = {
+                'activity': act,
+                'control': 2  # 多人活动报名
+            }
+            return render(request, 'stu_home/stu_activity_details.html', context=context)
 
 
 @check_login
@@ -315,7 +335,7 @@ def stu_center(request):
     """
     if request.method == 'GET':
         user_id = request.session.get('user_id', None)
-        stu = students.objects.filter(stu_id=user_id).first()  # return an object获取对象
+        stu = students.objects.filter(id=user_id).first()  # return an object获取对象
         context = {
             'stu': stu
         }
@@ -325,14 +345,15 @@ def stu_center(request):
 
 
 @check_login
+@check_login
 def stu_modify_message(request, id):
     """
     学生：修改个人信息
     :param request:
     :return:
     """
-    stu1 = students.objects.filter(stu_id=id).first()
-    stu2 = students.objects.filter(stu_id=id).first()
+    stu1 = students.objects.filter(id=id).first()
+    stu2 = students.objects.filter(id=id).first()
     if request.method == "POST":
         id = request.session.get('user_id')
         stu_password = request.POST.get('stu_password')
@@ -361,6 +382,45 @@ def stu_modify_message(request, id):
     return render(request, 'stu_home/stu_modify_message.html', {"stu": stu1})
 
 
+# def stu_modify_message(request, id):
+#     """
+#     学生：修改个人信息
+#     :param request:
+#     :return:
+#     """
+#     print(request.method)
+#     if request.method == "GET":
+#         stu1 = students.objects.filter(id=id).first()
+#         return render(request, 'stu_home/stu_modify_message.html', {"stu": stu1})
+#     if request.method == "POST":
+#         id = request.session.get('user_id')
+#         stu_password = request.POST.get('stu_password')
+#         stu_Email = request.POST.get('stu_Email')
+#         stu_name = request.POST.get('stu_name')
+#         stu_phone = request.POST.get('stu_phone')
+#         print(stu_phone)
+#         stu_gender = request.POST.get('stu_gender')
+#         stu_major = request.POST.get('stu_major')
+#         stu_college = request.POST.get('stu_college')
+#         stu_grade = request.POST.get('stu_grade')
+#         stu_introduction = request.POST.get('stu_introduction')
+#         stu_valid = request.POST.get('stu_valid')
+#         stu2 = students.objects.filter(id=id).first()
+#         stu2.stu_id = request.POST.get('stu_id')
+#         stu2.stu_college = stu_college
+#         stu2.stu_name = stu_name
+#         stu2.stu_Email = stu_Email
+#         stu2.stu_password = stu_password
+#         stu2.stu_phone = stu_phone
+#         stu2.stu_gender = stu_gender
+#         stu2.stu_grade = stu_grade
+#         stu2.stu_major = stu_major
+#         stu2.stu_introduction = stu_introduction
+#         stu2.valid = stu_valid
+#         stu2.save()
+#         return redirect(reverse('sac_app:stu_center'))
+
+
 @check_login
 def stu_activity(request):
     """
@@ -368,7 +428,8 @@ def stu_activity(request):
     根据前端的control信号返回对应的活动列表
     :return: 活动列表
     """
-    whole_activities = activities.objects.filter().exclude(act_state=0).exclude(act_state=1)  # 可显示的活动集
+    whole_activities = activities.objects.filter().exclude(act_state=0).exclude(act_state=1).order_by(
+        'act_start_time')  # 可显示的活动集
     show_activities = None  # 待显示的活动集 - 筛选后的活动集
     control = 0  # 控制信号，默认显示所有活动
     if request.GET.get('control'):
@@ -398,7 +459,6 @@ def stu_activity(request):
             "func_state": 1,  # 访问状态
             "message": "待显示的内容为空"
         }
-        print("待显示的内容为空")
         return HttpResponse(render(request, 'stu_home/stu_activity.html', locals()))
 
 
@@ -410,6 +470,7 @@ def stu_join_activity_details(request, id):
     :return:
     """
     act = activities.objects.filter(act_id=id).first()
+    print(act.act_type)
     context = {
         'activity': act
     }
@@ -419,7 +480,6 @@ def stu_join_activity_details(request, id):
 @check_login
 def stu_create_team(request):
     if request.method == "GET":
-        print("get")
         return render(request, 'stu_home/stu_create_team.html')
     else:
         stu_id = request.session.get('user_id')
@@ -429,12 +489,13 @@ def stu_create_team(request):
         team_number = request.POST.get('team_number')
         team_name = request.POST.get('team_name')
         team_header_phone = request.POST.get('team_header_phone')
-
         new_team = teams.objects.create(team_number=team_number,
                                         team_name=team_name,
                                         team_header_name=stu.stu_name,
                                         team_header_phone=team_header_phone,
                                         team_act=act)
+        act.act_created_team_number = act.act_created_team_number + 1
+        act.save()
         # 学生与活动表间关系
         act_to_stu.objects.create(act=act, stu=stu)
         # 学生与队伍表间关系
@@ -444,12 +505,29 @@ def stu_create_team(request):
 
 @check_login
 def stu_myteam(request):
-    """
-    学生：我的队伍
-    :param request:
-    :return:
-    """
-    return render(request, 'stu_home/stu_myteam.html')
+    stu_id = request.session.get('user_id')
+    stu = students.objects.get(id=stu_id)
+    if stu:
+        try:
+            team = stu.teams_set.all().order_by('id')
+            pagesize = 10
+            pgnt1 = Paginator(team, pagesize)
+            page = request.POST.get('page', 1)
+            page1 = pgnt1.page(page)
+            page = list(page1)
+            return HttpResponse(render(request, 'stu_home/stu_myteam.html', {'page': page, 'msg': "ok"}))
+        except EmptyPage:
+            return HttpResponse(render(request, 'stu_home/stu_myteam.html', {'page': [], 'msg': '队伍为空'}))
+
+
+@check_login
+def stu_view_myteam(request, id):
+    team = teams.objects.filter(id=id).first()
+    context = {
+        'team': team,
+        'control': 1,
+    }
+    return render(request, 'stu_home/stu_view_myteam.html', context=context)
 
 
 # 查看参加活动的队伍
@@ -462,14 +540,22 @@ def act_join_other_team(request, id):
             team = list(act.teams_set.all())
             pgnt = Paginator(team, 10)
             pagenum = request.POST.get('page', 1)
+            ok = request.POST.get('ok')
             pages = list(pgnt.page(pagenum))
-            print(pages)
             return render(request, 'stu_home/stu_join_other_team.html', {'page': pages, 'msg': "ok"})
         except EmptyPage:
             return HttpResponse(render(request, 'stu_home/stu_join_other_team.html', {'page': [], 'msg': '队伍为空'}))
-        # except:
-        #     return HttpResponse(render(request, 'stu_home/stu_join_other_team.html', {'msg': '未知错误'}))
     return HttpResponse(render(request, 'stu_home/stu_join_other_team.html', {'msg': '活动不存在'}))
+
+
+@check_login
+def stu_view_other_team(request, id):
+    team = teams.objects.filter(id=id).first()
+    context = {
+        'team': team,
+        'control': 1,
+    }
+    return render(request, 'stu_home/stu_view_other_team.html', context=context)
 
 
 @check_login
@@ -479,27 +565,46 @@ def stu_notice(request):
     :param request:
     :return:
     """
-    return render(request, 'stu_home/stu_notice.html')
+    try:
+        pagesize = 10
+        qs1 = notices.objects.filter(notice_tag=1).values().order_by('id')  # 'notice_title')
+        qs0 = notices.objects.filter(notice_tag=0).values().order_by('id')  # 'notice_title')
+        pgnt1 = Paginator(qs1, pagesize)
+        pgnt0 = Paginator(qs0, pagesize)
+        page = request.POST.get('page', 1)
+        page0 = pgnt0.page(page)
+        page1 = pgnt1.page(page)
+        notice_sys = list(page0)
+        notice_act = list(page1)
+        print(notice_act)
+        return HttpResponse(render(request, 'stu_home/stu_notice.html', locals()))
+
+    except EmptyPage:
+        return HttpResponse(render(request, 'stu_home/stu_notice.html', {'notice_act': [], 'notice_sys': []}))
 
 
 @check_login
-def stu_notice_act(request):
+def stu_notice_act(request,id):
     """
     学生：公告界面
     :param request:
     :return:
     """
+    act = notices.objects.filter(id=id).first()
+
     return render(request, 'stu_home/stu_notice_act.html', locals())
 
 
 @check_login
-def stu_notice_sys(request):
+def stu_notice_sys(request,id):
     """
     学生：公告界面
     :param request:
     :return:
     """
+    sys = notices.objects.filter(id=id).first()
     return render(request, 'stu_home/stu_notice_sys.html', locals())
+
 
 
 @check_login
@@ -519,7 +624,7 @@ def org_center(request):
     """
     if request.method == 'GET':
         user_id = request.session.get('user_id', None)
-        org = organizers.objects.filter(org_id=user_id).first()  # return an object获取对象
+        org = organizers.objects.filter(id=user_id).first()  # return an object获取对象
         context = {
             'org': org
         }
@@ -533,14 +638,22 @@ def org_modify_message(request):
     """
     组织者修改页面：修改组织者信息
     """
-    user_id = request.session.get('user_id', None)
-    print(user_id)
-    org = organizers.objects.filter(org_id=user_id).first()
-    context = {
-        "org": org
-    }
-    print(context)
-    return render(request, 'org_home/org_modify_message.html', context=context)
+    id = request.session.get('user_id')
+    org = organizers.objects.filter(id=id).first()
+    organizer = organizers.objects.filter(id=id).first()
+    if request.method == 'POST':
+        organizers_modified.objects.create(
+            org_id=id,
+            org_password=request.POST.get('password'),
+            org_name=request.POST.get('name'),
+            org_header_name=request.POST.get('header_name'),
+            org_header_phone=request.POST.get('header_phone'),
+            org_introduction=request.POST.get('introduction'),
+            org_header_college=request.POST.get('header_college'),
+            org_valid=1
+        )
+        return redirect(reverse('sac_app:org_center'))
+    return render(request, 'org_home/org_modify_message.html', locals())
 
 
 @check_login
@@ -555,57 +668,36 @@ def org_launch_activity(request):  # 需要修改
     if request.method == 'GET':
         return render(request, 'org_home/org_launch_activity.html', {"org": org})
     elif request.method == 'POST':
-        act_name = request.POST.get('act_name')
         # 1.测试开始时间不能晚于结束时间
         # 2.开始时间必须晚于当前时间
         act_start_time = request.POST.get('act_start_time')
         act_start_time = datetime.datetime.strptime(act_start_time, '%Y-%m-%dT%H:%M')  # 字符串转为date.time类型
         act_end_time = request.POST.get('act_end_time')
         act_end_time = datetime.datetime.strptime(act_end_time, '%Y-%m-%dT%H:%M')
-        print(org)
-        act_organizer_phone = request.POST.get('act_organizer_phone')
-        print(act_organizer_phone)
-        act_max_team_number = request.POST.get('act_max_team_number')
-        act_min_team_number = request.POST.get('act_min_team_number')
-        act_team_number = request.POST.get('act_team_number')
-        act_available_team_number = request.POST.get('act_available_team_number')
-        act_created_team_number = request.POST.get('act_created_team_number')
-        print(act_max_team_number)
-        act_type = request.POST.get('act_type')
-        print(act_type)
-        act_state = 0  # 0：审核中	1：未发布（不通过）2：报名阶段（通过）	3：进行中	4：已结束
-        act_total_number = request.POST.get('act_total_number')  # 针对不需要组队的活动而言
-        print(act_total_number)
-        act_participated_number = 0  # 默认已参加人数为0人
-
-        act_available_number = act_total_number  # 默认可参加人数为总人数人
-        act_flag = "不可参加"  # 默认不可参加
-        act_planning_book = request.POST.get('act_planning_book')
-        # print(act_planning_book)
-        act_introduction = request.POST.get('act_introduction')
-        print(act_introduction)
-        activities.objects.create(
-            act_id=request.session.get('user_id'),
-            act_name=act_name,
+        ac = activities.objects.create(
+            act_name=request.POST.get('act_name'),
             act_start_time=act_start_time,
             act_end_time=act_end_time,
-            act_organizer_name=org.org_name,
-            act_organizer=org,
-            act_organizer_phone=act_organizer_phone,
-            act_max_team_number=act_max_team_number,
-            act_created_team_number=act_created_team_number,
-            act_min_team_number=act_min_team_number,
-            act_team_number=act_team_number,
-            act_state=act_state,
-            act_available_team_number=act_available_team_number,
-            act_total_number=act_total_number,
-            act_participated_number=act_participated_number,
-            act_available_number=act_available_number,
-            act_flag=act_flag,
-            act_planning_book=act_planning_book,
-            act_introduction=act_introduction,
-            act_type=act_type,
+            act_organizer_name=request.POST.get('act_organizer_name'),
+            act_organizer=request.POST.get('act_organizer'),
+            act_organizer_phone=request.POST.get('act_organizer_phone'),
+            act_max_team_number=request.POST.get('act_max_team_number'),
+            act_created_team_number=0,
+            act_min_team_number=request.POST.get('act_min_team_number'),
+            act_team_number=request.POST.get('act_team_number'),
+            act_state=0,  # 0：审核中	1：未发布（不通过）2：报名阶段（通过）	3：进行中	4：已结束
+            act_available_team_number=request.POST.get('act_team_number'),
+            act_total_number=request.POST.get('act_total_number'),
+            act_participated_number=0,
+            act_available_number=request.POST.get('act_total_number'),
+            act_flag="不可参加",
+            act_planning_book=request.POST.get('act_planning_book'),
+            act_introduction=request.POST.get('act_introduction'),
+            act_type=request.POST.get('act_type'),
+            act_organizer_id=id,
         )
+        ac.act_id = ac.id
+        ac.save()
         return redirect(reverse('sac_app:org_view_posted_activity'))
 
 
@@ -619,7 +711,6 @@ def org_launch_notice(request):
     if request.method != 'POST':
         return render(request, 'org_home/org_launch_notice.html')
     if request.method == 'POST':
-        notice_id = request.POST.get('notice_id')
         notice_title = request.POST.get('notice_title')
         notice_create_time = request.POST.get('notice_create_time')
         notice_content = request.POST.get('notice_content')
@@ -628,7 +719,6 @@ def org_launch_notice(request):
                 and notice_appendix):
             return render(request, 'org_home/org_launch_notice.html', {'empty_notice_content': '公告所有部分均不能为空'})
         notices.objects.create(
-            notice_id=notice_id,
             notice_title=notice_title,
             notice_create_time=notice_create_time,
             notice_content=notice_content,
@@ -657,7 +747,7 @@ def org_view_posted_activity(request):
     if request.session.get("user_type") == 'organizer':  # 组织者登录
         # 获取<组织者>
         org_id = request.session.get("user_id")
-        organizer = organizers.objects.get(org_id=org_id)
+        organizer = organizers.objects.get(id=org_id)
 
         # 根据<组织者>找到其所有活动
         whole_activities = organizer.activities_set.all()
@@ -668,7 +758,6 @@ def org_view_posted_activity(request):
                 "func_state": 0,  # 访问状态
                 "message": "正常访问"  # 待返回的信息
             }
-            print(1)
             return render(request, 'org_home/org_view_posted_activity.html', context=context)
         else:  # 组织者未组织过活动，即无数据显示
             context = {
@@ -676,7 +765,6 @@ def org_view_posted_activity(request):
                 "func_state": 1,  # 访问状态
                 "message": "待显示的内容为空"  # 待返回的信息
             }
-            print(2)
             return render(request, 'org_home/org_view_posted_activity.html', context=context)
     else:  # 非组织者访问，即参加者或管理员访问，不能显示纤细
         context = {
@@ -684,7 +772,6 @@ def org_view_posted_activity(request):
             "func_state": 2,  # 访问状态
             "message": "非组织者身份访问，无权限"  # 待返回的信息
         }
-        print(3)
         return render(request, 'login.html', context=context)
 
 
@@ -701,17 +788,117 @@ def org_launch_activity_details(request, id):
 
 
 @check_login
+def org_modify_activity_message(request, id):
+    org_id = request.session.get('user_id')
+    org = organizers.objects.get(id=org_id)
+    act = activities.objects.get(id=id)
+    if request.method == 'POST':
+        act_start_time = request.POST.get('act_start_time')
+        act_start_time = datetime.datetime.strptime(act_start_time, '%Y-%m-%dT%H:%M')  # 字符串转为date.time类型
+        act_end_time = request.POST.get('act_end_time')
+        act_end_time = datetime.datetime.strptime(act_end_time, '%Y-%m-%dT%H:%M')
+        activities_modified.objects.create(
+            act_id=id,
+            act_name=request.POST.get('act_name'),
+            act_start_time=act_start_time,
+            act_end_time=act_end_time,
+            act_organizer_name=request.POST.get('act_organizer_name'),
+            act_organizer_phone=request.POST.get('act_organizer_phone'),
+            act_max_team_number=request.POST.get('act_max_team_number'),
+            act_team_number=request.POST.get('act_team_number'),
+            act_state=0,
+            act_total_number=request.POST.get('act_total_number'),
+            act_participated_number=act.act_participated_number,
+            act_available_number=act.act_available_number,
+            act_flag=act.act_flag,
+            act_min_team_number=act.act_min_team_number,
+            act_created_team_number=act.act_created_team_number,
+            act_planning_book=request.POST.get('act_planning_book'),
+            act_introduction=request.POST.get('act_introduction'),
+            act_type=request.POST.get('act_type'),
+            act_valid=1
+        )
+        act.act_state = 0
+        act.save()
+        return redirect(reverse('sac_app:org_launch_activity'))
+    return render(request, 'org_home/org_modify_activity_message.html', {"act": act, "org": org})
+
+
+@check_login
+def org_stu_one_list(request, id):
+    """
+    组织者：单人活动人员表单
+    """
+    act = activities.objects.get(id=id)
+    try:
+        temp = list(act_to_stu.objects.filter(act=act).values('stu_id'))
+        stu = []
+        for i in range(len(temp)):
+            stu.append(students.objects.get(id=temp[i]['stu_id']))
+        pgnt = Paginator(stu, 10)
+        pagenum = request.POST.get('page', 1)
+        page = list(pgnt.page(pagenum))
+        return HttpResponse(render(request, 'org_home/org_stu_one_list.html', {'page': page, 'msg': "ok"}))
+    except EmptyPage:
+        return HttpResponse(render(request, 'org_home/org_stu_one_list.html', {'page': [], 'msg': '学生为空'}))
+
+
+@check_login
+def org_stu_team_list(request, id):
+    """
+    组织者：组队活动队伍表单
+    """
+    act = activities.objects.get(id=id)
+    try:
+        team = list(act.teams_set.all())
+        pgnt = Paginator(team, 10)
+        pagenum = request.POST.get('page', 1)
+        page = list(pgnt.page(pagenum))
+        return HttpResponse(render(request, 'org_home/org_stu_team_list.html', {'page': page, 'msg': "ok"}))
+    except EmptyPage:
+        return HttpResponse(render(request, 'org_home/org_stu_team_list.html', {'page': [], 'msg': '队伍为空'}))
+
+
+@check_login
+def org_stu_team_list_mul(request, id):
+    """
+    组织者：查看某个活动某个对的队员信息
+    """
+    stu_team = teams.objects.get(id=id)
+    m = list(stu_to_team.objects.filter(team=stu_team).values('stu_id'))
+    member = []
+    for i in range(len(m)):
+        member.append(students.objects.get(stu_id=m[i]['stu_id']))
+    return render(request, 'org_home/org_stu_team_list_mul.html', {"stus": member})
+
+
+@check_login
 def org_notice(request):
     """
     组织者: 公告界面
     :param request:
     :return:
     """
-    return render(request, 'org_home/org_notice.html')
+    try:
+        pagesize = 10
+        qs1 = notices.objects.filter(notice_tag=1).values().order_by('id')  # 'notice_title')
+        qs0 = notices.objects.filter(notice_tag=0).values().order_by('id')  # 'notice_title')
+        pgnt1 = Paginator(qs1, pagesize)
+        pgnt0 = Paginator(qs0, pagesize)
+        page = request.POST.get('page', 1)
+        page0 = pgnt0.page(page)
+        page1 = pgnt1.page(page)
+        notice_sys = list(page0)
+        notice_act = list(page1)
+        print(notice_act)
+        return HttpResponse(render(request, 'org_home/org_notice.html', locals()))
+
+    except EmptyPage:
+        return HttpResponse(render(request, 'org_home/org_notice.html', {'notice_act': [], 'notice_sys': []}))
 
 
 @check_login
-def org_notice_act(request):
+def org_notice_act(request,id):
     """
     组织者：活动公告界面
     :param request:
@@ -721,13 +908,15 @@ def org_notice_act(request):
 
 
 @check_login
-def org_notice_sys(request):
+def org_notice_sys(request,id):
     """
     组织者：系统公告界面
     :param request:
     :return:
     """
+    sys = notices.objects.filter(id=id).first()
     return render(request, 'org_home/org_notice_sys.html', locals())
+
 
 
 @check_login
@@ -747,33 +936,39 @@ def mag_examine_act(request):
     :param request:
     :return:
     """
+
     try:
         pagesize = 10
-
         # if request.method == "POST":
         # 获取 url 后面的 page 参数的值, 首页不显示 page 参数, 默认值是 1
         # page = request.POST.get('page',1)
-        qs1 = activities.objects.all()  # .values().order_by('org_id')#'notice_title')
+        qs1 = activities.objects.filter(act_state=0)  # .values().order_by('org_id')#'notice_title')
+        qs2 = activities_modified.objects.filter(act_valid=1)
         pgnt1 = Paginator(qs1, pagesize)
+        pgnt2 = Paginator(qs2, pagesize)
         page = request.POST.get('page', 1)
         # print(pgnt1.num_pages)
         # print(pgnt1.count)
         page1 = pgnt1.page(page)
+        page2 = pgnt2.page(page)
         # print(page)
         # print(page1)
-        act_list = list(page1)
+        act1_list = list(page1)
+        act2_list = list(page2)
         # print(act_list)
         return HttpResponse(render(request, 'mag_home/mag_examine_act.html', locals()))
     except EmptyPage:
         return HttpResponse(render(request, 'mag_home/mag_examine_act.html', {'org_list': []}))
     except:
         return HttpResponse(render(request, 'mag_home/mag_examine_act.html', {'msg': "未知错误"}))
+    # return render(request, 'mag_home/mag_examine_act.html')
+
 
 
 @check_login
 def mag_add_org(request):
     """
-    管理者：审核
+    管理者：增加组织者
     :param request:
     :return:
     """
@@ -789,7 +984,6 @@ def mag_add_org(request):
                                   org_password=password, org_header_phone=header_phone,
                                   org_header_college=header_college, org_introduction=introduction, org_valid=1)
         return render(request, 'mag_home/mag_add_org.html', {"success": "添加成功"})
-
     return render(request, 'mag_home/mag_add_org.html')
 
 
@@ -802,18 +996,14 @@ def mag_examine_org(request):
     """
     try:
         pagesize = 10
-
         # if request.method == "POST":
         # 获取 url 后面的 page 参数的值, 首页不显示 page 参数, 默认值是 1
         # page = request.POST.get('page',1)
-        qs1 = organizers.objects.all()  # .values().order_by('org_id')#'notice_title')
+        qs1 = organizers_modified.objects.filter(org_valid=1)  # .values().order_by('org_id')#'notice_title')
         pgnt1 = Paginator(qs1, pagesize)
         page = request.POST.get('page', 1)
-        # print(pgnt1.num_pages)
-        # print(pgnt1.count)
+        if page > pgnt1.num_pages: page = pgnt1.num_pages
         page1 = pgnt1.page(page)
-        # print(page)
-        # print(page1)
         org_list = list(page1)
         # print(org_list)
         return HttpResponse(render(request, 'mag_home/mag_examine_org.html', locals()))
@@ -839,13 +1029,8 @@ def mag_manage(request):
         qs1 = organizers.objects.filter(org_valid=1)  # .values().order_by('org_id')#'notice_title')
         pgnt1 = Paginator(qs1, pagesize)
         page = request.POST.get('page', 1)
-        # print(pgnt1.num_pages)
-        # print(pgnt1.count)
         page1 = pgnt1.page(page)
-        # print(page)
-        # print(page1)
         org_list = list(page1)
-        # print(org_list)
         return HttpResponse(render(request, 'mag_home/mag_manage.html', locals()))
     except EmptyPage:
         return HttpResponse(render(request, 'mag_home/mag_manage.html', {'org_list': []}))
@@ -872,14 +1057,12 @@ def mag_notice(request):
     :param request:
     :return:
     """
-
     try:
         pagesize = 10
-        qs1 = notices.objects.filter(notice_tag=1).values().order_by('notice_id')  # 'notice_title')
-        qs0 = notices.objects.filter(notice_tag=0).values().order_by('notice_id')  # 'notice_title')
+        qs1 = notices.objects.filter(notice_tag=1).values().order_by('id')  # 'notice_title')
+        qs0 = notices.objects.filter(notice_tag=0).values().order_by('id')  # 'notice_title')
         pgnt1 = Paginator(qs1, pagesize)
         pgnt0 = Paginator(qs0, pagesize)
-
         page = request.POST.get('page', 1)
         page0 = pgnt0.page(page)
         page1 = pgnt1.page(page)
@@ -890,9 +1073,6 @@ def mag_notice(request):
 
     except EmptyPage:
         return HttpResponse(render(request, 'mag_home/mag_notice.html', {'notice_act': [], 'notice_sys': []}))
-    except:
-        return HttpResponse(render(request, 'mag_home/mag_notice.html', {'msg': "未知错误"}))
-
 
 @check_login
 def mag_notice_act(request, id):
@@ -901,9 +1081,19 @@ def mag_notice_act(request, id):
     :param request:
     :return:
     """
-    act = notices.objects.filter(notice_id=id).first()
+    act = notices.objects.filter(id=id).first()
 
     return render(request, 'mag_home/mag_notice_act.html', locals())
+
+
+def mag_notice_sys(request, id):
+    """
+    管理者：公告界面
+    :param request:
+    :return:
+    """
+    sys = notices.objects.filter(id=id).first()
+    return render(request, 'mag_home/mag_notice_sys.html', locals())
 
 
 @check_login
@@ -913,7 +1103,7 @@ def mag_notice_sys(request, id):
     :param request:
     :return:
     """
-    sys = notices.objects.filter(notice_id=id).first()
+    sys = notices.objects.filter(id=id).first()
     return render(request, 'mag_home/mag_notice_sys.html', locals())
 
 
@@ -924,9 +1114,34 @@ def mag_look_act(request, id):
     :param request:
     :return:
     """
-    act = activities.objects.filter(act_id=id).first()
-
+    act = activities.objects.filter(id=id).first()
+    act_mid = activities_modified.objects.filter(act_valid=0).first()
+    if request.method == 'POST':
+        sel = request.POST.get('select')
+        if sel == 'yes':
+            act.act_name = act_mid.act_name
+            act.act_start_time = act_mid.act_start_time
+            act.act_end_time = act_mid.act_end_time
+            act.act_organizer_name = act_mid.act_organizer_name
+            act.act_organizer_phone = act_mid.act_organizer_phone
+            act.act_type = act_mid.act_type
+            act.act_total_number = act_mid.act_total_number
+            act.act_team_number = act_mid.act_team_number
+            act.act_min_team_number = act_mid.act_min_team_number
+            act.act_max_team_number = act_mid.act_max_team_number
+            act.act_planning_book = act_mid.act_planning_book
+            act.act_introduction = act_mid.act_introduction
+            act.act_state = act_mid.act_state = 2
+            act.save()
+            act_mid.save()
+            return redirect(reverse('sac_app:mag_examine_act'))
+        elif sel == 'no':
+            act.act_state = act_mid.act_state = 1
+            act.save()
+            act_mid.save()
+            return redirect(reverse('sac_app:mag_examine_act'))
     return render(request, 'mag_home/mag_look_act.html', locals())
+
 
 
 @check_login
@@ -936,8 +1151,26 @@ def mag_look_org(request, id):
     :param request:
     :return:
     """
-    org = organizers.objects.filter(org_id=id).first()
-
+    org = organizers.objects.filter(id=id).first()
+    org_mid = organizers_modified.objects.filter(org_id=id, org_valid=1).first()
+    if request.method == 'POST':
+        sel = request.POST.get('select')
+        if sel == 'yes':
+            org.org_id = org_mid.org_id
+            org.org_name = org_mid.org_name
+            org.org_password = org_mid.org_password
+            org.org_header_name = org_mid.org_header_name
+            org.org_header_phone = org_mid.org_header_phone
+            org.org_header_college = org_mid.org_header_college
+            org.org_introduction = org_mid.org_introduction
+            org_mid.org_valid = 0
+            org.save()
+            org_mid.save()
+            return redirect(reverse('sac_app:mag_examine_org'))
+        elif sel == 'no':
+            org_mid.org_valid = 0
+            org_mid.save()
+            return redirect(reverse('sac_app:mag_examine_org'))
     return render(request, 'mag_home/mag_look_org.html', locals())
 
 

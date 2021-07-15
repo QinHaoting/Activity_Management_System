@@ -79,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'sac_database',
         'USER': 'root',         # 注意调试连接自己的数据库
-        'PASSWORD': '123456',
+        'PASSWORD': 'Mx2425448479',
         'HOST': '127.0.0.1',
         'PORT': '3306'
     }

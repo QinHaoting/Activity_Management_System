@@ -43,7 +43,7 @@
                             <thead>
                             <tr>
                                 <th width=5%></th>
-                                <th width=20%>组织 ID</th>
+                                <th width=20%>组织 ID </th>
                                 <th width=35%>组织名称</th>
                                 <th width=30%>联系电话</th>
                                 <th width=10%>详情</th>
@@ -51,36 +51,37 @@
                             </thead>
                             <tbody>
                             {% for org in org_list %}
-                                <tr>
-                                    <td>{{ org.id }}</td>
-                                    <td>{{ org.org_id }}</td>
-                                    <td>{{ org.org_name }}</td>
-                                    <td>{{ org.org_header_phone }}</td>
-                                    <td><a href="mag_look_org/{{ org.org_id }}">查看</a></td>
-                                </tr>
+                            <tr>
+                                <td>{{org.id}}</td>
+                                <td>{{ org.org_id }}</td>
+                                <td>{{ org.org_name }}</td>
+                                <td>{{org.org_header_phone}}</td>
+                                <td><a href="mag_look_org/{{org.org_id}}">查看</a></td>
+                            </tr>
                             {% endfor %}
                             </tbody>
                         </table>
-                        <form method="post" action="">
-                            {% csrf_token %}
-                            <div>
-                                <div class="col-xs-1">
-                                    <input type="text" name="page" class="form-control" placeholder="page"
-                                           required="required">
-                                </div>
-                                <div class="col-xs-1">
-                                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
-                                    <span style="color: red">{{ error }}</span>
-                                </div>
-                            </div>
-                            <div class="col-md-1">
-                                <div>共-{{ pgnt1.num_pages }}-页</div>
-                            </div>
-                        </form>
                     </div>
                 </div>
             </div>
         </div>
+        <form  method="post" action="">
+            {% csrf_token %}
+            <div>
+                <div class="col-xs-1">
+                    <input type="text" name="page" class="form-control" placeholder="page" required="required">
+                </div>
+                <div class="col-xs-1">
+                    <button type="submit" class="btn btn-block btn-primary">跳转</button>
+                    <span style="color: red">{{ error }}</span>
+                </div>
+            </div>
+            <div class="col-md-1">
+                <div>共-{{pgnt1.num_pages}}-页</div>
+            </div>
+        </form>
+
+
     </div>
 </div>
 

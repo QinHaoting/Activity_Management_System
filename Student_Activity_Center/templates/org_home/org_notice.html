@@ -80,48 +80,47 @@
         </div>
     </nav>
 </header>
-<div id="global">
+<div id="global" style="padding-top: 60px">
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div class="col-md-6">
                         <table class="table table-bordered table-hover">
-                            <thead>
+                        <thead>
                             <tr>
                                 <th width=100%>活动公告</th>
                             </tr>
-                            </thead>
-                            <tbody>
+                        </thead>
+                        <tbody>
                             {% for act in notice_act %}
-                                <tr>
-                                    <td><a href="mag_notice_act/{{ act.notice_id }}">{{ act.notice_title }}</a></td>
-                                </tr>
+                            <tr>
+                                <td><a href="mag_notice_act/{{act.id}}">{{ act.notice_title }}</a></td>
+                            </tr>
                             {% endfor %}
-                            </tbody>
+                        </tbody>
                         </table>
                     </div>
                     <div class="col-md-6">
                         <table class="table table-bordered table-hover">
-                            <thead>
-                            <tr>
-                                <th width=100%>系统公告</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for sys in notice_sys %}
-                                <tr>
-                                    <td><a href="sac_app:mag_notice_sys/{{ sys.notice_id }}">{{ sys.notice_title }}</a>
-                                    </td>
-                                </tr>
-                            {% endfor %}
-                            </tbody>
+                        <thead>
+                        <tr>
+                            <th width=100%>系统公告</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for sys in notice_sys %}
+                        <tr>
+                            <td><a href="mag_notice_sys/{{sys.id}}">{{ sys.notice_title }}</a></td>
+                        </tr>
+                        {% endfor %}
+                        </tbody>
                         </table>
                     </div>
                 </div>
             </div>
         </div>
-        <form method="post" action="">
+        <form  method="post" action="">
             <div>
                 <div class="col-xs-1">
                     <input type="text" name="page" class="form-control" placeholder="page" required="required">
@@ -133,9 +132,12 @@
 
             </div>
             <div class="col-md-1">
-                <div>共-{{ pgnt1.num_pages }}-页</div>
+                <div>共-{{pgnt1.num_pages}}-页</div>
             </div>
         </form>
+
+
+        <footer class="cm-footer"><span class="pull-left">Connected as John Smith</span><span class="pull-right">&copy; PAOMEDIA SARL</span></footer>
     </div>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>

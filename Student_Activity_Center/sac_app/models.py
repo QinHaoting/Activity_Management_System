@@ -119,6 +119,8 @@ class activities_modified(models.Model):
     act_planning_book = models.FileField(null=True)
     # 活动简介
     act_introduction = models.TextField(blank=False)
+    # 有效位
+    act_valid = models.IntegerField()
     # 多对多表间关系
     # 参加活动人员名单
     # 一对多表间关系
@@ -158,11 +160,12 @@ class organizers(models.Model):
 
 # 组织修改组织信息中间表单
 class organizers_modified(models.Model):
-    org_id = models.CharField(max_length=64)
+    org_id = models.CharField(max_length=64,null=True)
     org_password = models.CharField(max_length=128)
     org_name = models.CharField(max_length=64)
     org_header_name = models.CharField(max_length=64)
     org_header_phone = models.CharField(max_length=32)
+    org_header_college = models.CharField(max_length=64)
     org_introduction = models.TextField()
     org_valid = models.IntegerField()
 

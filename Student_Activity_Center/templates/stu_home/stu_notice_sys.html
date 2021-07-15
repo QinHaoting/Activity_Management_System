@@ -24,6 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -47,7 +48,8 @@
             </div>
         </div>
         <div class="dropdown pull-right">
-            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">消息数量</span> </button>
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">消息数量</span></button>
             <div class="popover cm-popover bottom">
                 <div class="arrow"></div>
                 <div class="popover-content">
@@ -74,13 +76,13 @@
                     <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
-<div id="global" >
+<div id="global" style="padding-top: 60px">
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
@@ -91,13 +93,12 @@
                     <div>
                         {{ sys.notice_content }}
                     </div>
-
                 </div>
             </div>
         </div>
     </div>
 </div>
- <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>

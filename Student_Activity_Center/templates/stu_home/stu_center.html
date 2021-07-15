@@ -24,6 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li class="active"><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -129,8 +130,7 @@
                     </table>
                     <div class="col-xs-6 col-sm-4 col-md-3 col-lg-2 " style="left: 40%">
                         <div class="col-xs-6">
-                            <a href="stu_modify_message/{{ stu.stu_id }}">修改</a>
-                            <br>
+                            <a href="stu_modify_message/{{ stu.id }}">修改</a>
                         </div>
                     </div>
                 </div>
@@ -138,13 +138,13 @@
         </div>
     </div>
 </div>
-    <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
 </body>
 </html>

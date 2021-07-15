@@ -90,105 +90,98 @@
                     <div class="col-md-1">&nbsp;</div>
                     <div class="col-md-5">
 
-                        <div class="col-md-12">
-                            <h2 style="text-align:center;">组织名称:&nbsp;&nbsp;{{ org.org_name }}</h2>
-                        </div>
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织账号:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_id }}
-                        </h4></div>
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_password }}
-                        </h4></div>
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织负责人姓名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_name }}
-                        </h4></div>
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织负责人联系方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_phone }}
-                        </h4></div>
-
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织负责人所在学院:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_college }}
-                        </h4></div>
-
-                        <div class="col-md-12">&nbsp;</div>
-
-                        <div class="col-md-12"><h4>
-                            组织简介:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_introduction }}
-                        </h4></div>
+                    <div class="col-md-12">
+                        <h2 style="text-align:center;">组织名称:&nbsp;&nbsp;{{ org.org_name }}</h2>
                     </div>
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织账号:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_id }}
+                    </h4></div>
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织密码:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_password }}
+                    </h4></div>
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织负责人姓名:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_name }}
+                    </h4></div>
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织负责人联系方式:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_phone }}
+                    </h4></div>
+
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织负责人所在学院:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_header_college }}
+                    </h4></div>
+
+                    <div class="col-md-12">&nbsp;</div>
+
+                    <div class="col-md-12"><h4>
+                        组织简介:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ org.org_introduction }}
+                    </h4></div>
+                        </div>
                     <div class="col-md-5">
-                        <form method="post" action="">
-                            {% csrf_token %}
-                            <div class="col-md-12">
-                                <div class="col-md-12">&nbsp;</div>
-                                <div class="col-md-12">&nbsp;</div>
-                                <div class="col-md-12">&nbsp;</div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新名称</div>
-                                        <input type="text" name="name" class="form-control" placeholder="Name"
-                                               required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新账号</div>
-                                        <input type="text" name="id" class="form-control" placeholder="ID"
-                                               required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新密码</div>
-                                        <input type="text" name="password" class="form-control" placeholder="Password"
-                                               required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新负责人姓名:</div>
-                                        <input type="text" name="header_name" class="form-control"
-                                               placeholder="Header_name" required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新负责人联系方式</div>
-                                        <input type="text" name="header_phone" class="form-control"
-                                               placeholder="Header_phone" required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新负责人所在学院</div>
-                                        <input type="text" name="header_college" class="form-control"
-                                               placeholder="Header_college" required="required">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="input-group">
-                                        <div class="input-group-addon">组织新简介</div>
-                                        <input type="text" name="introduction" class="form-control"
-                                               placeholder="Introduction" required="required">
-                                    </div>
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="col-md-12">
+                            <div class="col-md-12">&nbsp;</div>
+                            <div class="col-md-12">&nbsp;</div>
+                            <div class="col-md-12">&nbsp;</div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新名称</div>
+                                    <input type="text" name="name" class="form-control" placeholder="Name" required="required">
                                 </div>
                             </div>
-                            <div class="col-md-6">&nbsp;</div>
-                            <div class="col-md-6">
-                                <button type="submit" class="btn btn-block btn-yellow">立即修改</button>
-                                <span style="color: red">{{ error }}</span>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新账号</div>
+                                    <input type="text" name="id" class="form-control" placeholder="ID" required="required">
+                                </div>
                             </div>
-                        </form>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新密码</div>
+                                    <input type="text" name="password" class="form-control" placeholder="Password" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新负责人姓名:</div>
+                                    <input type="text" name="header_name" class="form-control" placeholder="Header_name" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新负责人联系方式</div>
+                                    <input type="text" name="header_phone" class="form-control" placeholder="Header_phone" required="required">
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新负责人所在学院</div>
+                                    <input type="text" name="header_college" class="form-control" placeholder="Header_college" required="required">
+                               </div>
+                            </div>
+                            <div class="form-group">
+                                <div class="input-group">
+                                    <div class="input-group-addon">组织新简介</div>
+                                    <input type="text" name="introduction" class="form-control" placeholder="Introduction" required="required">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">&nbsp;</div>
+                        <div class="col-md-6">
+                            <button type="submit" class="btn btn-block btn-yellow">立即修改</button>
+                            <span style="color: red">{{ error }}</span>
+                        </div>
+                    </form>
                     </div>
                     <div class="col-md-1">&nbsp;</div>
                 </div>

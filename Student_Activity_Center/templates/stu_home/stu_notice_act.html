@@ -24,6 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -47,7 +48,8 @@
             </div>
         </div>
         <div class="dropdown pull-right">
-            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"> <span class="label label-danger">消息数量</span> </button>
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">消息数量</span></button>
             <div class="popover cm-popover bottom">
                 <div class="arrow"></div>
                 <div class="popover-content">
@@ -74,46 +76,27 @@
                     <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
                 </li>
                 <li>
-                    <a href=""><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
                 </li>
             </ul>
         </div>
     </nav>
 </header>
-<div id="global" >
+<div id="global" style="padding-top: 60px">
     <div class="container-fluid">
         <div class="col-md-12">
             <div class="panel panel-default">
                 <div class="panel-body">
                     <div>
-                        <h2>{{ act.notice_title }}</h2>
+                        <h1 style="text-align:center;">{{ act.notice_title }}</h1>
                     </div>
                     <div>
-                        {{ act.notice_content }}
+                        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ act.notice_content }}
                     </div>
 
                 </div>
             </div>
         </div>
-        <nav>
-            <ul class="pagination shadowed" style="margin:0">
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-left"></i></span>
-                    </a>
-                </li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li>
-                    <a href="#">
-                        <span><i class="fa fa-angle-right"></i></span>
-                    </a>
-                </li>
-            </ul>
-        </nav>
     </div>
 </div>
 <script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>

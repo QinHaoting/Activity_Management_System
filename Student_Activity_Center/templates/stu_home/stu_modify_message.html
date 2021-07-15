@@ -24,6 +24,7 @@
                 <ul class="cm-menu-items">
                     <li><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
                     <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
                     <li class="active"><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a>
                     </li>
                 </ul>
@@ -94,7 +95,8 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">学号</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="stu_id" value="{{ stu.stu_id }}" disabled="disabled">
+                                <input type="text" class="form-control" name="stu_id" value="{{ stu.stu_id }}"
+                                       disabled="disabled">
                             </div>
                         </div>
                         <div class="form-group">
@@ -112,7 +114,8 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">学院</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="stu_college" value="{{stu.stu_college }}">
+                                <input type="text" class="form-control" name="stu_college"
+                                       value="{{ stu.stu_college }}">
                             </div>
                         </div>
                         <div class="form-group">
@@ -142,11 +145,13 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label">个人简介</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="stu_introduction" value="{{ stu.stu_introduction }}">
+                                <input type="text" class="form-control" name="stu_introduction"
+                                       value="{{ stu.stu_introduction }}">
                             </div>
                         </div>
                         <div class="col-xs-6 col-sm-12 col-md-3 col-lg-2" style="left:45% ">
-                            <button type="button" class="btn btn-default"><a href="{% url 'sac_app:stu_center' %}">取消</a>
+                            <button type="button" class="btn btn-default"><a
+                                    href="{% url 'sac_app:stu_center' %}">取消</a>
                             </button>
                             <button type="submit" class="btn btn-danger" id="bt"><a
                                     href="{% url 'sac_app:stu_center' %}">提交</a></button>
@@ -164,7 +169,8 @@
 <script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
-<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+>
 </body>
 </html>
 
