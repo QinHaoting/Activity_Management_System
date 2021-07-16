@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
+    <style type="text/css">
+        @font-face {
+            font-family: jianzhi;
+            src: url(FZJZ.TTF);
+        }
+
+        body {
+            color: #128095;
+        }
+
+        h3 {
+            font-family: jianzhi;
+            font-size: 32px;
+            text-align: center;
+            letter-spacing: 10px;
+            text-shadow: 2px 10px 20px #CCC;
+        }
+
+        h4 {
+            font-family: "楷体";
+            text-align: center;
+        }
+
+        p {
+            line-height: 28px;
+        }
+
+        .indent {
+            text-indent: 2em;
+        }
+
+        .space {
+            white-space: pre;
+        }
+
+        .right {
+            text-align: right;
+            font-weight: bold;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .key {
+            width: 200px;
+            height: 200px;
+            background-color: cornsilk;
+            top: -100%;
+            left: 50%;
+            transform: translate(-50%, -50);
+            z-index: 1000;
+            transition: 0.5ms;
+            visibility: hidden;
+        }
+
+        .key.active {
+            visibility: visible;
+            top: 50%;
+        }
+
+        .context {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+
+        .context h2 {
+            color: #084298;
+        }
+
+        .context span {
+            background-color: #2980b9;
+            display: block;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #2980b9;
+            border-radius: 12px;
+            color: #ffffff;
+            text-align: center;
+            line-height: 10px;
+            cursor: pointer;
+        }
+    </style>
+
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li class="active"><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
+                    <li><a href="{% url 'sac_app:stu_join_activity' %}" class="sf-dashboard">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-user-male-alt">我的队伍</a></li>
+                    <li><a href="{% url 'sac_app:stu_directmessage' %}" class="sf-envelope-letter">私信界面</a>
+                    <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                    <li><a href="{% url 'sac_app:stu_bbs' %}">论坛</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">{{ count }}</span>
+                <tton>
+                    <div class="popover cm-popover bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <form method="post" action="">
+                                {% for msg in messages %}
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item">
+                                            <div class="">
+                                                <h4 class="list-group-item-heading text-overflow">
+                                                    <i class="fa fa-fw fa-envelope"></i>{{ msg.send_id }}
+                                                </h4>
+                                            </div>
+                                            <div class="" style="float: right;"><input type="radio" name="delete"
+                                                                                       value="{{ msg.id }}"/>
+                                                <input type="submit" name="de" value="删除"></div>
+                                            <div class="">
+                                                <p class="list-group-item-text text-overflow">{{ msg.message }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </form>
+                            <div style="padding:10px"><a class="btn btn-success btn-block"
+                                                         href="{% url 'sac_app:stu_directmessage' %}">展现更多</a>
+                            </div>
+                        </div>
+                    </div>
+                </tton>
+            </button>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading font-size=89px "><h2>小队名称：{{ team.team_name }}</h2></div>
+                <div class="panel-body">
+                    <h4><strong>小队队长：{{ team.team_header_name }}</strong></h4>
+                    <hr/>
+                    <p>小队简介：</p>
+                    <p><strong>{{ team.team_introduction }}</strong></p>
+                    <p class="indent">{{ activity.act_introduction }}</p>
+                    <div class="right">
+                        <button onclick="ac()" class="right btn-group-sm">点击加入</button>
+                        <form method="post">
+                            {% csrf_token %}
+                            <div class="key">
+                                <div class="context">
+                                    <span onclick="ac()">X</span>
+                                    <input style="display:none " value="1" name="ok">
+                                    <a type="submit" class="btn-success" onclick="ac()" href="{}">确认</a>
+                                    <button class="btn-yellow" onclick="ac()">取消</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function ac() {
+        document.querySelector('.key').classList.toggle('active')
+    }
+
+    $(document).ready(function () {
+        jQuery.fn.extend({
+            center: function (width, height) {
+                return $(this).css("left", ($(window).width() - width) / 2 + $(window).scrollLeft()).css("top", ($(window).height() - height) / 2 + $(window).scrollTop()).css("width", width).css("height", height);
+            }
+        });
+
+    });
+</script>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
+</html>

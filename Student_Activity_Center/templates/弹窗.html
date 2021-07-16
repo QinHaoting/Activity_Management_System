@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        *{
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body{
+            background-color: #111111;
+        }
+        button{
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%,-50%);
+            padding: 10px;
+            background-color: #084298;
+            color: aliceblue;
+            outline: none;
+            font-weight: bolder;
+            font-family: Helvetica;
+            font-size: 20px;
+            border: 1px solid #2980b9;
+            cursor: pointer;
+        }
+        .main{
+            width: 100px;
+            height: 100px;
+            background-color: cornsilk;
+            position: fixed;
+            top: -100%;
+            left: 50%;
+            transform: translate(-50%,-50);
+            z-index: 1000;
+            transition: 0.5ms;
+            visibility: hidden;
+        }
+        .main.active{
+            visibility: visible;
+            top: 50%;
+        }
+        .content{
+            width: 100%;
+            height: 100%;
+            position: relative;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .content h2{
+            color: #084298;
+        }
+        .content span{
+            background-color: #2980b9;
+            display: block;
+            padding: 10px;
+            margin-top: 10px;
+            border: 1px solid #2980b9;
+            border-radius:12px ;
+            color: #ffffff;
+            text-align: center;
+            line-height: 10px;
+            cursor: pointer;
+        }
+
+
+    </style>
+</head>
+<body>
+<button onclick="ac()">点我一哈</button>
+<div class="main">
+    <div class="content">
+        <h2>变态</h2>
+        <span onclick="ac()">x</span>
+    </div>
+</div>
+<script>
+
+    function ac() {
+        document.querySelector('.main').classList.toggle('active')
+    }
+</script>
+</body>
+</html>
