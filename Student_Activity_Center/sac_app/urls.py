@@ -134,5 +134,7 @@ urlpatterns = [
     re_path(r'^mag_home/mag_manage/mag_look_mag_org/(\d+)', views.mag_look_mag_org, name="mag_look_mag_org"),
     re_path(r'^mag_home/mag_manage/mag_revise/(\d+)', views.mag_revise, name="mag_revise"),
     re_path(r'^mag_home/mag_manage/mag_delete/(\d+)', views.mag_delete, name="mag_delete"),
+    path('stu_home/stu_directmessage', views.stu_directmessage, name="stu_directmessage"),
+    path('stu_home/stu_bbs', views.stu_bbs, name="stu_bbs"),
 
 ]

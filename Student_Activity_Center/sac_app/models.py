@@ -33,6 +33,8 @@ class students(models.Model):
 class activities(models.Model):
     # 活动ID
     act_id = models.CharField(max_length=128)
+    # 社团名字
+    org_name = models.CharField(max_length=128)
     # 活动名称
     act_name = models.CharField(max_length=64, blank=False)
     # 活动开始时间
@@ -160,7 +162,7 @@ class organizers(models.Model):
 
 # 组织修改组织信息中间表单
 class organizers_modified(models.Model):
-    org_id = models.CharField(max_length=64,null=True)
+    org_id = models.CharField(max_length=64, null=True)
     org_password = models.CharField(max_length=128)
     org_name = models.CharField(max_length=64)
     org_header_name = models.CharField(max_length=64)
@@ -198,7 +200,7 @@ class teams(models.Model):
     team_members = models.ManyToManyField(students, through="stu_to_team")
     # 队伍参加活动的名称
     team_act = models.ForeignKey(activities, on_delete=models.PROTECT)
-    team_introduction = models.CharField(max_length=256,null=True)
+    team_introduction = models.CharField(max_length=256, null=True)
 
 
 # 公告类
@@ -219,3 +221,25 @@ class notices(models.Model):
 class stu_to_team(models.Model):
     stu = models.ForeignKey(students, on_delete=models.PROTECT)
     team = models.ForeignKey(teams, on_delete=models.PROTECT)
+
+
+class bbs_comments(models.Model):
+    bbs_id = models.CharField(max_length=64)
+    bbs_message = models.TextField()
+    bbs_create_time = models.DateTimeField(default=datetime.datetime.now)
+
+
+class stu_directMessages(models.Model):
+    send_id = models.CharField(max_length=64)
+    message = models.TextField()
+    accept_id = models.CharField(max_length=64)
+    message_send_time = models.DateTimeField(default=datetime.datetime.now)
+    message_valid = models.IntegerField()
+
+
+class org_directMessages(models.Model):
+    send_id = models.CharField(max_length=64)
+    message = models.TextField()
+    accept_id = models.CharField(max_length=64)
+    message_send_time = models.DateTimeField(default=datetime.datetime.now)
+    message_valid = models.IntegerField()

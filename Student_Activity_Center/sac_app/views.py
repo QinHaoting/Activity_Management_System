@@ -1,7 +1,7 @@
 import enum
 import uuid
 from functools import wraps
-from random import random
+from random import random, randint
 from typing import re
 
 import datetime
@@ -20,7 +20,7 @@ from io import BytesIO
 from django.contrib import auth
 
 from sac_app.models import activities, organizers, notices, managers, students, teams, act_to_stu, stu_to_team, \
-    organizers_modified, activities_modified
+    organizers_modified, activities_modified, bbs_comments, stu_directMessages, org_directMessages
 
 
 class FunctionStatus(enum.Enum):
@@ -253,7 +253,61 @@ def stu_home(request):
     :param request:
     :return:
     """
-    return render(request, 'stu_home/stu_home.html')
+    if request.method == "POST":
+        de = request.POST.get('delete')
+        if stu_directMessages.objects.filter(id=de, message_valid=1).first():
+            msg = stu_directMessages.objects.filter(id=de, message_valid=1).first()
+            msg.message_valid = 0
+            msg.save()
+    accept_id = request.session.get('user_id', 1)
+    print(accept_id)
+    messages = list(stu_directMessages.objects.filter(accept_id=accept_id, message_valid=1))
+    count = len(messages)
+    return render(request, 'stu_home/stu_home.html', locals())
+
+
+@check_login
+def stu_directmessage(request):
+    """
+    学生：主页
+    :param request:
+    :return:
+    """
+    if request.method == "POST":
+        de = request.POST.get('delete')
+        if stu_directMessages.objects.filter(id=de, message_valid=1).first():
+            msg = stu_directMessages.objects.filter(id=de, message_valid=1).first()
+            msg.message_valid = 0
+            msg.save()
+    accept_id = request.session.get('user_id', 1)
+    print(accept_id)
+    messages = list(stu_directMessages.objects.filter(accept_id=accept_id, message_valid=1))
+    page = request.GET.get('page', 1)
+    id1 = request.session.get('user_id')
+    comment = stu_directMessages.objects.filter(accept_id=id1, message_valid=1).order_by('message_send_time')
+    pgnt = Paginator(comment, 10)
+    if int(page) <= pgnt.num_pages:
+        comlist = list(pgnt.page(page))
+    else:
+        page = str(pgnt.num_pages)
+        comlist = list(pgnt.page(page))
+    if request.method == 'POST':
+        accept_id1 = request.POST.get('accept_id')
+        if students.objects.filter(stu_id=accept_id1).first() and accept_id != accept_id1:
+            message = request.POST.get('message')
+            stu_directMessages.objects.create(send_id=id1, message=message, accept_id=accept_id1, message_valid=1)
+            page = request.GET.get('page', 1)
+            comment = comment = stu_directMessages.objects.filter(accept_id=id1, message_valid=1).order_by(
+                'message_send_time')
+            pgnt = Paginator(comment, 10)
+            if int(page) <= pgnt.num_pages:
+                comlist = list(pgnt.page(page))
+            else:
+                page = str(pgnt.num_pages)
+                comlist = list(pgnt.page(page))
+            return redirect(reverse('sac_app:stu_home'))
+        return render(request, 'stu_home/stu_directmessage.html', locals())
+    return render(request, 'stu_home/stu_directmessage.html', locals())
 
 
 @check_login
@@ -344,7 +398,6 @@ def stu_center(request):
         return render(request, 'stu_home/stu_center.html', context={'message': '消息错误'})
 
 
-@check_login
 @check_login
 def stu_modify_message(request, id):
     """
@@ -584,7 +637,7 @@ def stu_notice(request):
 
 
 @check_login
-def stu_notice_act(request,id):
+def stu_notice_act(request, id):
     """
     学生：公告界面
     :param request:
@@ -596,7 +649,7 @@ def stu_notice_act(request,id):
 
 
 @check_login
-def stu_notice_sys(request,id):
+def stu_notice_sys(request, id):
     """
     学生：公告界面
     :param request:
@@ -604,7 +657,6 @@ def stu_notice_sys(request,id):
     """
     sys = notices.objects.filter(id=id).first()
     return render(request, 'stu_home/stu_notice_sys.html', locals())
-
 
 
 @check_login
@@ -615,6 +667,26 @@ def org_home(request):
     :return:
     """
     return render(request, 'org_home/org_home.html')
+
+
+@check_login
+def org_home(request):
+    """
+    组织者：主页
+    :param request:
+    :return:
+    """
+    if request.method == "POST":
+        de = request.POST.get('delete')
+        if org_directMessages.objects.filter(id=de, message_valid=1).first():
+            msg = org_directMessages.objects.filter(id=de, message_valid=1).first()
+            msg.message_valid = 0
+            msg.save()
+    accept_id = request.session.get('user_id', 1)
+    print(accept_id)
+    messages = list(org_directMessages.objects.filter(accept_id=accept_id, message_valid=1))
+
+    return render(request, 'org_home/org_home.html', locals())
 
 
 @check_login
@@ -675,6 +747,7 @@ def org_launch_activity(request):  # 需要修改
         act_end_time = request.POST.get('act_end_time')
         act_end_time = datetime.datetime.strptime(act_end_time, '%Y-%m-%dT%H:%M')
         ac = activities.objects.create(
+            org_name=request.POST.get("org_name"),
             act_name=request.POST.get('act_name'),
             act_start_time=act_start_time,
             act_end_time=act_end_time,
@@ -898,7 +971,7 @@ def org_notice(request):
 
 
 @check_login
-def org_notice_act(request,id):
+def org_notice_act(request, id):
     """
     组织者：活动公告界面
     :param request:
@@ -908,7 +981,7 @@ def org_notice_act(request,id):
 
 
 @check_login
-def org_notice_sys(request,id):
+def org_notice_sys(request, id):
     """
     组织者：系统公告界面
     :param request:
@@ -916,7 +989,6 @@ def org_notice_sys(request,id):
     """
     sys = notices.objects.filter(id=id).first()
     return render(request, 'org_home/org_notice_sys.html', locals())
-
 
 
 @check_login
@@ -962,7 +1034,6 @@ def mag_examine_act(request):
     except:
         return HttpResponse(render(request, 'mag_home/mag_examine_act.html', {'msg': "未知错误"}))
     # return render(request, 'mag_home/mag_examine_act.html')
-
 
 
 @check_login
@@ -1074,6 +1145,7 @@ def mag_notice(request):
     except EmptyPage:
         return HttpResponse(render(request, 'mag_home/mag_notice.html', {'notice_act': [], 'notice_sys': []}))
 
+
 @check_login
 def mag_notice_act(request, id):
     """
@@ -1141,7 +1213,6 @@ def mag_look_act(request, id):
             act_mid.save()
             return redirect(reverse('sac_app:mag_examine_act'))
     return render(request, 'mag_home/mag_look_act.html', locals())
-
 
 
 @check_login
@@ -1226,3 +1297,31 @@ def mag_delete(request, id):
         return redirect(reverse('sac_app:mag_manage'))
 
     return render(request, 'mag_home/mag_delete.html', locals())
+
+
+@check_login
+def stu_bbs(request):
+    """
+    管理者：私信
+    :param request:
+    :return:
+    """
+    # stu = students.objects.filter(stu_id=id).first()
+    # for i in range(0,17):
+    # bbs_comments.objects.create(bbs_id=randint(10000000,99999999), bbs_message=random())
+    # notices.objects.create(notice_id=i+16, notice_title=random(),
+    # notice_content=random(),notice_tag = 0)
+    page = request.GET.get('page', 1)
+    comment = bbs_comments.objects.all().order_by('bbs_create_time')
+    pgnt = Paginator(comment, 10)
+    comlist = list(pgnt.page(page))
+    if request.method == 'POST':
+        stu_id = request.POST.get('stu_id')
+        com = request.POST.get('com')
+        bbs_comments.objects.create(bbs_id=randint(10000000, 99999999), bbs_message=com)
+        page = request.GET.get('page', 1)
+        comment = bbs_comments.objects.all().order_by('bbs_create_time')
+        pgnt = Paginator(comment, 10)
+        comlist = list(pgnt.page(page))
+        return render(request, 'stu_home/stu_bbs.html', locals())
+    return render(request, 'stu_home/stu_bbs.html', locals())
