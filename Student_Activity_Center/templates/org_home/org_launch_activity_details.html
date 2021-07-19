@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
+    <style type="text/css">
+        @font-face {
+            font-family: jianzhi;
+            src: url(FZJZ.TTF);
+        }
+
+        body {
+            color: #128095;
+        }
+
+        h3 {
+            font-family: jianzhi;
+            font-size: 32px;
+            text-align: center;
+            letter-spacing: 10px;
+            text-shadow: 2px 10px 20px #CCC;
+        }
+
+        h4 {
+            font-family: "楷体";
+            text-align: center;
+        }
+
+        p {
+            line-height: 28px;
+        }
+
+        .indent {
+            text-indent: 2em;
+        }
+
+        .space {
+            white-space: pre;
+        }
+
+        .right {
+            text-align: right;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="{% url 'sac_app:org_launch_activity' %}" class="sf-house">发布活动</a></li>
+                    <li class="active"><a href="{% url 'sac_app:org_view_posted_activity' %}"
+                                          class="sf-dashboard">已发布活动</a></li>
+                    <li><a href="{% url 'sac_app:org_launch_notice' %}" class="sf-box-out">发布公告</a></li>
+                    <li><a href="{% url 'sac_app:org_center' %}" class="sf-user-male-alt">组织中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown">
+                <span
+                        class="label label-danger">{{ count }}</span></button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <form method="post" action="">
+                    {% csrf_token %}
+                        {% for msg in messages %}
+                            <div class="list-group">
+                                <a href="#" class="list-group-item">
+                                    <div class="">
+                                        <h4 class="list-group-item-heading text-overflow">
+                                            <i class="fa fa-fw fa-envelope"></i>{{ msg.send_id }}
+                                        </h4>
+                                    </div>
+                                    <div class="" style="float: right;"><input type="radio" name="delete"
+                                                                               value="{{ msg.id }}"/>
+                                        <input type="submit" name="de" value="删除"></div>
+                                    <div class="">
+                                        <p class="list-group-item-text text-overflow">{{ msg.message }}</p>
+                                    </div>
+                                </a>
+                            </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:login' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-heading" font-size="89px"><h2></h2></div>
+                <div class="panel-body">
+                    <h4><strong>活动名称：{{ activity.act_name }}</strong></h4>
+                    <div style="font-size: 18px">
+                        {% if activity.act_type == 0 %}
+                            <div class="button right">
+                                <a class="btn-toolbar" href="org_modify_activity_message/{{ activity.act_id }}">修改信息</a>
+                                <a class="btn-turquoise" href="org_stu_one_list/{{ activity.act_id }}">人员名单</a>
+                            </div>
+                        {% elif activity.act_type == 1 %}
+                            <div class="button right">
+                                <a class="btn-toolbar" href="org_modify_activity_message/{{ activity.act_id }}">修改信息</a>
+                                <a href="org_stu_team_list/{{ activity.act_id }}">队伍名单</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                    <p><strong>各位漂亮的小姐姐，帅气的小哥哥：</strong></p>
+                    <p class="indent">{{ activity.act_introduction }}</p>
+                    <p class="space">
+                        {% if activity.act_type == 0 %}
+                            <strong>详情如下</strong>
+                            <mark>活动类型：</mark>单人参加
+                            <mark>活动还剩名额：</mark>仅剩{{ activity.act_available_number }}个大家冲啊！
+                            <mark>开始时间：</mark>
+                            {{ activity.act_start_time }}
+                            <mark>结束时间：</mark>
+                            {{ activity.act_end_time }}
+                        {% else %}
+                            <mark>活动类型：</mark>组队参加
+                            <mark>活动还剩名额：</mark>仅剩{{ activity.act_team_number }}
+                            <mark>开始时间：</mark>
+                            {{ activity.act_start_time }}
+                            <mark>结束时间：</mark>
+                            {{ activity.act_end_time }}
+                        {% endif %}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
+</html>

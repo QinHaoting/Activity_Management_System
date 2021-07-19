@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li class="active"><a href="{% url 'sac_app:mag_examine_act' %}" class="sf-pencil">审核活动</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_org' %}" class="sf-device-computer">审核组织</a></li>
+                    <li><a href="{% url 'sac_app:mag_manage' %}" class="sf-user-male">管理组织者</a></li>
+                    <li><a href="{% url 'sac_app:mag_add_org' %}" class="sf-sign-add">添加组织者</a></li>
+                    <li><a href="{% url 'sac_app:mag_launch_notice' %}" class="sf-box-out">发布系统公告</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="container-fluid">
+    <div class="tab-content">
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
+                    i>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown">
+                <span
+                        class="label label-danger">{{ count }}</span></button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <form method="post" action="">
+                        {% for msg in messages %}
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">
+                                <div class="">
+                                    <h4 class="list-group-item-heading text-overflow">
+                                        <i class="fa fa-fw fa-envelope"></i>{{ msg.send_id }}
+                                    </h4>
+                                </div>
+                                <div class="" style="float: right;"><input type="radio" name="delete"
+                                                                           value="{{ msg.id }}"/>
+                                    <input type="submit" name="de" value="删除"></div>
+                                <div class="">
+                                    <p class="list-group-item-text text-overflow">{{ msg.message }}</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="col-md-12" style="text-align:center;"><h1>如果看不到修改后就是第一次提交审核</h1></div>
+                    <div class="col-md-6">
+                        <div>
+                            <h2 style="text-align:center;">修改前</h2>
+                        </div>
+                        <div>
+                            <h4>活动名称:&nbsp;&nbsp;{{ act.act_name }}</h4>
+                        </div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动开始时间:&nbsp;&nbsp;{{ act.act_start_time}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动结束时间:&nbsp;&nbsp;{{ act.act_end_time }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动负责人名字:&nbsp;&nbsp;{{act.act_organizer_name }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动负责人电话:&nbsp;&nbsp;{{ act.act_organizer_phone }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动类型:&nbsp;&nbsp;{{ act.act_type }}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动总人数:&nbsp;&nbsp;{{ act.act_total_number}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动组数:&nbsp;&nbsp;{{ act.act_team_number}}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动最少人数:&nbsp;&nbsp;{{ act.act_min_team_number }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动最多人数:&nbsp;&nbsp;{{ act.act_max_team_number }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动附件:&nbsp;&nbsp;{{ act.act_planning_book}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动简介:&nbsp;&nbsp;{{ act.act_introduction }}
+                        </h4></div>
+                    </div>
+                    <div class="col-md-6">
+                        <div>
+                            <h2 style="text-align:center;">修改后</h2>
+                        </div>
+                        <div>
+                            <h4>活动名称:&nbsp;&nbsp;{{ act_mid.act_name }}</h4>
+                        </div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动开始时间:&nbsp;&nbsp;{{ act_mid.act_start_time}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动结束时间:&nbsp;&nbsp;{{ act_mid.act_end_time }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动负责人名字:&nbsp;&nbsp;{{act_mid.act_organizer_name }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动负责人电话:&nbsp;&nbsp;{{ act_mid.act_organizer_phone }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动类型:&nbsp;&nbsp;{{ act_mid.act_type }}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动总人数:&nbsp;&nbsp;{{ act_mid.act_total_number}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+
+                        <div><h4>
+                            活动组数:&nbsp;&nbsp;{{ act_mid.act_team_number}}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动最少人数:&nbsp;&nbsp;{{ act_mid.act_min_team_number }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动最多人数:&nbsp;&nbsp;{{ act_mid.act_max_team_number }}
+                        </h4></div>
+
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动附件:&nbsp;&nbsp;{{ act_mid.act_planning_book}}
+                        </h4></div>
+                        <div class="col-md-12">&nbsp;</div>
+                        <div><h4>
+                            活动简介:&nbsp;&nbsp;{{ act_mid.act_introduction }}
+                        </h4></div>
+                    </div>
+                    <div class="col-md-12">&nbsp;</div>
+                    <div class="col-md-12">
+                        <form method="post" action="">
+                            {% csrf_token %}
+                            <div class="col-sm-12">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="btn btn-block btn-success">通过</div>
+                                        <input type="radio" class="form-control" name="select"  placeholder="PASS" value="yes">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <div class="btn btn-block btn-danger">拒绝</div>
+                                        <input type="radio" class="form-control" name="select"  placeholder="REJECT" value="no">
+                                    </div>
+                                </div>
+                                <div class="col-sm-12">
+                                    <div class="form-group">
+                                        <div class="input-group-addon">审核理由</div>
+                                        <input type="text" class="form-control" name="msg"  placeholder="MESSAGE" required="required">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">&nbsp;</div>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-block btn-primary">立即确定</button>
+                                    <span style="color: red">{{ error }}</span>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
+</html>

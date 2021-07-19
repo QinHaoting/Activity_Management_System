@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+
+
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}" />
+
+    <title>登录学生活动中心</title>
+    <style></style>
+</head>
+<body class="cm-login">
+
+<div class="text-center" style="padding:50px 0 30px 0;background:#fff;border-bottom:1px solid #ddd">
+    <img src="{% static 'img/login.bmp' %}" width="300" height="100" >
+</div>
+
+<div class="col-sm-6 col-md-4 col-lg-3" style="margin:40px auto; float:none;">
+    <form method="post" action="">
+        {% csrf_token %}
+        <div class="col-xs-12">
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;账&nbsp;&nbsp;&nbsp;号&nbsp;&nbsp;</i></div>
+                    <input type="text" name="username" class="form-control" placeholder="请输入账号(英文和数字)"
+                           required="required" id="username" onfocus="clearText('username','name')"
+                           onblur="checkUserName()"/>
+                </div>
+                <font id="name"></font>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;邮&nbsp;&nbsp;&nbsp;箱&nbsp;&nbsp;</i></div>
+                    <input type="email" name="email" class="form-control" placeholder="Email" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <div class="input-group-addon"><i>&nbsp;&nbsp;验证码&nbsp;&nbsp;</i></div>
+                    <input type="text" name="idcode" class="form-control" placeholder="Identifying code" required="required">
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="input-group">
+                    <img onclick="changeImage(this);" src="{% url 'sac_app:check_code' %}" title="点击刷新">
+                </div>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-block btn-primary">立即找回</button>
+                <span style="color: red">{{ error }}</span>
+            </div>
+            <div class="form-group">
+                <a href="{% url 'sac_app:login' %}" class="">点错了？返回登录</a>
+            </div>
+        </div>
+
+
+    </form>
+</div>
+<script>
+    //整个表单提交验证
+    function checkForm() {
+
+        return checkUserName() & checkPwd() & recheckPwd() & checkEmail();
+
+    }
+
+    function checkUserName() {
+        //用户名不能为空
+        var username = document.getElementById("username").value;
+        var name = document.getElementById("name");
+        var reg_username = /^([a-zA-Z0-9_-])/;
+        if (username == "") {
+            name.color = "red";
+            name.innerHTML = "用户名不能为空";
+            return false
+        }
+        if (!reg_username.test(username)) {
+            name.color = "red";
+            name.innerHTML = "用户名不是英文和数字";
+            return false
+        }
+        name.innerHTML = "√";
+        name.color = "green";
+        return true;
+
+    }
+
+    function checkPwd() {
+        //验证密码
+        var password = document.getElementById("password").value;
+        //alert(password);
+        var pwd = document.getElementById("pwd");
+        var reg = /^([a-zA-Z0-9_-])/;
+        if (password == "") {
+            pwd.color = "red";
+            pwd.innerHTML = "密码不能为空!";
+            return false;
+        }
+        if (!reg.test(password)) {
+            pwd.color = "red";
+            pwd.innerHTML = "密码必须是数字!";
+            return false;
+        }
+        pwd.innerHTML = "√";
+        pwd.color = "green";
+        return true;
+    }
+
+    function recheckPwd() {
+        var password = document.getElementById("password").value;
+        var agpassword = document.getElementById("agpassword").value;
+        var repwd = document.getElementById("repwd");
+        if (agpassword == "") {
+            repwd.color = "red";
+            repwd.innerHTML = "密码不能为空!";
+            return false;
+        }
+        if (agpassword != password) {
+            repwd.color = "red";
+            document.getElementById("repwd").innerHTML = "两次密码不一致!";
+            return false;
+        }
+        repwd.innerHTML = "√";
+        repwd.color = "green";
+        return true;
+    }
+
+    function checkEmail() {
+        //邮箱验证
+        var email = document.getElementById("email").value;
+        var eml = document.getElementById("eml")
+        //正则表达式,以下表达式就是一个正则对象
+        var reg = /^[a-zA-Z0-9_-]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/;
+        if (!reg.test(email)) {
+            eml.color = "red"
+            eml.innerHTML = "邮箱格式不正确!";
+            return false;
+        }
+        eml.innerHTML = "√";
+        eml.color = "green";
+        return true;
+    }
+
+    function clearText(inpId, fontId) {
+        document.getElementById(inpId).value = "";
+        document.getElementById(fontId).innerHTML = "";
+
+    }
+
+    function changeImage(ths) {
+        ths.src = ths.src + '?'
+
+    }
+</script>
+</body>
+</html>

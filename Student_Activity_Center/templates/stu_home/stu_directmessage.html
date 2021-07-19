@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li class=""><a href="{% url 'sac_app:stu_activity' %}" class="sf-house">活动大厅</a></li>
+                    <li><a href="{% url 'sac_app:stu_join_activity' %}" class=" sf-brick ">已参加活动</a></li>
+                    <li><a href="{% url 'sac_app:stu_myteam' %}" class="sf-puzzle ">我的队伍</a></li>
+                    <li class="active"><a href="{% url 'sac_app:stu_directmessage' %}" class="sf-envelope-letter">私信界面</a>
+                    <li><a href="{% url 'sac_app:stu_center' %}" class="sf-user-male-alt">个人中心</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:stu_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:stu_notice' %}">公告</a></li>
+                    <li><a href="{% url 'sac_app:stu_bbs' %}">论坛</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown"><span
+                    class="label label-danger">{{ count }}</span>
+                <tton>
+                    <div class="popover cm-popover bottom">
+                        <div class="arrow"></div>
+                        <div class="popover-content">
+                            <form method="post" action="">
+                            {% csrf_token %}
+                                {% for msg in messages %}
+                                    <div class="list-group">
+                                        <a href="#" class="list-group-item">
+                                            <div class="">
+                                                <h4 class="list-group-item-heading text-overflow">
+                                                    <i class="fa fa-fw fa-envelope"></i>{{ msg.send_id }}
+                                                </h4>
+                                            </div>
+                                            <div class="" style="float: right;"><input type="radio" name="delete"
+                                                                                       value="{{ msg.id }}"/>
+                                                <input type="submit" name="de" value="删除"></div>
+                                            <div class="">
+                                                <p class="list-group-item-text text-overflow">{{ msg.message }}</p>
+                                            </div>
+                                        </a>
+                                    </div>
+                                {% endfor %}
+                            </form>
+                            <div style="padding:10px"><a class="btn btn-success btn-block"
+                                                         href="{% url 'sac_app:stu_directmessage' %}">展现更多</a>
+                            </div>
+                        </div>
+                    </div>
+                </tton>
+            </button>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-md-12">
+            <div class="panel panel-default">
+                <div class="panel-body" style="min-height: 560px;">
+                    <div class="col-md-12" style="min-height: 480px;">
+                        <table class="table table-bordered table-hover">
+                            <thead>
+                            <tr>
+
+                                <th width=10%>发送的学生 I D</th>
+                                <th width=70%>发送的内容</th>
+                                <th width=20%>发布时间</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for c in comlist %}
+                                <tr>
+
+                                    <td>{{ c.send_id }}</td>
+                                    <td>{{ c.message }}</td>
+                                    <td>{{ c.message_send_time }}</td>
+                                </tr>
+                            {% endfor %}
+                            </tbody>
+
+                        </table>
+                    </div>
+                    <div class="col-md-12">
+                        <form method="get" action="" name="form1">
+                            {% csrf_token %}
+                            <div>
+                                <div class="col-xs-1">
+                                    <input type="text" name="page" class="form-control" placeholder="page"
+                                           required="required">
+                                </div>
+                                <div class="col-xs-1">
+                                    <button type="submit" class="btn btn-block btn-primary" onclick="form1">跳转</button>
+                                    <span style="color: red">{{ error }}</span>
+                                </div>
+                            </div>
+                            <div class="col-md-1">
+                                <div>共-{{ pgnt.num_pages }}-页</div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12">&nbsp;</div>
+                    <div class="col-md-12">
+                        <form action="" method="post" name="form2">
+                            {% csrf_token %}
+                            <div class="col-md-3">
+                                <input type="text" class="form-control" required="required" name="accept_id"
+                                       placeholder="请输入要发送的学生id">
+                            </div>
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" required="required" name="message"
+                                       placeholder="请输入私信内容">
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-block btn-primary" onclick="form1">发送评论</button>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="col-md-12">&nbsp;</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
+</html>

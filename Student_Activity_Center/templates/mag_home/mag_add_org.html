@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/bootstrap-clearmin.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/roboto.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/material-design.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/small-n-flat.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/font-awesome.min.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'css/c3.min.css' %}">
+    <title>学生活动中心</title>
+</head>
+<body class="cm-no-transition cm-2-navbar">
+<div id="cm-menu">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="cm-flex"><img src="{% static 'img/logo.png' %}" width="180px" height="50px"></div>
+        <div class="btn btn-primary md-menu-white" data-toggle="cm-menu"></div>
+    </nav>
+    <div id="cm-menu-content">
+        <div id="cm-menu-items-wrapper">
+            <div id="cm-menu-scroller">
+                <ul class="cm-menu-items">
+                    <li><a href="{% url 'sac_app:mag_examine_act' %}" class="sf-pencil">审核活动</a></li>
+                    <li><a href="{% url 'sac_app:mag_examine_org' %}" class="sf-device-computer">审核组织</a></li>
+                    <li><a href="{% url 'sac_app:mag_manage' %}" class="sf-user-male">管理组织者</a></li>
+                    <li class="active"><a href="{% url 'sac_app:mag_add_org' %}" class="sf-sign-add">添加组织者</a></li>
+                    <li><a href="{% url 'sac_app:mag_launch_notice' %}" class="sf-box-out">发布系统公告</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="global" style="padding-top: 60px">
+    <div class="container-fluid">
+        <div class="col-sm-12">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <form method="post" action="">
+                        {% csrf_token %}
+                        <div class="col-sm-12">
+                            <div class="panel-body" style="min-height: 480px;">
+                                <div class="col-sm-12"><h3>{{ success }}</h3></div>
+                                <div class="form-group ">
+                                    <label class="input-group">组织id</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="id" placeholder="ID"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织名称</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="name" placeholder="Name"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人名字</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_name"
+                                               placeholder="header_name" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织密码</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="password" placeholder="Password"
+                                               required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人电话</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_phone"
+                                               placeholder="Header_phone" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织领导人学院</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="header_college"
+                                               placeholder="Header_college" required="required">
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="input-group">组织介绍</label>
+                                    <div class="col-sm-12">
+                                        <input type="text" class="form-control" name="introduction"
+                                               placeholder="Introduction" required="required" style="height: 200px;">
+                                    </div>
+                                </div>
+                                <hr>
+                                <div class="col-sm-12">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-8">
+                                    &nbsp;
+                                </div>
+                                <div class="col-sm-4">
+                                    <button type="submit" class="btn btn-block btn-primary">添加组织</button>
+                                    <span style="color: red">{{ error }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<header id="cm-header">
+    <nav class="cm-navbar cm-navbar-primary">
+        <div class="btn btn-primary md-menu-white hidden-md hidden-lg" data-toggle="cm-menu"></div>
+        <div class="cm-flex">
+            <div class="nav-tabs-container">
+                <ul class="nav nav-tabs">
+                    <li><a href="{% url 'sac_app:mag_home' %}">首页</a></li>
+                    <li><a href="{% url 'sac_app:mag_notice' %}">公告</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-notifications-white" data-toggle="dropdown">
+                <span
+                        class="label label-danger">{{ count }}</span></button>
+            <div class="popover cm-popover bottom">
+                <div class="arrow"></div>
+                <div class="popover-content">
+                    <form method="post" action="">
+                        {% for msg in messages %}
+                        <div class="list-group">
+                            <a href="#" class="list-group-item">
+                                <div class="">
+                                    <h4 class="list-group-item-heading text-overflow">
+                                        <i class="fa fa-fw fa-envelope"></i>{{ msg.send_id }}
+                                    </h4>
+                                </div>
+                                <div class="" style="float: right;"><input type="radio" name="delete"
+                                                                           value="{{ msg.id }}"/>
+                                    <input type="submit" name="de" value="删除"></div>
+                                <div class="">
+                                    <p class="list-group-item-text text-overflow">{{ msg.message }}</p>
+                                </div>
+                            </a>
+                        </div>
+                        {% endfor %}
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="dropdown pull-right">
+            <button class="btn btn-primary md-account-circle-white" data-toggle="dropdown"></button>
+            <ul class="dropdown-menu">
+                <li class="disabled text-center">
+                    <a style="cursor:default;"><strong>用户名</strong></a>
+                </li>
+                <li class="divider"></li>
+                <li>
+                    <a href="#"><i class="fa fa-fw fa-cog"></i>设置</a>
+                </li>
+                <li>
+                    <a href="{% url 'sac_app:logout' %}"><i class="fa fa-fw fa-sign-out"></i>注销</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</header>
+<script type="text/javascript" src="{% static 'js/lib/jquery.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.mousewheel.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/jquery.cookie.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/fastclick.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/clearmin.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/d3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'js/lib/c3.min.js' %}"></script>
+</body>
+</html>
